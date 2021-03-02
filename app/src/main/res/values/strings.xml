@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">HDRescuer</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="btn_login">Acceder</string>
+    <string name="txt_info_login">Accede a la app con el email y contraseña que obtuviste del equipo de desarrollo</string>
+    <string name="app_name_login">HDRESCUER</string>
 </resources>
