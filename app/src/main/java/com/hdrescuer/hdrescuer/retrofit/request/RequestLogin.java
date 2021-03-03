@@ -1,5 +1,5 @@
 
-package com.hdrescuer.hdrescuer;
+package com.hdrescuer.hdrescuer.retrofit.request;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
