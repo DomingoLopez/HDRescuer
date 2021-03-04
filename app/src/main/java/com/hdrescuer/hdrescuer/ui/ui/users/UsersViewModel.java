@@ -1,16 +1,16 @@
-package com.hdrescuer.hdrescuer.ui.ui.home;
+package com.hdrescuer.hdrescuer.ui.ui.users;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class UsersViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public UsersViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is users fragment");
     }
 
     public LiveData<String> getText() {
