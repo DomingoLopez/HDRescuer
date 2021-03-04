@@ -3,6 +3,7 @@ package com.hdrescuer.hdrescuer.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
+import com.hdrescuer.hdrescuer.common.SharedPreferencesManager;
 import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.LoginService;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestLogin;
@@ -92,6 +95,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         Toast.makeText(MainActivity.this, "Sesión iniciada correctamente", Toast.LENGTH_LONG).show();
 
+                        //Almacenamos el token y demás preferencias que devuelve la petición de OK para que estén disponibles en cualquier momento:
+
+                        //Token
+                        SharedPreferencesManager.setSomeStringValue(Constants.PREF_TOKEN,response.body().getToken());
+                        //username
+                        SharedPreferencesManager.setSomeStringValue(Constants.PREF_USERNAME,response.body().getUsername());
+                        //email
+                        SharedPreferencesManager.setSomeStringValue(Constants.PREF_EMAIL,response.body().getEmail());
+                        //created
+                        SharedPreferencesManager.setSomeStringValue(Constants.PREF_CREATED,response.body().getCreated());
+
+                        //Iniciamos intent para arrancar la actividad del Home
                         Intent i = new Intent(MainActivity.this, HomeActivity.class);
                         startActivity(i);
 
