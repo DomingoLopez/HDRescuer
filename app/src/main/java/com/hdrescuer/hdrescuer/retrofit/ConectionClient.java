@@ -11,7 +11,7 @@ public class ConectionClient {
     //Instancia Singleton para la conexión a la API
     private static ConectionClient instance = null;
     //Instance del Servicio de Login
-    private LoginService loginService;
+    private LoginApiService loginApiService;
     //Instancia de Retrofit para establecer la conexión
     private Retrofit retrofit;
 
@@ -23,7 +23,7 @@ public class ConectionClient {
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
 
-        this.loginService = this.retrofit.create(LoginService.class);
+        this.loginApiService = this.retrofit.create(LoginApiService.class);
 
     }
 
@@ -37,8 +37,8 @@ public class ConectionClient {
         return instance;
     }
 
-    public LoginService getLoginService(){
-        return this.loginService;
+    public LoginApiService getLoginApiService(){
+        return this.loginApiService;
     }
 
 

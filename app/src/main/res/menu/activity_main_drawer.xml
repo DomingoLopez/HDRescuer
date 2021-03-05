@@ -10,11 +10,11 @@
             android:title="@string/menu_users" />
         <item
             android:id="@+id/nav_support"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_baseline_email_24"
             android:title="@string/menu_support" />
         <item
             android:id="@+id/nav_config"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_brightness_low_24"
             android:title="@string/menu_config" />
     </group>
 </menu>

@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/nav_users"
-        android:name="com.hdrescuer.hdrescuer.ui.ui.users.UsersFragment"
+        android:name="com.hdrescuer.hdrescuer.ui.ui.users.UserListFragment"
         android:label="@string/menu_users"
-        tools:layout="@layout/fragment_users" />
+        tools:layout="@layout/fragment_user_list" />
 
     <fragment
         android:id="@+id/nav_support"
