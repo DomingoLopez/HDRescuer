@@ -17,6 +17,10 @@ import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestLogin;
 import com.hdrescuer.hdrescuer.retrofit.response.ResponseAuth;
 
+import java.util.logging.Logger;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,10 +88,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //Objeto llamada con respuesta como objeto de tipo ResponseAuth que hemos creado
             Call<ResponseAuth> call = this.loginApiService.doLogin(requestLogin);
 
+
+
             //Relizamos una llamada ASÍNCRONA, por lo que tenemos dos métodos, onRespose que es success y onFailure
             call.enqueue(new Callback<ResponseAuth>() {
                 @Override
                 public void onResponse(Call<ResponseAuth> call, Response<ResponseAuth> response) {
+
+
 
                     if(response.isSuccessful()) { //Código 200...299
 
@@ -95,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         //Almacenamos el token y demás preferencias que devuelve la petición de OK para que estén disponibles en cualquier momento:
 
-                        //Token
+                       //Token
                         SharedPreferencesManager.setSomeStringValue(Constants.PREF_TOKEN,response.body().getToken());
                         //username
                         SharedPreferencesManager.setSomeStringValue(Constants.PREF_USERNAME,response.body().getUsername());
@@ -104,12 +112,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //created
                         SharedPreferencesManager.setSomeStringValue(Constants.PREF_CREATED,response.body().getCreated());
 
-                        //Iniciamos intent para arrancar la actividad del Home
                         Intent i = new Intent(MainActivity.this, HomeActivity.class);
                         startActivity(i);
 
                         //Destruimos el activity de login para que no se pueda volver a él
                         finish();
+
                     }else{
                         Toast.makeText(MainActivity.this, "Algo salió mal. Revise sus datos de acceso", Toast.LENGTH_LONG).show();
                     }

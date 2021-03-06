@@ -17,12 +17,14 @@ import java.util.List;
 
 public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecyclerViewAdapter.ViewHolder> {
 
-    private final List<User> mValues;
+    private List<User> mValues;
     private Context ctx;
+    final private ListItemClickListener mOnClickListener;
 
-    public MyUserRecyclerViewAdapter(Context contexto,List<User> items) {
+    public MyUserRecyclerViewAdapter(Context contexto,List<User> items, ListItemClickListener onClickListener) {
         this.ctx = contexto;
-        mValues = items;
+        this.mValues = items;
+        this.mOnClickListener = onClickListener;
     }
 
     @Override
@@ -34,18 +36,32 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
+        if(mValues != null) {
+            holder.mItem = mValues.get(position);
 
-        holder.user_name.setText(holder.mItem.getUsername());
-        holder.last_monitoring.setText(holder.mItem.getLastMonitoring());
+            holder.user_name.setText(holder.mItem.getUsername());
+            holder.last_monitoring.setText(holder.mItem.getLastMonitoring());
+        }
+    }
+
+    public void setData(List<User> users){
+        this.mValues = users;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+
+        if(this.mValues != null)
+            return mValues.size();
+        else
+            return 0;
+
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final View mView;
         public final TextView user_name;
         public final TextView last_monitoring;
@@ -56,11 +72,19 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
             mView = view;
             user_name = (TextView) view.findViewById(R.id.textViewUserName);
             last_monitoring = (TextView) view.findViewById(R.id.textViewLastMonitoring);
+
+            view.setOnClickListener(this);
         }
 
         @Override
         public String toString() {
             return super.toString() + " '" + user_name.getText() + "'";
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            mOnClickListener.onListItemClick(position);
         }
     }
 }

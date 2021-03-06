@@ -16,4 +16,13 @@
     <string name="menu_users">Usuarios</string>
     <string name="menu_support">Soporte</string>
     <string name="menu_config">Configuración</string>
+    <string name="label_last_monitoring">Última monitorización: </string>
+    <string name="label_edad">Edad:</string>
+    <string name="label_altura">Altura:</string>
+    <string name="label_peso">Peso:</string>
+    <string name="label_genero">Género:</string>
+    <string name="label_email">Email:</string>
+    <string name="label_phone">Teléfono</string>
+    <string name="btn_edit_data">Editar</string>
+    <string name="btn_new_monitoring">Nueva Monitorización</string>
 </resources>

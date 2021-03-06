@@ -1,43 +1,37 @@
 package com.hdrescuer.hdrescuer.ui.ui.users;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.hdrescuer.hdrescuer.R;
-import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
+import com.hdrescuer.hdrescuer.common.MyApp;
+import com.hdrescuer.hdrescuer.data.UserListViewModel;
+import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
+import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.ui.ui.support.SupportViewModel;
+import com.hdrescuer.hdrescuer.ui.HomeActivity;
+import com.hdrescuer.hdrescuer.ui.ui.userdetails.UserDetailsActivity;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
  * A fragment representing a list of Items.
  */
-public class UserListFragment extends Fragment {
+public class UserListFragment extends Fragment implements ListItemClickListener{
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -47,8 +41,8 @@ public class UserListFragment extends Fragment {
     RecyclerView recyclerView;
     MyUserRecyclerViewAdapter adapter;
     List<User> userList;
-    AuthApiService authApiService;
-    AuthConectionClient authConectionClient;
+    UserListViewModel userListViewModel;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -102,71 +96,51 @@ public class UserListFragment extends Fragment {
         }
         return view;*/
 
+
+        this.userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
+
+
         View view = inflater.inflate(R.layout.fragment_user_list, container, false);
         Context context = view.getContext();
-        RecyclerView recyclerView = view.findViewById(R.id.list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        this.recyclerView = view.findViewById(R.id.list);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         //recyclerView.addItemDecoration(new DividerItemDecoration(context, LinearLayoutManager.VERTICAL));
 
-        retrofitInit();
+        this.adapter = new MyUserRecyclerViewAdapter(
+                getActivity(),
+                this.userList,
+                this
+        );
+        this.recyclerView.setAdapter(adapter);
+
+
         loadUserData();
-        recyclerView.setAdapter(adapter);
 
         return view;
 
 
     }
 
-    private void retrofitInit() {
-        this.authConectionClient = AuthConectionClient.getInstance();
-        this.authApiService = this.authConectionClient.getAuthApiService();
 
-    }
 
     private void loadUserData() {
 
-        //Obtenemos usuarios
-        Log.i("info","ENTROOOOOOOOOOOOOOOOOOOOO");
-        Call<List<User>> call = authApiService.getAllUsers();
-        /*call.enqueue(new Callback<List<User>>() {
+        this.userListViewModel.getUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if(response.isSuccessful()){
-                    userList = response.body();
-                    adapter = new MyUserRecyclerViewAdapter(
-                            getActivity(),
-                            userList
-                    );
-                }else {
-
-                    User user = new User(1,"domin","2020-13-32");
-                    userList.add(user);
-                    adapter = new MyUserRecyclerViewAdapter(
-                            getActivity(),
-                            userList
-                    );
-                    Toast.makeText(getActivity(), "Error al cargar la lista de usuarios", Toast.LENGTH_SHORT).show();
-                }
+            public void onChanged(List<User> users) {
+                userList = users;
+                adapter.setData(userList);
             }
+        });
 
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error en la conexión", Toast.LENGTH_SHORT).show();
-            }
-        });*/
+    }
 
-        User user = new User(1,"domin","2020-13-32");
-        userList= new ArrayList<>();
-        userList.add(user);
-        adapter = new MyUserRecyclerViewAdapter(
-                getActivity(),
-                userList
-        );
-        Log.i("info","SALGOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+    @Override
+    public void onListItemClick(int position) {
 
-
-
-
-
+        int id = this.userList.get(position).getId();
+        Intent i = new Intent(MyApp.getContext(), UserDetailsActivity.class);
+        i.putExtra("id", id);
+        startActivity(i);
     }
 }

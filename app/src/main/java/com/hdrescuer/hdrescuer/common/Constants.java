@@ -2,7 +2,19 @@ package com.hdrescuer.hdrescuer.common;
 
 public class Constants {
 
+    public static final String API_BASE_URL = "http://10.0.2.2:8080/";
+
+    /*API FINAL
     public static final String API_BASE_URL = "http://localhost:8080/api/";
+
+
+
+
+
+    */
+
+
+
 
     //PREFERENCES
     public static final String PREF_TOKEN = "PREF_TOKEN";
