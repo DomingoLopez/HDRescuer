@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HDRescuer">
-        <activity android:name=".ui.ui.userdetails.UserDetailsActivity"></activity>
+        <activity android:name=".ui.ui.devicesconnection.DevicesConnectionActivity"></activity>
+        <activity android:name=".ui.ui.userdetails.UserDetailsActivity" />
         <activity
             android:name=".ui.HomeActivity"
             android:label="@string/title_activity_home"
