@@ -261,7 +261,6 @@ public class E4Connection extends AppCompatActivity implements EmpaDataDelegate,
             // Start scanning
             // Start scanning
             try {
-                Log.i("ESCANEO:","EN EL TRY");
                 deviceManager.startScanning();
                 // The device manager has established a connection
             } catch (Exception e) {
@@ -278,7 +277,7 @@ public class E4Connection extends AppCompatActivity implements EmpaDataDelegate,
                         .show();
             }
 
-         //   deviceManager.startScanning();
+            deviceManager.startScanning();
             // The device manager has established a connection
 
             hide();

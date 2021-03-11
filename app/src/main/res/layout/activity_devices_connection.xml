@@ -147,8 +147,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginTop="88dp"
         android:text="@string/label_data_new_monitoring"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -157,14 +158,12 @@
         android:id="@+id/tv_date_monitoring"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="108dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/label_new_data_monitoring"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/label_new_data_monitoring"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/label_new_data_monitoring"
+        app:layout_constraintTop_toBottomOf="@+id/label_new_data_monitoring" />
 
     <Button
         android:id="@+id/btn_start_monitoring"
