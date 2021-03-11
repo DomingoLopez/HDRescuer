@@ -26,4 +26,22 @@
     <string name="btn_edit_data">Editar</string>
     <string name="btn_new_monitoring">Nueva Monitorización</string>
     <string name="label_data_new_monitoring">Nueva monitorización:</string>
+
+
+
+
+
+    <string name="accel">Accelerometers</string>
+    <string name="accel_x">x:</string>
+    <string name="accel_y">y:</string>
+    <string name="accel_z">z:</string>
+    <string name="bvp_label">BVP</string>
+    <string name="eda_label">EDA</string>
+    <string name="ibi_label">IBI</string>
+    <string name="emptyText">-</string>
+    <string name="temp_label">Temperature</string>
+    <string name="battery_label">Battery</string>
+    <string name="label_e4band">Empatica 4 Band</string>
+    <string name="label_watch_monitoring">Tic Watch Pro</string>
+    <string name="btn_start_monitoring">Comenzar monitorización</string>
 </resources>

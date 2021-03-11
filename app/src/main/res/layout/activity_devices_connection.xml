@@ -6,6 +6,105 @@
     android:layout_height="match_parent"
     tools:context=".ui.ui.userdetails.UserDetailsActivity">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="137dp"
+        android:layout_height="215dp"
+        android:layout_marginTop="172dp"
+        app:contentPadding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.808"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="116dp"
+                android:layout_height="115dp"
+                android:layout_marginTop="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/watch2" />
+
+            <TextView
+                android:id="@+id/label_watch_monitoring"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/label_watch_monitoring"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
+            <Button
+                android:id="@+id/btn_connect_watch"
+                android:layout_width="104dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="14dp"
+                android:text="Button"
+                android:textSize="8sp"
+                app:layout_constraintEnd_toEndOf="@+id/label_watch_monitoring"
+                app:layout_constraintStart_toStartOf="@+id/label_watch_monitoring"
+                app:layout_constraintTop_toBottomOf="@+id/label_watch_monitoring" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="146dp"
+        android:layout_height="216dp"
+        android:layout_marginTop="172dp"
+        app:contentPadding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.129"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="112dp"
+                android:layout_height="107dp"
+                android:layout_marginTop="7dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/e4band" />
+
+            <TextView
+                android:id="@+id/label_e4band"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/label_e4band"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
+            <Button
+                android:id="@+id/btn_connect_e4"
+                android:layout_width="104dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="14dp"
+                android:text="Button"
+                android:textSize="8sp"
+                app:layout_constraintEnd_toEndOf="@+id/label_e4band"
+                app:layout_constraintHorizontal_bias="0.538"
+                app:layout_constraintStart_toStartOf="@+id/label_e4band"
+                app:layout_constraintTop_toBottomOf="@+id/label_e4band" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
@@ -55,7 +154,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tv_date_monitoring"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -67,24 +166,16 @@
         app:layout_constraintStart_toEndOf="@+id/label_new_data_monitoring"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="115dp"
-        android:layout_height="117dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="168dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/e4band" />
-
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="116dp"
-        android:layout_height="115dp"
-        android:layout_marginStart="60dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="@+id/imageView6"
-        app:srcCompat="@mipmap/watch2" />
+    <Button
+        android:id="@+id/btn_start_monitoring"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="76dp"
+        android:text="@string/btn_start_monitoring"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
