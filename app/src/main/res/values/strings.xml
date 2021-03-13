@@ -28,9 +28,6 @@
     <string name="label_data_new_monitoring">Nueva monitorización</string>
 
 
-
-
-
     <string name="accel">Accelerometers</string>
     <string name="accel_x">x:</string>
     <string name="accel_y">y:</string>
@@ -44,4 +41,9 @@
     <string name="label_e4band">Empatica 4 Band</string>
     <string name="label_watch_monitoring">Tic Watch Pro</string>
     <string name="btn_start_monitoring">Comenzar monitorización</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_monitoring_e4band">E4Band</string>
+    <string name="tab_monitoring_watch">Tic Watch Pro</string>
+    <string name="tab_monitoring_oix">Oxímetro</string>
 </resources>

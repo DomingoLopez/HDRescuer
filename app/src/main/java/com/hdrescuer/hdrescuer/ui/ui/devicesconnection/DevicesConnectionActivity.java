@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,7 +16,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -31,19 +32,19 @@ import com.empatica.empalink.EmpaDeviceManager;
 import com.empatica.empalink.EmpaticaDevice;
 import com.empatica.empalink.config.EmpaSensorType;
 import com.empatica.empalink.config.EmpaStatus;
-import com.empatica.empalink.delegate.EmpaDataDelegate;
 import com.empatica.empalink.delegate.EmpaStatusDelegate;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
-import com.hdrescuer.hdrescuer.data.DevicesConnectionViewModel;
+import com.hdrescuer.hdrescuer.data.E4BandViewModel;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class DevicesConnectionActivity extends AppCompatActivity implements View.OnClickListener, EmpaDataDelegate, EmpaStatusDelegate {
+public class DevicesConnectionActivity extends AppCompatActivity implements View.OnClickListener, EmpaStatusDelegate {
 
     //ViewModel
-    DevicesConnectionViewModel devicesConnectionViewModel;
+    E4BandViewModel e4BandViewModel;
 
     TextView tvUsernameMonitoring;
     TextView tvDateMonitoring;
@@ -90,11 +91,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new DevicesConnectionViewModel(getApplication(),user_id);
+                return (T) new E4BandViewModel(getApplication(),user_id);
             }
         };
 
-        this.devicesConnectionViewModel = new ViewModelProvider(this,factory).get(DevicesConnectionViewModel.class);
+        this.e4BandViewModel = new ViewModelProvider(this,factory).get(E4BandViewModel.class);
 
         findViews();
         events();
@@ -122,12 +123,15 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
 
     private void events() {
         this.btn_back.setOnClickListener(this);
+        this.btnStartMonitoring.setOnClickListener(this);
     }
-
     private void loadUserData() {
 
         this.tvUsernameMonitoring.setText(this.user_name);
         this.tvDateMonitoring.setText(this.currentDate.toString());
+
+        this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4disconnected));
+        this.btnE4BandConnect.setText("Desconectado");
 
     }
 
@@ -203,8 +207,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
                 return;
             }
 
-            // Create a new EmpaDeviceManager. MainActivity is both its data and status delegate.
-            deviceManager = new EmpaDeviceManager(getApplicationContext(), this, this);
+            // Creamos el deviceManager y hacemos que el ViewModel que vamos a compartir con el fragment de monitorización obtenga los datos
+            deviceManager = new EmpaDeviceManager(getApplicationContext(), this.e4BandViewModel, this);
 
             // Initialize the Device Manager using your API key. You need to have Internet access at this point.
             deviceManager.authenticateWithAPIKey(Constants.EMPATICA_API_KEY);
@@ -223,47 +227,21 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
 
                 break;
 
-            case R.id.btn_connect_e4:
+            case R.id.btn_start_monitoring:
+                Log.i("ENTRO","ENTRO");
+                //Iniciaríamos el fragment para la monitorización en Tabs
+                DevicesMonitoringFragment fragment = new DevicesMonitoringFragment();
 
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                fragmentTransaction.add(R.id.fragment_monitoring_show, fragment);
+                fragmentTransaction.commit();
 
                 break;
         }
     }
 
-    @Override
-    public void didReceiveGSR(float gsr, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveBVP(float bvp, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveIBI(float ibi, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveTemperature(float t, double timestamp) {
-    Log.i("TEMP","TEMP SENDED");
-    }
-
-    @Override
-    public void didReceiveAcceleration(int x, int y, int z, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveBatteryLevel(float level, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveTag(double timestamp) {
-
-    }
 
     @Override
     public void didUpdateStatus(EmpaStatus status) {
