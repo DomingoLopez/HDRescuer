@@ -117,7 +117,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
         this.btnE4BandConnect = findViewById(R.id.btn_connect_e4);
         this.btnE4BandConnect.setOnClickListener(this);
 
-        //WATCH
+        //WATCH. Hacerlo no clickable
         this.btnWatchConnect = findViewById(R.id.btn_connect_watch);
     }
 

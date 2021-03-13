@@ -28,16 +28,16 @@
     <string name="label_data_new_monitoring">Nueva monitorización</string>
 
 
-    <string name="accel">Accelerometers</string>
+    <string name="accel">Acelerómetro</string>
     <string name="accel_x">x:</string>
     <string name="accel_y">y:</string>
     <string name="accel_z">z:</string>
-    <string name="bvp_label">BVP</string>
-    <string name="eda_label">EDA</string>
-    <string name="ibi_label">IBI</string>
+    <string name="bvp_label">BVP:</string>
+    <string name="eda_label">EDA:</string>
+    <string name="ibi_label">IBI:</string>
     <string name="emptyText">-</string>
-    <string name="temp_label">Temperature</string>
-    <string name="battery_label">Battery</string>
+    <string name="temp_label">Temperatura:</string>
+    <string name="battery_label">Batería:</string>
     <string name="label_e4band">Empatica 4 Band</string>
     <string name="label_watch_monitoring">Tic Watch Pro</string>
     <string name="btn_start_monitoring">Comenzar monitorización</string>
@@ -46,4 +46,8 @@
     <string name="tab_monitoring_e4band">E4Band</string>
     <string name="tab_monitoring_watch">Tic Watch Pro</string>
     <string name="tab_monitoring_oix">Oxímetro</string>
+    <string name="btn_stop_monitoring">Terminar monitorizacion</string>
+    <string name="label_HR">HR:</string>
+    <string name="label_GSR" />
+    <string name="label_gsr">GSR:</string>
 </resources>

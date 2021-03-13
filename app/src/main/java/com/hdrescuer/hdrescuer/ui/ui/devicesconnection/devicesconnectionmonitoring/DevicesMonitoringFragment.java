@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -19,11 +20,12 @@ import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.E4BandViewModel;
 
 
-public class DevicesMonitoringFragment extends Fragment {
+public class DevicesMonitoringFragment extends Fragment implements View.OnClickListener {
 
     E4BandViewModel e4BandViewModel;
     TabLayout tabLayout;
     ViewPager2 viewPager;
+    Button btnStopMonitor;
 
     public DevicesMonitoringFragment() {
         // Required empty public constructor
@@ -96,7 +98,14 @@ public class DevicesMonitoringFragment extends Fragment {
     private void findViews(View view) {
         this.tabLayout = view.findViewById(R.id.tabLayout);
         this.viewPager = view.findViewById(R.id.view_pager_monitoring);
+        this.btnStopMonitor = view.findViewById(R.id.btn_stop_monitoring);
+        this.btnStopMonitor.setOnClickListener(this);
     }
 
 
+    @Override
+    public void onClick(View view) {
+
+        getActivity().finish();
     }
+}
