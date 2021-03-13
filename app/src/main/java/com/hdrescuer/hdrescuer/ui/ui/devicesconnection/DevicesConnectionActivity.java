@@ -40,7 +40,7 @@ import com.hdrescuer.hdrescuer.data.DevicesConnectionViewModel;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DevicesConnectionActivity extends AppCompatActivity implements View.OnClickListener, EmpaDataDelegate, EmpaStatusDelegate {
+public class DevicesConnectionActivity extends AppCompatActivity implements View.OnClickListener, EmpaStatusDelegate {
 
     //ViewModel
     DevicesConnectionViewModel devicesConnectionViewModel;
@@ -129,6 +129,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
         this.tvUsernameMonitoring.setText(this.user_name);
         this.tvDateMonitoring.setText(this.currentDate.toString());
 
+        this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4disconnected));
+        this.btnE4BandConnect.setText("Desconectado");
+
     }
 
     /**
@@ -203,8 +206,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
                 return;
             }
 
-            // Create a new EmpaDeviceManager. MainActivity is both its data and status delegate.
-            deviceManager = new EmpaDeviceManager(getApplicationContext(), this, this);
+            // Creamos el deviceManager y hacemos que el ViewModel que vamos a compartir con el fragment de monitorización obtenga los datos
+            deviceManager = new EmpaDeviceManager(getApplicationContext(), this.devicesConnectionViewModel, this);
 
             // Initialize the Device Manager using your API key. You need to have Internet access at this point.
             deviceManager.authenticateWithAPIKey(Constants.EMPATICA_API_KEY);
@@ -223,47 +226,15 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
 
                 break;
 
-            case R.id.btn_connect_e4:
+            case R.id.btn_start_monitoring:
 
+                //Iniciaríamos el fragment para la monitorización en Tabs
+                initEmpaticaDeviceManager();
 
                 break;
         }
     }
 
-    @Override
-    public void didReceiveGSR(float gsr, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveBVP(float bvp, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveIBI(float ibi, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveTemperature(float t, double timestamp) {
-    Log.i("TEMP","TEMP SENDED");
-    }
-
-    @Override
-    public void didReceiveAcceleration(int x, int y, int z, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveBatteryLevel(float level, double timestamp) {
-
-    }
-
-    @Override
-    public void didReceiveTag(double timestamp) {
-
-    }
 
     @Override
     public void didUpdateStatus(EmpaStatus status) {
