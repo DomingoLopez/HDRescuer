@@ -23,7 +23,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 
-public class DevicesConnectionViewModel extends AndroidViewModel implements ViewModelProvider.Factory, EmpaDataDelegate {
+public class E4BandViewModel extends AndroidViewModel implements ViewModelProvider.Factory, EmpaDataDelegate {
 
 
     private final int user_id;
@@ -61,7 +61,7 @@ public class DevicesConnectionViewModel extends AndroidViewModel implements View
     private float averageHr = 0;
 
 
-    public DevicesConnectionViewModel(@NonNull Application application, int id) {
+    public E4BandViewModel(@NonNull Application application, int id) {
         super(application);
         this.user_id = id;
 

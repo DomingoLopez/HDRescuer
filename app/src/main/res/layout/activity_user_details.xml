@@ -59,8 +59,8 @@
         android:id="@+id/label_edad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="8dp"
         android:text="@string/label_edad"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -68,23 +68,11 @@
         app:layout_constraintTop_toTopOf="@+id/user_avatar" />
 
     <TextView
-        android:id="@+id/label_altura"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/label_altura"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/user_avatar"
-        app:layout_constraintTop_toBottomOf="@+id/label_edad" />
-
-    <TextView
         android:id="@+id/label_peso"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="16dp"
         android:text="@string/label_peso"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -95,13 +83,25 @@
         android:id="@+id/label_genero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="12dp"
         android:text="@string/label_genero"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/user_avatar"
         app:layout_constraintTop_toBottomOf="@+id/label_peso" />
+
+    <TextView
+        android:id="@+id/label_altura"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/label_altura"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/user_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/label_edad" />
 
     <TextView
         android:id="@+id/label_email"
@@ -130,14 +130,14 @@
         android:id="@+id/label_last_monitoring"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="408dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginBottom="36dp"
         android:text="@string/label_last_monitoring"
         android:textAlignment="textStart"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_new_monitoring"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_edit_data"
@@ -213,11 +213,13 @@
 
     <TextView
         android:id="@+id/tvLastMonitoring"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         android:text="TextView"
         android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/label_last_monitoring"
         app:layout_constraintTop_toTopOf="@+id/label_last_monitoring" />
 
@@ -225,11 +227,11 @@
         android:id="@+id/btn_new_monitoring"
         android:layout_width="233dp"
         android:layout_height="47dp"
-        android:layout_marginStart="88dp"
         android:layout_marginTop="452dp"
         android:text="@string/btn_new_monitoring"
         android:textSize="12sp"
         app:icon="@drawable/ic_add_user"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
 
