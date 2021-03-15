@@ -59,4 +59,9 @@ dependencies {
     implementation 'com.empatica.empalink:E4link:1.0.0@aar'
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
 
+    //Watch Libraries
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
+    wearApp project(':hdrescuerwatch')
+
 }
