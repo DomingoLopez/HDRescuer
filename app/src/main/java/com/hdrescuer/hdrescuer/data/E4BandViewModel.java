@@ -26,14 +26,11 @@ import java.util.concurrent.TimeUnit;
 public class E4BandViewModel extends AndroidViewModel implements ViewModelProvider.Factory, EmpaDataDelegate {
 
 
-    private final int user_id;
+    private int user_id ;
 
     private final static double timezoneOffset = TimeZone.getDefault().getRawOffset() / 1000d;
 
-    private MutableLiveData<Boolean> onWrist;
-    private MutableLiveData<String> sessionStatus;
-    private MutableLiveData<Boolean> isConnected;
-    private MutableLiveData<String> deviceName;
+
     private MutableLiveData<Float> battery;
     private MutableLiveData<Double> tag;
     private MutableLiveData<Integer> currentAccX;
@@ -44,8 +41,7 @@ public class E4BandViewModel extends AndroidViewModel implements ViewModelProvid
     private MutableLiveData<Float> currentGsr;
     private MutableLiveData<Float> currentIbi;
     private MutableLiveData<Float> currentTemp;
-    private MutableLiveData<Float> currentAccMag;
-    private MutableLiveData<String> currentStatus;
+
 
 
 
@@ -65,12 +61,8 @@ public class E4BandViewModel extends AndroidViewModel implements ViewModelProvid
         super(application);
         this.user_id = id;
 
-        onWrist = new MutableLiveData<>();
-        sessionStatus = new MutableLiveData<>();
-        isConnected = new MutableLiveData<>(false);
-        deviceName = new MutableLiveData<>();
+
         battery = new MutableLiveData<>();
-        currentStatus = new MutableLiveData<>();
         currentAccX = new MutableLiveData<Integer>();
         currentAccY = new MutableLiveData<Integer>();
         currentAccZ = new MutableLiveData<Integer>();
@@ -79,7 +71,6 @@ public class E4BandViewModel extends AndroidViewModel implements ViewModelProvid
         currentGsr = new MutableLiveData<Float>();
         currentIbi = new MutableLiveData<Float>();
         currentTemp = new MutableLiveData<Float>();
-        currentAccMag = new MutableLiveData<Float>();
         tag = new MutableLiveData<Double>();
 
 
@@ -141,28 +132,26 @@ public class E4BandViewModel extends AndroidViewModel implements ViewModelProvid
 
             firstIbiTimestamp = timestamp;
 
+
             // start writing average heart rate from IBI every 1000ms
             // todo: should be calculated from BVP
             scheduler = Executors.newSingleThreadScheduledExecutor();
             scheduler.scheduleAtFixedRate
                     (new Runnable() {
                         public void run() {
-                            if (isConnected.getValue()) {
                                 if (averageHr != 0) {
                                     currentHr.postValue(averageHr);
                                 }
-                            } else {
-                                scheduler.shutdown();
-                            }
                         }
                     }, 0, 1000, TimeUnit.MILLISECONDS);
 
             return;
         }
 
-        final double time = timestamp - firstIbiTimestamp;
+
         final float hr = 60.0f / ibi;
         averageHr = (float) (averageHr * 0.8 + hr * 0.2);
+
 
         currentIbi.postValue(ibi);
     }
@@ -205,21 +194,6 @@ public class E4BandViewModel extends AndroidViewModel implements ViewModelProvid
         return timezoneOffset;
     }
 
-    public MutableLiveData<Boolean> getOnWrist() {
-        return onWrist;
-    }
-
-    public MutableLiveData<String> getSessionStatus() {
-        return sessionStatus;
-    }
-
-    public MutableLiveData<Boolean> getIsConnected() {
-        return isConnected;
-    }
-
-    public MutableLiveData<String> getDeviceName() {
-        return deviceName;
-    }
 
     public MutableLiveData<Float> getBattery() {
         return battery;
@@ -261,47 +235,11 @@ public class E4BandViewModel extends AndroidViewModel implements ViewModelProvid
         return currentTemp;
     }
 
-    public MutableLiveData<Float> getCurrentAccMag() {
-        return currentAccMag;
-    }
-
-    public MutableLiveData<String> getCurrentStatus() {
-        return currentStatus;
-    }
 
 
 
 
-    public double getFirstIbiTimestamp() {
-        return firstIbiTimestamp;
-    }
 
 
-    public boolean isTempWritten() {
-        return tempWritten;
-    }
 
-    public boolean isAccWritten() {
-        return accWritten;
-    }
-
-    public boolean isBvpWritten() {
-        return bvpWritten;
-    }
-
-    public boolean isIbiWritten() {
-        return ibiWritten;
-    }
-
-    public boolean isGsrWritten() {
-        return gsrWritten;
-    }
-
-    public ScheduledExecutorService getScheduler() {
-        return scheduler;
-    }
-
-    public float getAverageHr() {
-        return averageHr;
-    }
 }
