@@ -16,6 +16,7 @@ import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestLogin;
 import com.hdrescuer.hdrescuer.retrofit.response.ResponseAuth;
+import com.hdrescuer.hdrescuer.ui.ui.PruebaActivity;
 
 import java.util.logging.Logger;
 
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         //created
                         SharedPreferencesManager.setSomeStringValue(Constants.PREF_CREATED,response.body().getCreated());
 
-                        Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                        Intent i = new Intent(MainActivity.this, PruebaActivity.class);
                         startActivity(i);
 
                         //Destruimos el activity de login para que no se pueda volver a él
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //Toast.makeText(MainActivity.this, "Error de conexión",Toast.LENGTH_LONG).show();
 
                     //De momento, como no tenemos la api hecha, vamos a hacer la triquiñuela de poner aquí que pase a la siguiente pantalla
-                    Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                    Intent i = new Intent(MainActivity.this, PruebaActivity.class);
                     startActivity(i);
 
                     //Destruimos el activity de login para que no se pueda volver a él

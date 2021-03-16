@@ -33,18 +33,28 @@ import com.empatica.empalink.EmpaticaDevice;
 import com.empatica.empalink.config.EmpaSensorType;
 import com.empatica.empalink.config.EmpaStatus;
 import com.empatica.empalink.delegate.EmpaStatusDelegate;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.CapabilityClient;
+import com.google.android.gms.wearable.CapabilityInfo;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.data.E4BandViewModel;
+import com.hdrescuer.hdrescuer.data.TicWatchViewModel;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
+
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 public class DevicesConnectionActivity extends AppCompatActivity implements View.OnClickListener, EmpaStatusDelegate {
 
-    //ViewModel
+    //ViewModelS
     E4BandViewModel e4BandViewModel;
+    TicWatchViewModel ticWatchViewModel;
 
     TextView tvUsernameMonitoring;
     TextView tvDateMonitoring;
@@ -87,6 +97,26 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
         //Obtenemos la fecha:hora actual
         this.currentDate = Calendar.getInstance().getTime();
 
+
+
+        initViewModels();
+
+        findViews();
+        events();
+        loadUserData();
+
+        //Iniciamos servicios de descubrimiento para los dispositivos
+        //La empática va en esta misma Actividad. Los demás en principio en servicios a parte
+        initEmpaticaDeviceManager();
+        initTicWatchService();
+
+    }
+
+
+
+    private void initViewModels() {
+
+        //ViewModelFactory
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -94,13 +124,16 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
                 return (T) new E4BandViewModel(getApplication(),user_id);
             }
         };
-
+        ViewModelProvider.Factory factoryWatch = new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new TicWatchViewModel(getApplication(),user_id);
+            }
+        };
+        //iniciamos viewmodels
         this.e4BandViewModel = new ViewModelProvider(this,factory).get(E4BandViewModel.class);
-
-        findViews();
-        events();
-        loadUserData();
-        initEmpaticaDeviceManager();
+        this.ticWatchViewModel = new ViewModelProvider(this,factoryWatch).get(TicWatchViewModel.class);
     }
 
 
@@ -186,6 +219,20 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
                 break;
         }
     }
+
+
+    /**
+     * Método que inicia el servicio del TicWatch. Primero comprueba si está conectado. Si lo está inicia la recopilación de datos.
+     * Si no lo está, vuelve a comprobarlo a los 5 segundos por ejemplo, hasta que pulsamos en nueva monitorización y paramos de buscar.
+     *
+     */
+    private void initTicWatchService() {
+
+
+
+
+    }
+
 
 
     private void initEmpaticaDeviceManager() {

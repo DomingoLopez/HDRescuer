@@ -1,4 +1,4 @@
-package com.hdrescuer.hdrescuerwatch;
+package com.hdrescuer.hdrescuer;
 
 import android.content.Context;
 

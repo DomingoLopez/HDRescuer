@@ -20,7 +20,6 @@ import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.E4Connection;
 
 public class UserDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -133,7 +132,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             case R.id.btn_new_monitoring:
 
                 Intent i = new Intent(MyApp.getContext(), DevicesConnectionActivity.class);
-               // Intent i = new Intent(MyApp.getContext(), E4Connection.class);
                 i.putExtra("id", id);
                 i.putExtra("username",this.username.getText().toString());
                 startActivity(i);

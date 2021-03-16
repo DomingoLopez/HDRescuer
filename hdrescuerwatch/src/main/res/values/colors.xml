@@ -7,4 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="blue_secondary">#2072B8</color>
+    <color name="blue_primary">#DAE8FC</color>
+    <color name="blue_top_mini_bar">#428BF0</color>
+
+    <!--Colores de conexión/desconexión dispositivos-->
+    <color name="e4disconnected">#F44336</color>
+    <color name="e4connected">#4CAF50</color>
+    <color name="e4Managerready">#FFEB3B</color>
+
+
+
 </resources>
