@@ -48,9 +48,10 @@ import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitori
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
-public class DevicesConnectionActivity extends AppCompatActivity implements View.OnClickListener, EmpaStatusDelegate {
+public class DevicesConnectionActivity extends AppCompatActivity implements View.OnClickListener, EmpaStatusDelegate, CapabilityClient.OnCapabilityChangedListener {
 
     //ViewModelS
     E4BandViewModel e4BandViewModel;
@@ -77,6 +78,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
     private EmpaDeviceManager deviceManager = null;
 
     EmpaStatus E4BandStatus = EmpaStatus.DISCONNECTED;
+
+    //Atributos para la detección del Watch
+    private Set<Node> wearNodesWithApp;
+    private List<Node> allConnectedNodes;
+    private Boolean watchConnected;
 
 
 
@@ -107,9 +113,22 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
 
         //Iniciamos servicios de descubrimiento para los dispositivos
         //La empática va en esta misma Actividad. Los demás en principio en servicios a parte
-        initEmpaticaDeviceManager();
-        initTicWatchService();
 
+        //Pensar en mover esto a ONRESUME
+        initEmpaticaDeviceManager();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_WEAR_APP);
+
+        // Initial request for devices with our capability, aka, our Wear app installed.
+        findWearDevicesWithApp();
+
+        findAllWearDevices();
     }
 
 
@@ -160,11 +179,18 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
     }
     private void loadUserData() {
 
+        //Iniciamos las views a los valores iniciales por defecto
         this.tvUsernameMonitoring.setText(this.user_name);
         this.tvDateMonitoring.setText(this.currentDate.toString());
 
+        //Botón de la empática
         this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4disconnected));
         this.btnE4BandConnect.setText("Desconectado");
+
+        //Botón del watch
+        this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
+        this.btnWatchConnect.setText("Desconectado");
+
 
     }
 
@@ -409,8 +435,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
         super.onPause();
         if (deviceManager != null) {
             deviceManager.disconnect();
-
         }
+
+        //Quitamos el Listener de las capabilities del watch
+        Wearable.getCapabilityClient(this).removeListener(this, Constants.CAPABILITY_WEAR_APP);
     }
 
 
@@ -422,6 +450,97 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
             deviceManager.disconnect();
         }
     }
+
+    @Override
+    public void onCapabilityChanged(@NonNull CapabilityInfo capabilityInfo) {
+
+        this.wearNodesWithApp = capabilityInfo.getNodes();
+
+        // Because we have an updated list of devices with/without our app, we need to also update
+        // our list of active Wear devices.
+        findAllWearDevices();
+
+        verifyNodeAndWaitForMonitoring();
+    }
+
+
+    private void findWearDevicesWithApp() {
+
+        Task<CapabilityInfo> capabilityInfoTask;
+        capabilityInfoTask = Wearable.getCapabilityClient(this)
+                .getCapability(Constants.CAPABILITY_WEAR_APP, CapabilityClient.FILTER_ALL);
+
+        capabilityInfoTask.addOnCompleteListener(new OnCompleteListener<CapabilityInfo>() {
+            @Override
+            public void onComplete(Task<CapabilityInfo> task) {
+
+                if (task.isSuccessful()) {
+
+                    CapabilityInfo capabilityInfo = task.getResult();
+                    wearNodesWithApp = capabilityInfo.getNodes();
+
+                    Log.d("INFO", "Capable Nodes: " + wearNodesWithApp);
+
+                    verifyNodeAndWaitForMonitoring();
+
+                } else {
+                    Log.d("ERROR", "Capability request failed to return any results.");
+                    btnWatchConnect.setBackgroundColor(btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
+                    btnWatchConnect.setText("Desconectado");
+                }
+            }
+        });
+    }
+
+
+    private void findAllWearDevices() {
+
+        Task<List<Node>> NodeListTask = Wearable.getNodeClient(this).getConnectedNodes();
+
+        NodeListTask.addOnCompleteListener(new OnCompleteListener<List<Node>>() {
+            @Override
+            public void onComplete(Task<List<Node>> task) {
+
+                if (task.isSuccessful()) {
+                    Log.d("INFO", "Node request succeeded.");
+                    allConnectedNodes = task.getResult();
+
+                } else {
+                    Log.d("ERROR", "Node request failed to return any results.");
+                    btnWatchConnect.setBackgroundColor(btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
+                    btnWatchConnect.setText("Desconectado");
+                }
+
+                verifyNodeAndWaitForMonitoring();
+            }
+        });
+    }
+
+
+    private void verifyNodeAndWaitForMonitoring() {
+
+        if ((this.wearNodesWithApp == null) || (this.allConnectedNodes == null)) {
+            Log.d("ERROR", "Waiting on Results for both connected nodes and nodes with app");
+        } else if (this.allConnectedNodes.isEmpty()) {
+            Log.d("INFO", "No hay nodos conectados");
+        } else if (this.wearNodesWithApp.isEmpty()) {
+            Log.d("INFO", "El dispositivo WearOs no dispone de la app necesaria");
+        } else if (this.wearNodesWithApp.size() < this.allConnectedNodes.size()) {
+            // TODO: Add your code to communicate with the wear app(s) via
+            Log.i("INFO","Algún nodo conectado. Esperando inicio de la monitorización...");
+            this.btnWatchConnect.setText("Conectado");
+            this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4connected));
+
+        } else {
+            // TODO: Add your code to communicate with the wear app(s) via
+            Log.i("INFO","Todos los nodos conectados. Esperando inicio de la monitorización...");
+            this.btnWatchConnect.setText("Conectado");
+            this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4connected));
+
+        }
+    }
+
+
 
 
 

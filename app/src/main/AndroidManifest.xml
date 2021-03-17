@@ -17,7 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HDRescuer"
         tools:replace="android:theme">
-        <activity android:name=".ui.ui.PruebaActivity"></activity>
 
         <service
             android:name=".ui.ui.devicesconnection.devicesconnectionservices.TicWatchService"
