@@ -53,7 +53,7 @@ public class ConnectionActivity extends FragmentActivity implements
         static final String TAG = "ConnectionActivity";
         private Node mAndroidPhoneNodeWithApp; //Nodos encontrados
         private Boolean conectado = false;
-        private Boolean monitorizacionActiva = false;
+        private int monitorizacionActiva = 0;
 
         //Atributos de sensores
         SensorManager sensorManager; //SensorManager
@@ -233,7 +233,7 @@ public class ConnectionActivity extends FragmentActivity implements
     @Override
         public void onSensorChanged(SensorEvent event) {
 
-        if(this.monitorizacionActiva) {
+        if(this.monitorizacionActiva == 1) {
             //Almeceno los datos en un DataLayer entre el teléfono y el watch.
 
             if (event.sensor.getType() == 1) { //Acelerómetro
@@ -303,6 +303,7 @@ public class ConnectionActivity extends FragmentActivity implements
     @Override
     public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
         //Método que vamos a usar para escuchar cuando se inicia y se termina la monitorización
+        Log.i("ENTRO","ENTRO");
         for (DataEvent event : dataEventBuffer) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
                 Log.i("INFO","RECIBIDA MONITORIZACIÓN START");
@@ -310,8 +311,8 @@ public class ConnectionActivity extends FragmentActivity implements
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().compareTo("/MONITORING") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.monitorizacionActiva = dataMap.getBoolean("MONITORING");
-                    Log.i("MONITORING_ACTIVA", String.valueOf(dataMap.getBoolean("MONITORING")));
+                    this.monitorizacionActiva = dataMap.getInt("MONITORING");
+                    Log.i("MONITORING_ACTIVA", String.valueOf(dataMap.getInt("MONITORING")));
                     this.tv_status_watch.setText("MONITORIZACIÓN RECIBIDA. \n ENVIANDO DATOS...");
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {

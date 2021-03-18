@@ -100,7 +100,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     private DataClient dataClient;
     //Atributos de compartición de datos para cada uno de los sensores
     private static final String MONITORING_KEY = "MONITORING";
-    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/MONITORING");;
+    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/MONITORING");
     PutDataRequest putDataReq;
 
 
@@ -143,13 +143,13 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         super.onResume();
 
         Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_WEAR_APP);
-
+        this.dataClient = Wearable.getDataClient(this);
+        Wearable.getDataClient(this).addListener(this);
         // Initial request for devices with our capability, aka, our Wear app installed.
         findWearDevicesWithApp();
         findAllWearDevices();
 
-        this.dataClient = Wearable.getDataClient(this);
-        Wearable.getDataClient(this).addListener(this);
+
     }
 
 
@@ -324,7 +324,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             case R.id.btn_start_monitoring:
 
                 //Informamos al Reloj que vamos a iniciar la monitorización
-                this.putDataMapRequest.getDataMap().putBoolean(MONITORING_KEY, true);
+                /**NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO**/
+                this.putDataMapRequest.getDataMap().putInt(MONITORING_KEY, 1);
                 this.putDataReq = this.putDataMapRequest.asPutDataRequest();
                 Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
                 putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
@@ -571,6 +572,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             Log.i("INFO","Todos los nodos conectados. Esperando inicio de la monitorización...");
             this.btnWatchConnect.setText("Conectado");
             this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4connected));
+            Log.i("NODOS",this.wearNodesWithApp.toString());
 
         }
     }
