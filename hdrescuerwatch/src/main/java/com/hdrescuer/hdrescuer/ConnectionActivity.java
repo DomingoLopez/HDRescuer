@@ -39,7 +39,10 @@ import com.google.android.wearable.intent.RemoteIntent;
 import com.hdrescuer.hdrescuer.common.Constants;
 
 import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -53,7 +56,7 @@ public class ConnectionActivity extends FragmentActivity implements
         static final String TAG = "ConnectionActivity";
         private Node mAndroidPhoneNodeWithApp; //Nodos encontrados
         private Boolean conectado = false;
-        private int monitorizacionActiva = 0;
+        private String monitorizacionActiva;
 
         //Atributos de sensores
         SensorManager sensorManager; //SensorManager
@@ -75,9 +78,47 @@ public class ConnectionActivity extends FragmentActivity implements
         /**Capa de datos para la compartición de los mismos entre el Watch y la App**/
         private DataClient dataClient;
         //Atributos de compartición de datos para cada uno de los sensores
-        private static final String ACC_KEY = "ACC";
-        PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/ACC");;
-        PutDataRequest putDataReq;
+        //Acelerómetro con Gravedad
+        private static final String ACCX_KEY = "ACCX";
+        private static final String ACCY_KEY = "ACCY";
+        private static final String ACCZ_KEY = "ACCZ";
+        PutDataMapRequest putDataMapRequestACC = PutDataMapRequest.create("/ACC");;
+        PutDataRequest putDataReqACC;
+
+        //Aceleración Linear
+        private static final String ACCLX_KEY = "ACCLX";
+        private static final String ACCLY_KEY = "ACCLY";
+        private static final String ACCLZ_KEY = "ACCLZ";
+        PutDataMapRequest putDataMapRequestACCL = PutDataMapRequest.create("/ACCL");;
+        PutDataRequest putDataReqACCL;
+
+        //Giroscopio
+        private static final String GIRX_KEY = "GIRX";
+        private static final String GIRY_KEY = "GIRY";
+        private static final String GIRZ_KEY = "GIRZ";
+        PutDataMapRequest putDataMapRequestGIR = PutDataMapRequest.create("/GIR");;
+        PutDataRequest putDataReqGIR;
+
+        //HRPPG
+        private static final String HRPPG_KEY = "HRPPG";
+        PutDataMapRequest putDataMapRequestHRPPG = PutDataMapRequest.create("/HRPPG");;
+        PutDataRequest putDataReqHRPPG;
+
+        //HRPPGRAW
+        private static final String HRPPGRAW_KEY = "HRPPGRAW";
+        PutDataMapRequest putDataMapRequestHRPPGRAW = PutDataMapRequest.create("/HRPPGRAW");;
+        PutDataRequest putDataReqHRPPGRAW;
+
+        //STEP
+        private static final String STEP_KEY = "STEP";
+        PutDataMapRequest putDataMapRequestSTEP = PutDataMapRequest.create("/STEP");;
+        PutDataRequest putDataReqSTEP;
+
+        //Time Stamp utilizado de momento
+        Clock clock = Clock.systemUTC();
+        Instant instant;
+
+        private static final String TIME_KEY = "TIMEKEY";
 
 
         @Override
@@ -228,23 +269,28 @@ public class ConnectionActivity extends FragmentActivity implements
 
     /**
      * Método que se dispara cada vez que cambia algún sensor. Se notifica el tipo de sensor y las lecturas vienen en event.values
+     * TODO: IMPORTANTE: Tengo que revisar este método y hacer otro aparte para no repetir código.
      * @param event
      */
     @Override
         public void onSensorChanged(SensorEvent event) {
 
-        if(this.monitorizacionActiva == 1) {
-            //Almeceno los datos en un DataLayer entre el teléfono y el watch.
 
+        if(this.monitorizacionActiva != null) {
+            //Almeceno los datos en un DataLayer entre el teléfono y el watch.
+            this.instant = this.clock.instant();
             if (event.sensor.getType() == 1) { //Acelerómetro
                 String msg = "Acelerómetro: \n";
                 msg += "X: " + event.values[0] + "  ";
                 msg += "Y: " + event.values[1] + "  ";
                 msg += "Z: " + event.values[2] + "  ";
 
-                this.putDataMapRequest.getDataMap().putFloat(ACC_KEY, event.values[0]);
-                this.putDataReq = this.putDataMapRequest.asPutDataRequest();
-                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
+                this.putDataMapRequestACC.getDataMap().putFloat(ACCX_KEY, event.values[0]);
+                this.putDataMapRequestACC.getDataMap().putFloat(ACCY_KEY, event.values[1]);
+                this.putDataMapRequestACC.getDataMap().putFloat(ACCZ_KEY, event.values[2]);
+                this.putDataMapRequestACC.getDataMap().putString(TIME_KEY,this.instant.toString());
+                this.putDataReqACC = this.putDataMapRequestACC.asPutDataRequest();
+                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReqACC);
                 putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
@@ -259,6 +305,19 @@ public class ConnectionActivity extends FragmentActivity implements
                 msg += "Y: " + event.values[1] + "  ";
                 msg += "Z: " + event.values[2] + "  ";
 
+                this.putDataMapRequestACCL.getDataMap().putFloat(ACCLX_KEY, event.values[0]);
+                this.putDataMapRequestACCL.getDataMap().putFloat(ACCLY_KEY, event.values[1]);
+                this.putDataMapRequestACCL.getDataMap().putFloat(ACCLZ_KEY, event.values[2]);
+                this.putDataMapRequestACC.getDataMap().putString(TIME_KEY,this.instant.toString());
+                this.putDataReqACCL = this.putDataMapRequestACCL.asPutDataRequest();
+                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReqACCL);
+                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR ACCL EN DATACLIENT");
+                    }
+                });
+
                 Log.d(TAG, msg);
             } else if (event.sensor.getType() == 4) { //Giroscopio
                 String msg = "Giroscopio: \n";
@@ -266,25 +325,63 @@ public class ConnectionActivity extends FragmentActivity implements
                 msg += "Y: " + event.values[1] + "  ";
                 msg += "Z: " + event.values[2] + "  ";
 
+                this.putDataMapRequestGIR.getDataMap().putFloat(GIRX_KEY, event.values[0]);
+                this.putDataMapRequestGIR.getDataMap().putFloat(GIRY_KEY, event.values[1]);
+                this.putDataMapRequestGIR.getDataMap().putFloat(GIRZ_KEY, event.values[2]);
+                this.putDataMapRequestACC.getDataMap().putString(TIME_KEY,this.instant.toString());
+                this.putDataReqGIR = this.putDataMapRequestGIR.asPutDataRequest();
+                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReqGIR);
+                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR GIR EN DATACLIENT");
+                    }
+                });
                 Log.d(TAG, msg);
             } else if (event.sensor.getType() == 21) { //HRPPG
                 String msg = "HR: " + event.values[0];
-
+                this.putDataMapRequestHRPPG.getDataMap().putFloat(HRPPG_KEY, event.values[0]);
+                this.putDataMapRequestACC.getDataMap().putString(TIME_KEY,this.instant.toString());
+                this.putDataReqHRPPG = this.putDataMapRequestHRPPG.asPutDataRequest();
+                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReqHRPPG);
+                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR HR EN DATACLIENT");
+                    }
+                });
                 Log.d(TAG, msg);
             } else if (event.sensor.getType() == 65572) { //HRPPGRAW
                 String msg = "HRRAW: " + event.values[0];
-
+                this.putDataMapRequestHRPPGRAW.getDataMap().putFloat(HRPPGRAW_KEY, event.values[0]);
+                this.putDataMapRequestACC.getDataMap().putString(TIME_KEY,this.instant.toString());
+                this.putDataReqHRPPGRAW = this.putDataMapRequestHRPPGRAW.asPutDataRequest();
+                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReqHRPPGRAW);
+                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR HRRAW EN DATACLIENT");
+                    }
+                });
                 Log.d(TAG, msg);
             } else if (event.sensor.getType() == 18) { //STEPDETECTOR
-                String msg = "STEP:: " + event.values[0];
-
+                String msg = "STEP: " + event.values[0];
+                this.putDataMapRequestSTEP.getDataMap().putFloat(STEP_KEY, event.values[0]);
+                this.putDataMapRequestACC.getDataMap().putString(TIME_KEY,this.instant.toString());
+                this.putDataReqSTEP = this.putDataMapRequestSTEP.asPutDataRequest();
+                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReqSTEP);
+                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR STEP EN DATACLIENT");
+                    }
+                });
                 Log.d(TAG, msg);
             } else
                 Log.d(TAG, "Unknown sensor type");
 
         }
     }
-
 
 
     //Marca de tiempo.
@@ -303,17 +400,25 @@ public class ConnectionActivity extends FragmentActivity implements
     @Override
     public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
         //Método que vamos a usar para escuchar cuando se inicia y se termina la monitorización
-        Log.i("ENTRO","ENTRO");
         for (DataEvent event : dataEventBuffer) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
-                Log.i("INFO","RECIBIDA MONITORIZACIÓN START");
+
                 // DataItem changed
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().compareTo("/MONITORING") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.monitorizacionActiva = dataMap.getInt("MONITORING");
-                    Log.i("MONITORING_ACTIVA", String.valueOf(dataMap.getInt("MONITORING")));
+                    this.monitorizacionActiva = dataMap.getString("MONITORING");
+                    Log.i("MONITORING_ACTIVADA", String.valueOf(dataMap.getInt("MONITORING")));
                     this.tv_status_watch.setText("MONITORIZACIÓN RECIBIDA. \n ENVIANDO DATOS...");
+                    this.btn_connected_watch.setText("SENDING...");
+                    this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.blue_secondary,getTheme()));
+
+                }else if(item.getUri().getPath().compareTo("/MONITORINGSTOP") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.monitorizacionActiva = null;
+                    Log.i("MONITORING DESACTIVADA", String.valueOf(dataMap.getInt("MONITORINGTOP")));
+                    this.btn_connected_watch.setText("Conectado");
+                    this.tv_status_watch.setText("Ambos dispositivos vinculados correctamente.\n Esperando monitorización...");
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {
                 // DataItem deleted

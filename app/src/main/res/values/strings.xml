@@ -50,4 +50,12 @@
     <string name="label_HR">HR:</string>
     <string name="label_GSR" />
     <string name="label_gsr">GSR:</string>
+    <string name="label_watch_acc_gravity">Acelerómetro con Gravedad</string>
+    <string name="labelwatch_acc_linear">Aceleración Lineal</string>
+    <string name="label_watch_gir">Giroscopio</string>
+    <string name="label_hr_watch">Heart Rate:</string>
+    <string name="tvhrppgraw">Heart Rate Raw:</string>
+    <string name="label_steps">Pasos realizados:</string>
+
+
 </resources>

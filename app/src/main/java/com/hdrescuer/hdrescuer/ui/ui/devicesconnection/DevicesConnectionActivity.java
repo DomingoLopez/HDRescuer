@@ -54,6 +54,7 @@ import com.hdrescuer.hdrescuer.data.TicWatchViewModel;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
 
 
+import java.time.Clock;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -268,17 +269,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
-    /**
-     * Método que inicia el servicio del TicWatch. Primero comprueba si está conectado. Si lo está inicia la recopilación de datos.
-     * Si no lo está, vuelve a comprobarlo a los 5 segundos por ejemplo, hasta que pulsamos en nueva monitorización y paramos de buscar.
-     *
-     */
-    private void initTicWatchService() {
-
-
-
-
-    }
 
 
 
@@ -325,7 +315,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                 //Informamos al Reloj que vamos a iniciar la monitorización
                 /**NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO**/
-                this.putDataMapRequest.getDataMap().putInt(MONITORING_KEY, 1);
+                String time = String.valueOf(System.currentTimeMillis());
+                this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, time);
                 this.putDataReq = this.putDataMapRequest.asPutDataRequest();
                 Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
                 putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
@@ -588,7 +579,28 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().compareTo("/ACC") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    Log.i("ACCPHONE", String.valueOf(dataMap.getFloat("ACC")));
+                    this.ticWatchViewModel.setAccx(dataMap.getFloat("ACCX"));
+                    this.ticWatchViewModel.setAccy(dataMap.getFloat("ACCY"));
+                    this.ticWatchViewModel.setAccz(dataMap.getFloat("ACCZ"));
+                }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setAcclx(dataMap.getFloat("ACCLX"));
+                    this.ticWatchViewModel.setAccly(dataMap.getFloat("ACCLY"));
+                    this.ticWatchViewModel.setAcclz(dataMap.getFloat("ACCLZ"));
+                }else if(item.getUri().getPath().compareTo("/GIR") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setGirx(dataMap.getFloat("GIRX"));
+                    this.ticWatchViewModel.setGiry(dataMap.getFloat("GIRY"));
+                    this.ticWatchViewModel.setGirz(dataMap.getFloat("GIRZ"));
+                }else if(item.getUri().getPath().compareTo("/HRPPG") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setHrppg(dataMap.getFloat("HRPPG"));
+                }else if(item.getUri().getPath().compareTo("/HRPPGRAW") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setHrppgraw(dataMap.getFloat("HRPPGRAW"));
+                }else if(item.getUri().getPath().compareTo("/STEP") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setStep(dataMap.getFloat("STEP"));
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {
                 // DataItem deleted

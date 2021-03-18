@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvLabelBatery2"
+        android:id="@+id/tvLabelAccGravity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -34,11 +34,11 @@
         android:layout_marginTop="12dp"
         android:text="@string/accel_x"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tvLabelBatery2"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelBatery2" />
+        app:layout_constraintStart_toStartOf="@+id/tvLabelAccGravity"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelAccGravity" />
 
     <TextView
-        android:id="@+id/tvAcelX"
+        android:id="@+id/tvWatchAccx"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -53,11 +53,11 @@
         android:layout_marginStart="12dp"
         android:text="@string/accel_y"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tvAcelX"
-        app:layout_constraintTop_toTopOf="@+id/tvAcelX" />
+        app:layout_constraintStart_toEndOf="@+id/tvWatchAccx"
+        app:layout_constraintTop_toTopOf="@+id/tvWatchAccx" />
 
     <TextView
-        android:id="@+id/tvAcelY"
+        android:id="@+id/tvWatchAccy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -72,11 +72,11 @@
         android:layout_marginStart="12dp"
         android:text="@string/accel_z"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tvAcelY"
-        app:layout_constraintTop_toTopOf="@+id/tvAcelY" />
+        app:layout_constraintStart_toEndOf="@+id/tvWatchAccy"
+        app:layout_constraintTop_toTopOf="@+id/tvWatchAccy" />
 
     <TextView
-        android:id="@+id/tvAcelZ"
+        android:id="@+id/tvWatchAccz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"

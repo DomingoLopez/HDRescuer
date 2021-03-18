@@ -3,7 +3,6 @@ package com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitor
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,9 +13,6 @@ import android.widget.TextView;
 
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.E4BandViewModel;
-import com.hdrescuer.hdrescuer.retrofit.response.User;
-
-import java.util.List;
 
 
 public class TabE4BandMonitoring extends Fragment {
@@ -60,9 +56,9 @@ public class TabE4BandMonitoring extends Fragment {
     private void findViews(View view) {
         this.tvTemp = view.findViewById(R.id.tvTemp);
         this.tvBattery = view.findViewById(R.id.tvBattery);
-        this.tvAccX = view.findViewById(R.id.tvAcelX);
-        this.tvAccY = view.findViewById(R.id.tvAcelY);
-        this.tvAccZ = view.findViewById(R.id.tvAcelZ);
+        this.tvAccX = view.findViewById(R.id.tvWatchAccx);
+        this.tvAccY = view.findViewById(R.id.tvWatchAccy);
+        this.tvAccZ = view.findViewById(R.id.tvWatchAccz);
         this.tvBVP = view.findViewById(R.id.tvBVP);
         this.tvGSR = view.findViewById(R.id.tvGSR);
         this.tvIBI = view.findViewById(R.id.tvIBI);
