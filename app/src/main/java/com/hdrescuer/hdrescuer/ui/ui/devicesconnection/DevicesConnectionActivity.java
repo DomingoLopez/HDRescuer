@@ -37,6 +37,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.CapabilityClient;
 import com.google.android.gms.wearable.CapabilityInfo;
+import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
@@ -51,7 +57,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-public class DevicesConnectionActivity extends AppCompatActivity implements View.OnClickListener, EmpaStatusDelegate, CapabilityClient.OnCapabilityChangedListener {
+public class DevicesConnectionActivity extends AppCompatActivity implements
+        View.OnClickListener, EmpaStatusDelegate,
+        CapabilityClient.OnCapabilityChangedListener,
+        DataClient.OnDataChangedListener {
 
     //ViewModelS
     E4BandViewModel e4BandViewModel;
@@ -129,6 +138,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
         findWearDevicesWithApp();
 
         findAllWearDevices();
+
+        Wearable.getDataClient(this).addListener(this);
     }
 
 
@@ -439,6 +450,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
 
         //Quitamos el Listener de las capabilities del watch
         Wearable.getCapabilityClient(this).removeListener(this, Constants.CAPABILITY_WEAR_APP);
+        Wearable.getDataClient(this).removeListener(this);
     }
 
 
@@ -541,8 +553,21 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
     }
 
 
+    @Override
+    public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
 
-
-
-
+        for (DataEvent event : dataEventBuffer) {
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
+                Log.i("INFO","RECIBIDA NOTIFICACIÓN DE CAMBIO DE VALOR EN ACC");
+                // DataItem changed
+                DataItem item = event.getDataItem();
+                if (item.getUri().getPath().compareTo("/ACC") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    Log.i("ACCPHONE", String.valueOf(dataMap.getFloat("ACC")));
+                }
+            } else if (event.getType() == DataEvent.TYPE_DELETED) {
+                // DataItem deleted
+            }
+        }
+    }
 }

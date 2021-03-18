@@ -76,13 +76,22 @@ public class ConnectionActivity extends FragmentActivity implements
             setContentView(R.layout.activity_connection);
 
             // Enables Ambient mode.
-            AmbientModeSupport.attach(this);
+            //AmbientModeSupport.attach(this);
 
             // Keep the Wear screen always on (for testing only!)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         }
 
+        @Override
+        protected void onResume() {
+            Log.d(TAG, "onResume()");
+            super.onResume();
+
+            Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_PHONE_APP);
+            this.dataClient = Wearable.getDataClient(this);
+            checkIfPhoneHasApp();
+        }
 
         @Override
         protected void onPause() {
@@ -94,15 +103,7 @@ public class ConnectionActivity extends FragmentActivity implements
             this.sensorManager = null;
         }
 
-        @Override
-            protected void onResume() {
-            Log.d(TAG, "onResume()");
-            super.onResume();
 
-            Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_PHONE_APP);
-
-            checkIfPhoneHasApp();
-        }
 
         /*
          * Updates UI when capabilities change (install/uninstall phone app).
@@ -212,6 +213,15 @@ public class ConnectionActivity extends FragmentActivity implements
             msg += "Y: " + event.values[1]+"  ";
             msg += "Z: " + event.values[2]+"  ";
 
+            this.putDataMapRequest.getDataMap().putFloat(ACC_KEY,event.values[0]);
+            this.putDataReq = this.putDataMapRequest.asPutDataRequest();
+            Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
+            putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                @Override
+                public void onComplete(@NonNull Task<DataItem> task) {
+                    Log.i("INFOTASK","PUESTO VALOR ACC EN DATACLIENT");
+                }
+            });
 
             Log.d(TAG, msg);
         }
