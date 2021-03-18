@@ -37,5 +37,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View v) {
         Intent i = new Intent(MainActivity.this, ConnectionActivity.class);
         startActivity(i);
+
+        finish();
     }
 }

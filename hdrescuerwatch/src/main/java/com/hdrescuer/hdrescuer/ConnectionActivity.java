@@ -26,7 +26,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.CapabilityClient;
 import com.google.android.gms.wearable.CapabilityInfo;
 import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
@@ -40,14 +44,16 @@ import java.util.List;
 import java.util.Set;
 
 public class ConnectionActivity extends FragmentActivity implements
+        DataClient.OnDataChangedListener,
         AmbientModeSupport.AmbientCallbackProvider,
         CapabilityClient.OnCapabilityChangedListener,
         SensorEventListener {
 
-
+        //Nodos y estado
         static final String TAG = "ConnectionActivity";
         private Node mAndroidPhoneNodeWithApp; //Nodos encontrados
         private Boolean conectado = false;
+        private Boolean monitorizacionActiva = false;
 
         //Atributos de sensores
         SensorManager sensorManager; //SensorManager
@@ -60,9 +66,15 @@ public class ConnectionActivity extends FragmentActivity implements
         Sensor hrppgRAW;
         Sensor stepDetector;
 
-        //Capa de datos para la compartición de los mismos entre el Watch y la App
-        private DataClient dataClient;
+        //Views
+        Button btn_connected_watch;
+        TextView tv_status_watch;
 
+
+
+        /**Capa de datos para la compartición de los mismos entre el Watch y la App**/
+        private DataClient dataClient;
+        //Atributos de compartición de datos para cada uno de los sensores
         private static final String ACC_KEY = "ACC";
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/ACC");;
         PutDataRequest putDataReq;
@@ -81,6 +93,19 @@ public class ConnectionActivity extends FragmentActivity implements
             // Keep the Wear screen always on (for testing only!)
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+            findViews();
+
+        }
+
+        private void findViews() {
+            this.tv_status_watch = findViewById(R.id.tv_status_watch);
+            this.btn_connected_watch = findViewById(R.id.btn_connected_watch);
+
+            //Cargamos interfaz inicial mientras se conecta
+            this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.e4Managerready,getTheme()));
+            this.btn_connected_watch.setText("Comprobando");
+            this.tv_status_watch.setText("Comprobando estado de vinculación entre dispositivos...");
+
         }
 
         @Override
@@ -90,6 +115,7 @@ public class ConnectionActivity extends FragmentActivity implements
 
             Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_PHONE_APP);
             this.dataClient = Wearable.getDataClient(this);
+            Wearable.getDataClient(this).addListener(this);
             checkIfPhoneHasApp();
         }
 
@@ -99,24 +125,20 @@ public class ConnectionActivity extends FragmentActivity implements
             super.onPause();
 
             Wearable.getCapabilityClient(this).removeListener(this, Constants.CAPABILITY_PHONE_APP);
+            Wearable.getDataClient(this).removeListener(this);
             this.sensorManager.unregisterListener(this);
             this.sensorManager = null;
         }
 
 
 
-        /*
-         * Updates UI when capabilities change (install/uninstall phone app).
-         */
         public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
-            Log.d(TAG, "onCapabilityChanged(): " + capabilityInfo);
 
             mAndroidPhoneNodeWithApp = pickBestNodeId(capabilityInfo.getNodes());
             verifyNodeAndUpdateUI();
         }
 
         private void checkIfPhoneHasApp() {
-            Log.d(TAG, "checkIfPhoneHasApp()");
 
             Task<CapabilityInfo> capabilityInfoTask = Wearable.getCapabilityClient(this)
             .getCapability(Constants.CAPABILITY_PHONE_APP, CapabilityClient.FILTER_ALL);
@@ -144,11 +166,17 @@ public class ConnectionActivity extends FragmentActivity implements
 
             if (mAndroidPhoneNodeWithApp != null) {
                 this.conectado = true;
-                //Actualizo el valor del botón para mostrarlo en Verde y a la espera
+                this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.e4connected,getTheme()));
+                this.btn_connected_watch.setText("Conectado");
+                this.tv_status_watch.setText("Ambos dispositivos vinculados correctamente.\n Esperando monitorización...");
+                this.conectado = true;
                 initWatchSensors();
             } else {
                 this.conectado = false;
                 //Actualizo el valor del botón para mostrarlo en Rojo y a la espera de conexión
+                this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.e4disconnected,getTheme()));
+                this.btn_connected_watch.setText("Desconectado");
+                this.tv_status_watch.setText("Los dispositivos no están vinculados. Inicie la aplicación del teléfono...");
                 Log.i("ERROR","No tienes la app de móvil instalada");
             }
         }
@@ -205,72 +233,92 @@ public class ConnectionActivity extends FragmentActivity implements
     @Override
         public void onSensorChanged(SensorEvent event) {
 
-        //Almeceno los datos en un DataLayer entre el teléfono y el watch.
+        if(this.monitorizacionActiva) {
+            //Almeceno los datos en un DataLayer entre el teléfono y el watch.
 
-        if (event.sensor.getType() == 1) { //Acelerómetro
-            String msg = "Acelerómetro: \n";
-            msg += "X: " + event.values[0]+"  ";
-            msg += "Y: " + event.values[1]+"  ";
-            msg += "Z: " + event.values[2]+"  ";
+            if (event.sensor.getType() == 1) { //Acelerómetro
+                String msg = "Acelerómetro: \n";
+                msg += "X: " + event.values[0] + "  ";
+                msg += "Y: " + event.values[1] + "  ";
+                msg += "Z: " + event.values[2] + "  ";
 
-            this.putDataMapRequest.getDataMap().putFloat(ACC_KEY,event.values[0]);
-            this.putDataReq = this.putDataMapRequest.asPutDataRequest();
-            Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
-            putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
-                @Override
-                public void onComplete(@NonNull Task<DataItem> task) {
-                    Log.i("INFOTASK","PUESTO VALOR ACC EN DATACLIENT");
-                }
-            });
+                this.putDataMapRequest.getDataMap().putFloat(ACC_KEY, event.values[0]);
+                this.putDataReq = this.putDataMapRequest.asPutDataRequest();
+                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
+                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR ACC EN DATACLIENT");
+                    }
+                });
 
-            Log.d(TAG, msg);
+                Log.d(TAG, msg);
+            } else if (event.sensor.getType() == 10) { //Aceleración lineal
+                String msg = "Acc Lineal: \n";
+                msg += "X: " + event.values[0] + "  ";
+                msg += "Y: " + event.values[1] + "  ";
+                msg += "Z: " + event.values[2] + "  ";
+
+                Log.d(TAG, msg);
+            } else if (event.sensor.getType() == 4) { //Giroscopio
+                String msg = "Giroscopio: \n";
+                msg += "X: " + event.values[0] + "  ";
+                msg += "Y: " + event.values[1] + "  ";
+                msg += "Z: " + event.values[2] + "  ";
+
+                Log.d(TAG, msg);
+            } else if (event.sensor.getType() == 21) { //HRPPG
+                String msg = "HR: " + event.values[0];
+
+                Log.d(TAG, msg);
+            } else if (event.sensor.getType() == 65572) { //HRPPGRAW
+                String msg = "HRRAW: " + event.values[0];
+
+                Log.d(TAG, msg);
+            } else if (event.sensor.getType() == 18) { //STEPDETECTOR
+                String msg = "STEP:: " + event.values[0];
+
+                Log.d(TAG, msg);
+            } else
+                Log.d(TAG, "Unknown sensor type");
+
         }
-        else if (event.sensor.getType() == 10) { //Aceleración lineal
-            String msg = "Acc Lineal: \n";
-            msg += "X: " + event.values[0]+"  ";
-            msg += "Y: " + event.values[1]+"  ";
-            msg += "Z: " + event.values[2]+"  ";
-
-            Log.d(TAG, msg);
-        }
-        else if (event.sensor.getType() == 4) { //Giroscopio
-            String msg = "Giroscopio: \n";
-            msg += "X: " + event.values[0]+"  ";
-            msg += "Y: " + event.values[1]+"  ";
-            msg += "Z: " + event.values[2]+"  ";
-
-            Log.d(TAG, msg);
-        }
-        else if (event.sensor.getType() == 21) { //HRPPG
-            String msg = "HR: " + event.values[0];
-
-            Log.d(TAG, msg);
-        }
-        else if(event.sensor.getType() == 65572){ //HRPPGRAW
-            String msg = "HRRAW: " + event.values[0];
-
-            Log.d(TAG, msg);
-        }
-        else if(event.sensor.getType() == 18){ //STEPDETECTOR
-            String msg = "STEP:: " + event.values[0];
-
-            Log.d(TAG, msg);
-        }
-        else
-            Log.d(TAG, "Unknown sensor type");
     }
 
 
+
+    //Marca de tiempo.
     private String currentTimeStr() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
         return df.format(c.getTime());
     }
 
-    //Cuando cambia la precisión del sensor
+    //Cuando cambia la precisión de los sensor
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         Log.d(TAG, "onAccuracyChanged - accuracy: " + accuracy);
+    }
+
+    @Override
+    public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
+        //Método que vamos a usar para escuchar cuando se inicia y se termina la monitorización
+        for (DataEvent event : dataEventBuffer) {
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
+                Log.i("INFO","RECIBIDA MONITORIZACIÓN START");
+                // DataItem changed
+                DataItem item = event.getDataItem();
+                if (item.getUri().getPath().compareTo("/MONITORING") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.monitorizacionActiva = dataMap.getBoolean("MONITORING");
+                    Log.i("MONITORING_ACTIVA", String.valueOf(dataMap.getBoolean("MONITORING")));
+                    this.tv_status_watch.setText("MONITORIZACIÓN RECIBIDA. \n ENVIANDO DATOS...");
+                }
+            } else if (event.getType() == DataEvent.TYPE_DELETED) {
+                // DataItem deleted
+            }
+        }
+
     }
 
     private class MyAmbientCallback extends AmbientModeSupport.AmbientCallback {
@@ -279,17 +327,12 @@ public class ConnectionActivity extends FragmentActivity implements
             public void onEnterAmbient(Bundle ambientDetails) {
                 super.onEnterAmbient(ambientDetails);
 
-                Log.d(TAG, "onEnterAmbient() " + ambientDetails);
-                // In our case, the assets are already in black and white, so we don't update UI.
             }
 
             /** Restores the UI to active (non-ambient) mode. */
             @Override
             public void onExitAmbient() {
             super.onExitAmbient();
-
-            Log.d(TAG, "onExitAmbient()");
-            // In our case, the assets are already in black and white, so we don't update UI.
             }
         }
 }

@@ -43,6 +43,8 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
@@ -93,6 +95,14 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     private List<Node> allConnectedNodes;
     private Boolean watchConnected;
 
+    //Atributos de compartición de datos entre la capa de datos del reloj y la app
+    /**Capa de datos para la compartición de los mismos entre el Watch y la App**/
+    private DataClient dataClient;
+    //Atributos de compartición de datos para cada uno de los sensores
+    private static final String MONITORING_KEY = "MONITORING";
+    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/MONITORING");;
+    PutDataRequest putDataReq;
+
 
 
     @Override
@@ -136,9 +146,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         // Initial request for devices with our capability, aka, our Wear app installed.
         findWearDevicesWithApp();
-
         findAllWearDevices();
 
+        this.dataClient = Wearable.getDataClient(this);
         Wearable.getDataClient(this).addListener(this);
     }
 
@@ -312,10 +322,23 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 break;
 
             case R.id.btn_start_monitoring:
-                Log.i("ENTRO","ENTRO");
+
+                //Informamos al Reloj que vamos a iniciar la monitorización
+                this.putDataMapRequest.getDataMap().putBoolean(MONITORING_KEY, true);
+                this.putDataReq = this.putDataMapRequest.asPutDataRequest();
+                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
+                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR START MONITORING EN DATACLIENT");
+                    }
+                });
+
+
+
+
                 //Iniciaríamos el fragment para la monitorización en Tabs
                 DevicesMonitoringFragment fragment = new DevicesMonitoringFragment();
-
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);

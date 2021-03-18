@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2016 Google Inc.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/activity_main_top_padding"
-    android:paddingRight="@dimen/activity_main_right_padding"
-    android:paddingLeft="@dimen/activity_main_left_padding"
-    android:paddingBottom="@dimen/activity_main_bottom_padding"
-    tools:context=".ConnectionActivity">
+    android:background="@color/blue_primary"
+    android:padding="@dimen/box_inset_layout_padding"
+    tools:context=".MainActivity"
+    tools:deviceIds="wear">
 
-    <TextView
-        android:id="@+id/information_text_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"/>
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/blue_primary"
+        android:padding="@dimen/inner_frame_layout_padding"
+        app:boxedEdges="all">
 
-    <Button
-        android:id="@+id/remote_open_button"
-        android:layout_width="match_parent"
-        android:text="Install Mobile App"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="invisible"/>
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_connected_watch"
+            android:layout_width="105dp"
+            android:layout_height="41dp"
+            android:layout_marginTop="16dp"
+            android:text="Button"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_status_watch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="TextView"
+            android:textColor="@color/blue_secondary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/btn_connected_watch"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="@+id/btn_connected_watch"
+            app:layout_constraintTop_toBottomOf="@+id/btn_connected_watch" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.wear.widget.BoxInsetLayout>
