@@ -574,30 +574,33 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         for (DataEvent event : dataEventBuffer) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
-                Log.i("INFO","RECIBIDA NOTIFICACIÓN DE CAMBIO DE VALOR EN ACC");
                 // DataItem changed
                 DataItem item = event.getDataItem();
-                if (item.getUri().getPath().compareTo("/ACC") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchViewModel.setAccx(dataMap.getFloat("ACCX"));
-                    this.ticWatchViewModel.setAccy(dataMap.getFloat("ACCY"));
-                    this.ticWatchViewModel.setAccz(dataMap.getFloat("ACCZ"));
-                }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchViewModel.setAcclx(dataMap.getFloat("ACCLX"));
-                    this.ticWatchViewModel.setAccly(dataMap.getFloat("ACCLY"));
-                    this.ticWatchViewModel.setAcclz(dataMap.getFloat("ACCLZ"));
-                }else if(item.getUri().getPath().compareTo("/GIR") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchViewModel.setGirx(dataMap.getFloat("GIRX"));
-                    this.ticWatchViewModel.setGiry(dataMap.getFloat("GIRY"));
-                    this.ticWatchViewModel.setGirz(dataMap.getFloat("GIRZ"));
-                }else if(item.getUri().getPath().compareTo("/HRPPG") == 0) {
+//                if (item.getUri().getPath().compareTo("/ACC") == 0) {
+//                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+//                    this.ticWatchViewModel.setAccx(dataMap.getFloat("ACCX"));
+//                    this.ticWatchViewModel.setAccy(dataMap.getFloat("ACCY"));
+//                    this.ticWatchViewModel.setAccz(dataMap.getFloat("ACCZ"));
+//                }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
+//                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+//                    this.ticWatchViewModel.setAcclx(dataMap.getFloat("ACCLX"));
+//                    this.ticWatchViewModel.setAccly(dataMap.getFloat("ACCLY"));
+//                    this.ticWatchViewModel.setAcclz(dataMap.getFloat("ACCLZ"));
+//                }else if(item.getUri().getPath().compareTo("/GIR") == 0) {
+//                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+//                    this.ticWatchViewModel.setGirx(dataMap.getFloat("GIRX"));
+//                    this.ticWatchViewModel.setGiry(dataMap.getFloat("GIRY"));
+//                    this.ticWatchViewModel.setGirz(dataMap.getFloat("GIRZ"));
+//                }else
+                if(item.getUri().getPath().compareTo("/HRPPG") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchViewModel.setHrppg(dataMap.getFloat("HRPPG"));
                 }else if(item.getUri().getPath().compareTo("/HRPPGRAW") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchViewModel.setHrppgraw(dataMap.getFloat("HRPPGRAW"));
+                }else if(item.getUri().getPath().compareTo("/HB") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setHb(dataMap.getFloat("HB"));
                 }else if(item.getUri().getPath().compareTo("/STEP") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchViewModel.setStep(dataMap.getFloat("STEP"));

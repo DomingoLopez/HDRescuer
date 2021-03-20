@@ -29,18 +29,20 @@ public class TicWatchViewModel extends AndroidViewModel implements ViewModelProv
     private int user_id ;
 
 
-    private MutableLiveData<Float> accx;
-    private MutableLiveData<Float> accy;
-    private MutableLiveData<Float> accz;
-    private MutableLiveData<Float> acclx;
-    private MutableLiveData<Float> accly;
-    private MutableLiveData<Float> acclz;
-    private MutableLiveData<Float> girx;
-    private MutableLiveData<Float> giry;
-    private MutableLiveData<Float> girz;
+//    private MutableLiveData<Float> accx;
+//    private MutableLiveData<Float> accy;
+//    private MutableLiveData<Float> accz;
+//    private MutableLiveData<Float> acclx;
+//    private MutableLiveData<Float> accly;
+//    private MutableLiveData<Float> acclz;
+//    private MutableLiveData<Float> girx;
+//    private MutableLiveData<Float> giry;
+//    private MutableLiveData<Float> girz;
     private MutableLiveData<Float> hrppg;
+    private MutableLiveData<Float> hb;
     private MutableLiveData<Float> hrppgraw;
     private MutableLiveData<Float> step;
+    private int stepCounter;
 
 
 
@@ -54,18 +56,20 @@ public class TicWatchViewModel extends AndroidViewModel implements ViewModelProv
     public TicWatchViewModel(@NonNull Application application, int id) {
         super(application);
         this.user_id = id;
+        this.stepCounter = 0;
 
-        this.accx = new MutableLiveData<>();
-        this.accy = new MutableLiveData<>();
-        this.accz = new MutableLiveData<>();
-        this.acclx = new MutableLiveData<>();
-        this.accly = new MutableLiveData<>();
-        this.acclz = new MutableLiveData<>();
-        this.girx = new MutableLiveData<>();
-        this.giry = new MutableLiveData<>();
-        this.girz = new MutableLiveData<>();
+//        this.accx = new MutableLiveData<>();
+//        this.accy = new MutableLiveData<>();
+//        this.accz = new MutableLiveData<>();
+//        this.acclx = new MutableLiveData<>();
+//        this.accly = new MutableLiveData<>();
+//        this.acclz = new MutableLiveData<>();
+//        this.girx = new MutableLiveData<>();
+//        this.giry = new MutableLiveData<>();
+//        this.girz = new MutableLiveData<>();
         this.hrppg = new MutableLiveData<>();
         this.hrppgraw = new MutableLiveData<>();
+        this.hb = new MutableLiveData<>();
         this.step = new MutableLiveData<>();
 
 
@@ -88,41 +92,42 @@ public class TicWatchViewModel extends AndroidViewModel implements ViewModelProv
         return user_id;
     }
 
-    public MutableLiveData<Float> getAccx() {
-        return accx;
-    }
+//    public MutableLiveData<Float> getAccx() {
+//        return accx;
+//    }
+//
+//    public MutableLiveData<Float> getAccy() {
+//        return accy;
+//    }
+//
+//    public MutableLiveData<Float> getAccz() {
+//        return accz;
+//    }
+//
+//    public MutableLiveData<Float> getAcclx() {
+//        return acclx;
+//    }
+//
+//    public MutableLiveData<Float> getAccly() {
+//        return accly;
+//    }
+//
+//    public MutableLiveData<Float> getAcclz() {
+//        return acclz;
+//    }
+//
+//    public MutableLiveData<Float> getGirx() {
+//        return girx;
+//    }
+//
+//    public MutableLiveData<Float> getGiry() {
+//        return giry;
+//    }
+//
+//    public MutableLiveData<Float> getGirz() {
+//        return girz;
+//    }
 
-    public MutableLiveData<Float> getAccy() {
-        return accy;
-    }
-
-    public MutableLiveData<Float> getAccz() {
-        return accz;
-    }
-
-    public MutableLiveData<Float> getAcclx() {
-        return acclx;
-    }
-
-    public MutableLiveData<Float> getAccly() {
-        return accly;
-    }
-
-    public MutableLiveData<Float> getAcclz() {
-        return acclz;
-    }
-
-    public MutableLiveData<Float> getGirx() {
-        return girx;
-    }
-
-    public MutableLiveData<Float> getGiry() {
-        return giry;
-    }
-
-    public MutableLiveData<Float> getGirz() {
-        return girz;
-    }
 
     public MutableLiveData<Float> getHrppg() {
         return hrppg;
@@ -130,6 +135,10 @@ public class TicWatchViewModel extends AndroidViewModel implements ViewModelProv
 
     public MutableLiveData<Float> getHrppgraw() {
         return hrppgraw;
+    }
+
+    public MutableLiveData<Float> getHb() {
+        return hb;
     }
 
     public MutableLiveData<Float> getStep() {
@@ -150,41 +159,41 @@ public class TicWatchViewModel extends AndroidViewModel implements ViewModelProv
      *
      ********************************************/
 
-    public void setAccx(Float accx) {
-        this.accx.postValue(accx);
-    }
-
-    public void setAccy(Float accy) {
-        this.accy.postValue(accy);
-    }
-
-    public void setAccz(Float accz) {
-        this.accz.postValue(accz);
-    }
-
-    public void setAcclx(Float acclx) {
-        this.acclx.postValue(acclx);
-    }
-
-    public void setAccly(Float accly) {
-        this.accly.postValue(accly);
-    }
-
-    public void setAcclz(Float acclz) {
-        this.acclz.postValue(acclz);
-    }
-
-    public void setGirx(Float girx) {
-        this.girx.postValue(girx);
-    }
-
-    public void setGiry(Float giry) {
-        this.giry.postValue(giry);
-    }
-
-    public void setGirz(Float girz) {
-        this.girz.postValue(girz);
-    }
+//    public void setAccx(Float accx) {
+//        this.accx.postValue(accx);
+//    }
+//
+//    public void setAccy(Float accy) {
+//        this.accy.postValue(accy);
+//    }
+//
+//    public void setAccz(Float accz) {
+//        this.accz.postValue(accz);
+//    }
+//
+//    public void setAcclx(Float acclx) {
+//        this.acclx.postValue(acclx);
+//    }
+//
+//    public void setAccly(Float accly) {
+//        this.accly.postValue(accly);
+//    }
+//
+//    public void setAcclz(Float acclz) {
+//        this.acclz.postValue(acclz);
+//    }
+//
+//    public void setGirx(Float girx) {
+//        this.girx.postValue(girx);
+//    }
+//
+//    public void setGiry(Float giry) {
+//        this.giry.postValue(giry);
+//    }
+//
+//    public void setGirz(Float girz) {
+//        this.girz.postValue(girz);
+//    }
 
     public void setHrppg(Float hrppg) {
         this.hrppg.postValue(hrppg);
@@ -194,7 +203,12 @@ public class TicWatchViewModel extends AndroidViewModel implements ViewModelProv
         this.hrppgraw.postValue(hrppgraw);
     }
 
+    public void setHb(Float hb) {
+        this.hb.postValue(hb);
+    }
+
     public void setStep(Float step) {
+        //OJO. vamos a probar a que sume los pasos
         this.step.postValue(step);
     }
 }

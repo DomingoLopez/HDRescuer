@@ -56,6 +56,7 @@
     <string name="label_hr_watch">Heart Rate:</string>
     <string name="tvhrppgraw">Heart Rate Raw:</string>
     <string name="label_steps">Pasos realizados:</string>
+    <string name="label_hb_watch">Heart Beat:</string>
 
 
 </resources>
