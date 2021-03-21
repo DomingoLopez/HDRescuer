@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
@@ -31,7 +33,7 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  */
-public class UserListFragment extends Fragment implements ListItemClickListener{
+public class UserListFragment extends Fragment implements ListItemClickListener, View.OnClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -42,6 +44,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener{
     MyUserRecyclerViewAdapter adapter;
     List<User> userList;
     UserListViewModel userListViewModel;
+    FloatingActionButton btn;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -114,6 +117,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener{
         this.recyclerView.setAdapter(adapter);
 
 
+        findViews(view);
         loadUserData();
 
         return view;
@@ -121,6 +125,10 @@ public class UserListFragment extends Fragment implements ListItemClickListener{
 
     }
 
+    private void findViews(View view) {
+        this.btn = view.findViewById(R.id.user_add_btn);
+        this.btn.setOnClickListener(this);
+    }
 
 
     private void loadUserData() {
@@ -142,5 +150,14 @@ public class UserListFragment extends Fragment implements ListItemClickListener{
         Intent i = new Intent(MyApp.getContext(), UserDetailsActivity.class);
         i.putExtra("id", id);
         startActivity(i);
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        NewUserDialogFragment dialog = new NewUserDialogFragment();
+        dialog.show(this.getActivity().getSupportFragmentManager(), "NewUserFragment");
+
+
     }
 }

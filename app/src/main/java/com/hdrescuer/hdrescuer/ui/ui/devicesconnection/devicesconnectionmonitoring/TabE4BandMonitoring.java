@@ -21,7 +21,7 @@ public class TabE4BandMonitoring extends Fragment {
 
 
     TextView tvTemp;
-    TextView tvBattery;
+    //TextView tvBattery;
     TextView tvAccX;
     TextView tvAccY;
     TextView tvAccZ;
@@ -55,7 +55,7 @@ public class TabE4BandMonitoring extends Fragment {
 
     private void findViews(View view) {
         this.tvTemp = view.findViewById(R.id.tvTemp);
-        this.tvBattery = view.findViewById(R.id.tvBattery);
+        //this.tvBattery = view.findViewById(R.id.tvBattery);
         this.tvAccX = view.findViewById(R.id.tvWatchAccx);
         this.tvAccY = view.findViewById(R.id.tvWatchAccy);
         this.tvAccZ = view.findViewById(R.id.tvWatchAccz);
@@ -80,12 +80,12 @@ public class TabE4BandMonitoring extends Fragment {
         });
 
         //Observer de Batería
-        this.e4BandViewModel.getBattery().observe(getViewLifecycleOwner(), new Observer<Float>() {
-            @Override
-            public void onChanged(Float aFloat) {
-                tvBattery.setText(aFloat.toString());
-            }
-        });
+//        this.e4BandViewModel.getBattery().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//            @Override
+//            public void onChanged(Float aFloat) {
+//                tvBattery.setText(aFloat.toString());
+//            }
+//        });
 
 
         //Observer de GSR
