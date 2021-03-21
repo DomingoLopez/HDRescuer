@@ -29,6 +29,7 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
         return this.userDetails;
     }
 
+
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

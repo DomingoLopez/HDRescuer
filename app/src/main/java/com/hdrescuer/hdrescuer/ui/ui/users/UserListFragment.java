@@ -13,18 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.MyApp;
+import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
+import com.hdrescuer.hdrescuer.common.UserActionDialog;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
-import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
-import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.ui.HomeActivity;
 import com.hdrescuer.hdrescuer.ui.ui.userdetails.UserDetailsActivity;
 
 import java.util.List;
@@ -155,7 +151,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     @Override
     public void onClick(View view) {
 
-        NewUserDialogFragment dialog = new NewUserDialogFragment();
+        NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.NEW_USER,null);
         dialog.show(this.getActivity().getSupportFragmentManager(), "NewUserFragment");
 
 

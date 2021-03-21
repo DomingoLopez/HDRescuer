@@ -56,11 +56,12 @@ public class UserDetailsRepository {
 
 
         UserDetails user = new UserDetails(1,
-                                        "DOMINGO LÓPEZ PACHECO",
+                                        "DOMINGO",
+                                        "LÓPEZ PACHECO",
                                         29,
                                         1.73,
                                         75,
-                                        "V",
+                                        "M",
                                         "domin68914@gmail.com",
                                         637447471,
                                         "2021-03-05 08:40:35");
@@ -71,4 +72,6 @@ public class UserDetailsRepository {
         return data;
 
     }
+
+
 }

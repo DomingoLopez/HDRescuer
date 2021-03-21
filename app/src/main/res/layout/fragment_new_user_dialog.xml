@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ui.users.NewUserDialogFragment">
+    tools:context=".common.NewUserDialogFragment">
 
     <ImageView
         android:id="@+id/btn_close"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
+        android:layout_width="32dp"
+        android:layout_height="36dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
         android:src="@drawable/ic_baseline_close_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,20 +19,19 @@
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="50dp"
         android:backgroundTint="@color/blue_secondary"
         android:ems="10"
         android:hint="Nombre"
         android:inputType="textPersonName"
         android:singleLine="true"
         android:textColor="@color/blue_secondary"
-        android:textColorHighlight="@color/blue_secondary"
         android:textColorHint="@color/blue_secondary"
         android:textColorLink="@color/blue_secondary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitleDialogUser" />
 
     <EditText
         android:id="@+id/txtlastName"
@@ -44,12 +42,9 @@
         android:ems="10"
         android:hint="Apellidos"
         android:inputType="textPersonName"
-        android:outlineAmbientShadowColor="@color/blue_secondary"
         android:selectAllOnFocus="true"
-        android:shadowColor="@color/blue_secondary"
         android:singleLine="true"
         android:textColor="@color/blue_secondary"
-        android:textColorHighlight="@color/blue_secondary"
         android:textColorHint="@color/blue_secondary"
         android:textColorLink="@color/blue_secondary"
         app:layout_constraintStart_toStartOf="@+id/txtName"
@@ -101,32 +96,19 @@
         app:layout_constraintStart_toStartOf="@+id/txtlastName"
         app:layout_constraintTop_toTopOf="@+id/numWeight" />
 
-    <ToggleButton
-        android:id="@+id/tglSex"
-        android:layout_width="wrap_content"
-        android:backgroundTint="@color/blue_secondary"
-        android:textColor="@color/blue_primary"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="Sexo"
-        android:text="ToggleButton"
-        app:layout_constraintStart_toStartOf="@+id/numAge"
-        app:layout_constraintTop_toBottomOf="@+id/numAge" />
-
     <EditText
         android:id="@+id/txtEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/blue_secondary"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:textColor="@color/blue_secondary"
         android:textColorHint="@color/blue_secondary"
-        android:backgroundTint="@color/blue_secondary"
         android:textColorLink="@color/blue_secondary"
-        app:layout_constraintStart_toStartOf="@+id/tglSex"
-        app:layout_constraintTop_toBottomOf="@+id/tglSex" />
+        app:layout_constraintStart_toStartOf="@+id/rgGender"
+        app:layout_constraintTop_toBottomOf="@+id/rgGender" />
 
     <EditText
         android:id="@+id/numPhone"
@@ -154,5 +136,47 @@
         app:layout_constraintEnd_toEndOf="@+id/numPhone"
         app:layout_constraintStart_toStartOf="@+id/numPhone"
         app:layout_constraintTop_toBottomOf="@+id/numPhone" />
+
+    <RadioGroup
+        android:id="@+id/rgGender"
+        android:layout_width="218dp"
+        android:layout_height="93dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/numWeight">
+
+        <RadioButton
+            android:id="@+id/rbVaron"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Varón"
+            android:textColor="@color/blue_secondary"
+            android:textColorHint="@color/blue_secondary"
+            android:textSize="18sp"
+            app:buttonTint="@color/blue_secondary" />
+
+        <RadioButton
+            android:id="@+id/rbMujer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mujer"
+            android:textColor="@color/blue_secondary"
+            android:textSize="18sp"
+            app:buttonTint="@color/blue_secondary" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvTitleDialogUser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/blue_secondary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txtName"
+        app:layout_constraintTop_toTopOf="@+id/btn_close" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

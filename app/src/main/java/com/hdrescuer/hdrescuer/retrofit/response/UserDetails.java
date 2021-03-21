@@ -12,6 +12,9 @@ public class UserDetails {
     @SerializedName("username")
     @Expose
     private String username;
+    @SerializedName("lastname")
+    @Expose
+    private String lastname;
     @SerializedName("age")
     @Expose
     private Integer age;
@@ -53,10 +56,11 @@ public class UserDetails {
      * @param username
      * @param height
      */
-    public UserDetails(Integer id, String username, Integer age, Double height, Integer weight, String gender, String email, Integer phone, String lastMonitoring) {
+    public UserDetails(Integer id, String username,String lastname, Integer age, Double height, Integer weight, String gender, String email, Integer phone, String lastMonitoring) {
         super();
         this.id = id;
         this.username = username;
+        this.lastname = lastname;
         this.age = age;
         this.height = height;
         this.weight = weight;
@@ -80,6 +84,14 @@ public class UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getLastName() {
+        return lastname;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastname = lastName;
     }
 
     public Integer getAge() {

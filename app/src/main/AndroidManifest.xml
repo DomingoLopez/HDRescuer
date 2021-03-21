@@ -18,11 +18,6 @@
         android:theme="@style/Theme.HDRescuer"
         tools:replace="android:theme">
 
-        <service
-            android:name=".ui.ui.devicesconnection.devicesconnectionservices.TicWatchService"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity android:name=".ui.ui.devicesconnection.DevicesConnectionActivity" />
         <activity android:name=".ui.ui.userdetails.UserDetailsActivity" />
         <activity
