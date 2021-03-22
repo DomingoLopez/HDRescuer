@@ -11,8 +11,11 @@ import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestUserDetails;
+import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,7 +25,7 @@ public class UserDetailsRepository {
 
     AuthApiService authApiService;
     AuthConectionClient authConectionClient;
-    LiveData<UserDetails> user;
+    MutableLiveData<UserDetails> user;
 
     UserDetailsRepository(int id){
         this.authConectionClient = AuthConectionClient.getInstance();
@@ -30,7 +33,7 @@ public class UserDetailsRepository {
         //this.user = this.getUser(id);
     }
 
-    public LiveData<UserDetails> getUser(int id){
+    public MutableLiveData<UserDetails> getUser(int id){
         final MutableLiveData<UserDetails> data = new MutableLiveData<>();
 
         //Obtenemos el usuario
@@ -59,7 +62,7 @@ public class UserDetailsRepository {
                                         "DOMINGO",
                                         "LÓPEZ PACHECO",
                                         29,
-                                        1.73,
+                                        "1.73",
                                         75,
                                         "M",
                                         "domin68914@gmail.com",
@@ -71,6 +74,28 @@ public class UserDetailsRepository {
 
         return data;
 
+    }
+
+
+    public void updateUser(UserDetails user){
+        MutableLiveData<List<User>> data = new MutableLiveData<>();
+        Call<UserDetails> call = authApiService.updateUser(user);
+        call.enqueue(new Callback<UserDetails>() {
+            @Override
+            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(MyApp.getContext(), "Usuario modificado de forma satisfactoria", Toast.LENGTH_SHORT).show();
+                }else {
+
+                    Toast.makeText(MyApp.getContext(), "Error al modificar el usuario", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDetails> call, Throwable t) {
+                Toast.makeText(MyApp.getContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

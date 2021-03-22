@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +17,21 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.data.UserDetailsRepository;
+import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
+import com.hdrescuer.hdrescuer.data.UserListRepository;
+import com.hdrescuer.hdrescuer.data.UserListViewModel;
+import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
+import com.hdrescuer.hdrescuer.retrofit.request.RequestUserDetails;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NewUserDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -38,10 +52,16 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
     UserActionDialog type;
     UserDetails userDetails;
 
+    //Servicio de api
+    AuthConectionClient authConectionClient;
+    AuthApiService authApiService;
+
+
     public NewUserDialogFragment(UserActionDialog type, UserDetails userDetails){
         this.type = type;
         this.userDetails = userDetails;
-
+        this.authConectionClient = AuthConectionClient.getInstance();
+        this.authApiService = this.authConectionClient.getAuthApiService();
     }
 
     @Override
@@ -146,14 +166,41 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
 
                 if(validacion){
 
+                    String name = this.edName.getText().toString();
+                    String lastname = this.edLastName.getText().toString();
+                    int age = Integer.parseInt(this.numAge.getText().toString());
+                    String email = this.edEmail.getText().toString();
+                    int phone = Integer.parseInt(this.numPhone.getText().toString());
+                    String height = this.numHeight.getText().toString();
+                    int weight = Integer.parseInt(this.numWeight.getText().toString());
+
+                    String gender =" ";
+                    int genero = this.GenderGroup.getCheckedRadioButtonId();
+                    if(genero == R.id.rbMujer)
+                        gender = "F";
+                    else if(genero == R.id.rbVaron)
+                        gender = "M";
+                    else
+                        gender = " ";
+
                    if(this.type == UserActionDialog.NEW_USER){
+
+                       UserDetails user = new UserDetails(null, name, lastname, age, height, weight, gender, email, phone, null);
+                       UserListViewModel userListViewModel = new ViewModelProvider(this.getActivity()).get(UserListViewModel.class);
+                       userListViewModel.setNewUser(user);
+                       getDialog().dismiss();
 
                    }else if(this.type == UserActionDialog.MODIFY_USER){
 
-
+                       UserDetails user = new UserDetails(this.userDetails.getId(), name, lastname, age, height, weight, gender, email, phone, this.userDetails.getLastMonitoring());
+                       UserDetailsViewModel userDetailsViewModel = new ViewModelProvider(this.getActivity()).get(UserDetailsViewModel.class);
+                       userDetailsViewModel.updateUserDetails(user);
+                       getDialog().dismiss();
                    }
 
                 }
+
+                break;
         }
 
     }

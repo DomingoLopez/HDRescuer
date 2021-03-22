@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
+import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
@@ -157,9 +158,12 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                 break;
 
         }
+    }
 
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.userDetailsViewModel.refreshUserDetails(this.user.getId());
     }
 }

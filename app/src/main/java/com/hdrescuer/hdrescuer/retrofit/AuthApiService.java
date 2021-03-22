@@ -17,5 +17,11 @@ public interface AuthApiService {
     Call<List<User>> getAllUsers();
 
     @POST("api/userdetails")
-    Call<UserDetails> getUserDetails(@Body RequestUserDetails userDetails);
+    Call<UserDetails> getUserDetails(@Body RequestUserDetails userDetails); //Solo viaja una id
+
+    @POST("api/newuser")
+    Call<User> setNewUser(@Body UserDetails userDetails);
+
+    @POST("api/updateuser")
+    Call<UserDetails> updateUser(@Body UserDetails userDetails);
 }

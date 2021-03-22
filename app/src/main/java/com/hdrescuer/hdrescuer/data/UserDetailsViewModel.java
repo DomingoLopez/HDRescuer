@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -15,20 +16,32 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
 
 
     public UserDetailsRepository userDetailsRepository;
-    public LiveData<UserDetails> userDetails;
+    public MutableLiveData<UserDetails> userDetails;
 
     public UserDetailsViewModel(@NonNull Application application, int id) {
         super(application);
         this.userDetailsRepository = new UserDetailsRepository(id);
-        this.userDetails = this.userDetailsRepository.getUser(id);
+        this.userDetails = getUser(id);
 
     }
 
 
-    public LiveData<UserDetails> getUser() {
-        return this.userDetails;
+    public MutableLiveData<UserDetails> getUser(int id) {
+
+        return this.userDetailsRepository.getUser(id);
     }
 
+    public UserDetailsRepository getRepo(){
+        return this.userDetailsRepository;
+    }
+
+    public void updateUserDetails(UserDetails userDetails){
+        this.userDetailsRepository.updateUser(userDetails);
+    }
+
+    public void refreshUserDetails(int id){
+        this.userDetails = getUser(id);
+    }
 
     @NonNull
     @Override

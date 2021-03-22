@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
 import com.hdrescuer.hdrescuer.common.UserActionDialog;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
+import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.ui.ui.userdetails.UserDetailsActivity;
 
 import java.util.List;
@@ -66,6 +68,10 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+
+        this.userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
+
     }
 
     @Override
@@ -96,9 +102,6 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         return view;*/
 
 
-        this.userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
-
-
         View view = inflater.inflate(R.layout.fragment_user_list, container, false);
         Context context = view.getContext();
         this.recyclerView = view.findViewById(R.id.list);
@@ -116,6 +119,9 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         findViews(view);
         loadUserData();
 
+
+
+
         return view;
 
 
@@ -129,9 +135,10 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
 
     private void loadUserData() {
 
-        this.userListViewModel.getUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+        this.userListViewModel.users.observe(this.getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
+                Log.i("USERS", users.toString());
                 userList = users;
                 adapter.setData(userList);
             }
@@ -155,5 +162,11 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         dialog.show(this.getActivity().getSupportFragmentManager(), "NewUserFragment");
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.userListViewModel.refreshUsers();
     }
 }
