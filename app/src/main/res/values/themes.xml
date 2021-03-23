@@ -22,4 +22,20 @@
     <style name="Theme.HDRescuer.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.HDRescuer.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.HDRescuer.FullScreenDialogStyle" parent ="Theme.AppCompat.Dialog">
+        <item name="colorPrimary">@color/blue_secondary</item>
+        <item name="colorPrimaryVariant">@color/blue_primary</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/blue_top_mini_bar</item>
+
+
+        <!--Estilos para pantalla completa-->
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/blue_primary</item>
+
+    </style>
+
+
 </resources>

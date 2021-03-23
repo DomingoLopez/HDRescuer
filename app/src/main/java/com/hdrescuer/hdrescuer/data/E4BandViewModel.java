@@ -133,7 +133,7 @@ public class E4BandViewModel extends AndroidViewModel implements ViewModelProvid
             firstIbiTimestamp = timestamp;
 
 
-            // start writing average heart rate from IBI every 1000ms
+            // Escribir el HR obtenido del IBI cada segundo
             // todo: should be calculated from BVP
             scheduler = Executors.newSingleThreadScheduledExecutor();
             scheduler.scheduleAtFixedRate

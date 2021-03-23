@@ -33,18 +33,41 @@ import com.empatica.empalink.EmpaticaDevice;
 import com.empatica.empalink.config.EmpaSensorType;
 import com.empatica.empalink.config.EmpaStatus;
 import com.empatica.empalink.delegate.EmpaStatusDelegate;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.CapabilityClient;
+import com.google.android.gms.wearable.CapabilityInfo;
+import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.data.E4BandViewModel;
+import com.hdrescuer.hdrescuer.data.TicWatchViewModel;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
 
+
+import java.time.Clock;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
-public class DevicesConnectionActivity extends AppCompatActivity implements View.OnClickListener, EmpaStatusDelegate {
+public class DevicesConnectionActivity extends AppCompatActivity implements
+        View.OnClickListener, EmpaStatusDelegate,
+        CapabilityClient.OnCapabilityChangedListener,
+        DataClient.OnDataChangedListener {
 
-    //ViewModel
+    //ViewModelS
     E4BandViewModel e4BandViewModel;
+    TicWatchViewModel ticWatchViewModel;
 
     TextView tvUsernameMonitoring;
     TextView tvDateMonitoring;
@@ -68,6 +91,19 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
 
     EmpaStatus E4BandStatus = EmpaStatus.DISCONNECTED;
 
+    //Atributos para la detección del Watch
+    private Set<Node> wearNodesWithApp;
+    private List<Node> allConnectedNodes;
+    private Boolean watchConnected;
+
+    //Atributos de compartición de datos entre la capa de datos del reloj y la app
+    /**Capa de datos para la compartición de los mismos entre el Watch y la App**/
+    private DataClient dataClient;
+    //Atributos de compartición de datos para cada uno de los sensores
+    private static final String MONITORING_KEY = "MONITORING";
+    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/MONITORING");
+    PutDataRequest putDataReq;
+
 
 
     @Override
@@ -87,6 +123,41 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
         //Obtenemos la fecha:hora actual
         this.currentDate = Calendar.getInstance().getTime();
 
+
+
+        initViewModels();
+
+        findViews();
+        events();
+        loadUserData();
+
+        //Iniciamos servicios de descubrimiento para los dispositivos
+        //La empática va en esta misma Actividad. Los demás en principio en servicios a parte
+
+        //Pensar en mover esto a ONRESUME
+        initEmpaticaDeviceManager();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_WEAR_APP);
+        this.dataClient = Wearable.getDataClient(this);
+        Wearable.getDataClient(this).addListener(this);
+        // Initial request for devices with our capability, aka, our Wear app installed.
+        findWearDevicesWithApp();
+        findAllWearDevices();
+
+
+    }
+
+
+
+    private void initViewModels() {
+
+        //ViewModelFactory
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
             @NonNull
             @Override
@@ -94,13 +165,16 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
                 return (T) new E4BandViewModel(getApplication(),user_id);
             }
         };
-
+        ViewModelProvider.Factory factoryWatch = new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new TicWatchViewModel(getApplication(),user_id);
+            }
+        };
+        //iniciamos viewmodels
         this.e4BandViewModel = new ViewModelProvider(this,factory).get(E4BandViewModel.class);
-
-        findViews();
-        events();
-        loadUserData();
-        initEmpaticaDeviceManager();
+        this.ticWatchViewModel = new ViewModelProvider(this,factoryWatch).get(TicWatchViewModel.class);
     }
 
 
@@ -127,11 +201,18 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
     }
     private void loadUserData() {
 
+        //Iniciamos las views a los valores iniciales por defecto
         this.tvUsernameMonitoring.setText(this.user_name);
         this.tvDateMonitoring.setText(this.currentDate.toString());
 
+        //Botón de la empática
         this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4disconnected));
         this.btnE4BandConnect.setText("Desconectado");
+
+        //Botón del watch
+        this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
+        this.btnWatchConnect.setText("Desconectado");
+
 
     }
 
@@ -188,6 +269,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
     }
 
 
+
+
+
     private void initEmpaticaDeviceManager() {
         // Android 6 (API level 23) now require ACCESS_COARSE_LOCATION permission to use BLE
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -228,10 +312,25 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
                 break;
 
             case R.id.btn_start_monitoring:
-                Log.i("ENTRO","ENTRO");
+
+                //Informamos al Reloj que vamos a iniciar la monitorización
+                /**NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO**/
+                String time = String.valueOf(System.currentTimeMillis());
+                this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, time);
+                this.putDataReq = this.putDataMapRequest.asPutDataRequest();
+                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
+                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR START MONITORING EN DATACLIENT");
+                    }
+                });
+
+
+
+
                 //Iniciaríamos el fragment para la monitorización en Tabs
                 DevicesMonitoringFragment fragment = new DevicesMonitoringFragment();
-
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
@@ -362,8 +461,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
         super.onPause();
         if (deviceManager != null) {
             deviceManager.disconnect();
-
         }
+
+        //Quitamos el Listener de las capabilities del watch
+        Wearable.getCapabilityClient(this).removeListener(this, Constants.CAPABILITY_WEAR_APP);
+        Wearable.getDataClient(this).removeListener(this);
     }
 
 
@@ -376,7 +478,136 @@ public class DevicesConnectionActivity extends AppCompatActivity implements View
         }
     }
 
+    @Override
+    public void onCapabilityChanged(@NonNull CapabilityInfo capabilityInfo) {
+
+        this.wearNodesWithApp = capabilityInfo.getNodes();
+
+        // Because we have an updated list of devices with/without our app, we need to also update
+        // our list of active Wear devices.
+        findAllWearDevices();
+
+        verifyNodeAndWaitForMonitoring();
+    }
 
 
+    private void findWearDevicesWithApp() {
 
+        Task<CapabilityInfo> capabilityInfoTask;
+        capabilityInfoTask = Wearable.getCapabilityClient(this)
+                .getCapability(Constants.CAPABILITY_WEAR_APP, CapabilityClient.FILTER_ALL);
+
+        capabilityInfoTask.addOnCompleteListener(new OnCompleteListener<CapabilityInfo>() {
+            @Override
+            public void onComplete(Task<CapabilityInfo> task) {
+
+                if (task.isSuccessful()) {
+
+                    CapabilityInfo capabilityInfo = task.getResult();
+                    wearNodesWithApp = capabilityInfo.getNodes();
+
+                    Log.d("INFO", "Capable Nodes: " + wearNodesWithApp);
+
+                    verifyNodeAndWaitForMonitoring();
+
+                } else {
+                    Log.d("ERROR", "Capability request failed to return any results.");
+                    btnWatchConnect.setBackgroundColor(btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
+                    btnWatchConnect.setText("Desconectado");
+                }
+            }
+        });
+    }
+
+
+    private void findAllWearDevices() {
+
+        Task<List<Node>> NodeListTask = Wearable.getNodeClient(this).getConnectedNodes();
+
+        NodeListTask.addOnCompleteListener(new OnCompleteListener<List<Node>>() {
+            @Override
+            public void onComplete(Task<List<Node>> task) {
+
+                if (task.isSuccessful()) {
+                    Log.d("INFO", "Node request succeeded.");
+                    allConnectedNodes = task.getResult();
+
+                } else {
+                    Log.d("ERROR", "Node request failed to return any results.");
+                    btnWatchConnect.setBackgroundColor(btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
+                    btnWatchConnect.setText("Desconectado");
+                }
+
+                verifyNodeAndWaitForMonitoring();
+            }
+        });
+    }
+
+
+    private void verifyNodeAndWaitForMonitoring() {
+
+        if ((this.wearNodesWithApp == null) || (this.allConnectedNodes == null)) {
+            Log.d("ERROR", "Waiting on Results for both connected nodes and nodes with app");
+        } else if (this.allConnectedNodes.isEmpty()) {
+            Log.d("INFO", "No hay nodos conectados");
+        } else if (this.wearNodesWithApp.isEmpty()) {
+            Log.d("INFO", "El dispositivo WearOs no dispone de la app necesaria");
+        } else if (this.wearNodesWithApp.size() < this.allConnectedNodes.size()) {
+            // TODO: Add your code to communicate with the wear app(s) via
+            Log.i("INFO","Algún nodo conectado. Esperando inicio de la monitorización...");
+            this.btnWatchConnect.setText("Conectado");
+            this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4connected));
+
+        } else {
+            // TODO: Add your code to communicate with the wear app(s) via
+            Log.i("INFO","Todos los nodos conectados. Esperando inicio de la monitorización...");
+            this.btnWatchConnect.setText("Conectado");
+            this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4connected));
+            Log.i("NODOS",this.wearNodesWithApp.toString());
+
+        }
+    }
+
+
+    @Override
+    public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
+
+        for (DataEvent event : dataEventBuffer) {
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
+                // DataItem changed
+                DataItem item = event.getDataItem();
+//                if (item.getUri().getPath().compareTo("/ACC") == 0) {
+//                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+//                    this.ticWatchViewModel.setAccx(dataMap.getFloat("ACCX"));
+//                    this.ticWatchViewModel.setAccy(dataMap.getFloat("ACCY"));
+//                    this.ticWatchViewModel.setAccz(dataMap.getFloat("ACCZ"));
+//                }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
+//                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+//                    this.ticWatchViewModel.setAcclx(dataMap.getFloat("ACCLX"));
+//                    this.ticWatchViewModel.setAccly(dataMap.getFloat("ACCLY"));
+//                    this.ticWatchViewModel.setAcclz(dataMap.getFloat("ACCLZ"));
+//                }else if(item.getUri().getPath().compareTo("/GIR") == 0) {
+//                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+//                    this.ticWatchViewModel.setGirx(dataMap.getFloat("GIRX"));
+//                    this.ticWatchViewModel.setGiry(dataMap.getFloat("GIRY"));
+//                    this.ticWatchViewModel.setGirz(dataMap.getFloat("GIRZ"));
+//                }else
+                if(item.getUri().getPath().compareTo("/HRPPG") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setHrppg(dataMap.getFloat("HRPPG"));
+                }else if(item.getUri().getPath().compareTo("/HRPPGRAW") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setHrppgraw(dataMap.getFloat("HRPPGRAW"));
+                }else if(item.getUri().getPath().compareTo("/HB") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setHb(dataMap.getFloat("HB"));
+                }else if(item.getUri().getPath().compareTo("/STEP") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchViewModel.setStep(dataMap.getFloat("STEP"));
+                }
+            } else if (event.getType() == DataEvent.TYPE_DELETED) {
+                // DataItem deleted
+            }
+        }
+    }
 }

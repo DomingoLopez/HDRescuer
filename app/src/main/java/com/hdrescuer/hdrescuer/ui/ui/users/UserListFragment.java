@@ -10,19 +10,19 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.MyApp;
+import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
+import com.hdrescuer.hdrescuer.common.UserActionDialog;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
-import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
-import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.ui.HomeActivity;
+import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.ui.ui.userdetails.UserDetailsActivity;
 
 import java.util.List;
@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  */
-public class UserListFragment extends Fragment implements ListItemClickListener{
+public class UserListFragment extends Fragment implements ListItemClickListener, View.OnClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -42,6 +42,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener{
     MyUserRecyclerViewAdapter adapter;
     List<User> userList;
     UserListViewModel userListViewModel;
+    FloatingActionButton btn;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -67,6 +68,10 @@ public class UserListFragment extends Fragment implements ListItemClickListener{
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+
+        this.userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
+
     }
 
     @Override
@@ -97,9 +102,6 @@ public class UserListFragment extends Fragment implements ListItemClickListener{
         return view;*/
 
 
-        this.userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
-
-
         View view = inflater.inflate(R.layout.fragment_user_list, container, false);
         Context context = view.getContext();
         this.recyclerView = view.findViewById(R.id.list);
@@ -114,20 +116,29 @@ public class UserListFragment extends Fragment implements ListItemClickListener{
         this.recyclerView.setAdapter(adapter);
 
 
+        findViews(view);
         loadUserData();
+
+
+
 
         return view;
 
 
     }
 
+    private void findViews(View view) {
+        this.btn = view.findViewById(R.id.user_add_btn);
+        this.btn.setOnClickListener(this);
+    }
 
 
     private void loadUserData() {
 
-        this.userListViewModel.getUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+        this.userListViewModel.users.observe(this.getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
+                Log.i("USERS", users.toString());
                 userList = users;
                 adapter.setData(userList);
             }
@@ -142,5 +153,20 @@ public class UserListFragment extends Fragment implements ListItemClickListener{
         Intent i = new Intent(MyApp.getContext(), UserDetailsActivity.class);
         i.putExtra("id", id);
         startActivity(i);
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.NEW_USER,null);
+        dialog.show(this.getActivity().getSupportFragmentManager(), "NewUserFragment");
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.userListViewModel.refreshUsers();
     }
 }

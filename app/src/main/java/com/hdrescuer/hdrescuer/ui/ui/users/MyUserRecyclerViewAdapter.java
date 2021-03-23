@@ -39,7 +39,7 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
         if(mValues != null) {
             holder.mItem = mValues.get(position);
 
-            holder.user_name.setText(holder.mItem.getUsername());
+            holder.user_name.setText(holder.mItem.getUsername() + " " +holder.mItem.getLastname());
             holder.last_monitoring.setText(holder.mItem.getLastMonitoring());
         }
     }

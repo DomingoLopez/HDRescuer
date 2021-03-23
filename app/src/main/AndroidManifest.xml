@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hdrescuer.hdrescuer">
 
-
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -19,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HDRescuer"
         tools:replace="android:theme">
-        <activity android:name=".ui.ui.devicesconnection.E4Connection"></activity>
+
         <activity android:name=".ui.ui.devicesconnection.DevicesConnectionActivity" />
         <activity android:name=".ui.ui.userdetails.UserDetailsActivity" />
         <activity

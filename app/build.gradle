@@ -16,6 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
 
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -58,5 +59,11 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.empatica.empalink:E4link:1.0.0@aar'
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
+
+    //Watch Libraries
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
+    implementation 'com.google.android.support:wearable:2.8.1'
+    wearApp project(':hdrescuerwatch')
 
 }

@@ -17,9 +17,6 @@ import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestLogin;
 import com.hdrescuer.hdrescuer.retrofit.response.ResponseAuth;
 
-import java.util.logging.Logger;
-
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
