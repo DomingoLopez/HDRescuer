@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HDRescuer"
         tools:replace="android:theme">
+        <service
+            android:name=".ui.ui.devicesconnection.services.SampleRateService"
+            android:exported="false"></service>
 
         <activity android:name=".ui.ui.devicesconnection.DevicesConnectionActivity" />
         <activity android:name=".ui.ui.userdetails.UserDetailsActivity" />

@@ -11,13 +11,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hdrescuer.hdrescuer.R;
-import com.hdrescuer.hdrescuer.data.E4BandViewModel;
-import com.hdrescuer.hdrescuer.data.TicWatchViewModel;
+import com.hdrescuer.hdrescuer.data.TicWatchRepository;
 
 
 public class TabWatchMonitoring extends Fragment {
 
-    TicWatchViewModel ticWatchViewModel;
+    TicWatchRepository ticWatchRepository;
 
 //    TextView tvAccx;
 //    TextView tvAccy;
@@ -46,7 +45,7 @@ public class TabWatchMonitoring extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tab_watch_monitoring, container, false);
         findViews(view);
 
-        this.ticWatchViewModel = new ViewModelProvider(requireActivity()).get(TicWatchViewModel.class);
+        this.ticWatchRepository = new ViewModelProvider(requireActivity()).get(TicWatchRepository.class);
 
         createObserverForViewModel();
         // Inflate the layout for this fragment
@@ -75,19 +74,19 @@ public class TabWatchMonitoring extends Fragment {
 
     private void createObserverForViewModel() {
         //Observers de Acc
-//        this.ticWatchViewModel.getAccx().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//        this.ticWatchRepository.getAccx().observe(getViewLifecycleOwner(), new Observer<Float>() {
 //            @Override
 //            public void onChanged(Float aFloat) {
 //                tvAccx.setText(aFloat.toString());
 //            }
 //        });
-//        this.ticWatchViewModel.getAccy().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//        this.ticWatchRepository.getAccy().observe(getViewLifecycleOwner(), new Observer<Float>() {
 //            @Override
 //            public void onChanged(Float aFloat) {
 //                tvAccy.setText(aFloat.toString());
 //            }
 //        });
-//        this.ticWatchViewModel.getAccz().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//        this.ticWatchRepository.getAccz().observe(getViewLifecycleOwner(), new Observer<Float>() {
 //            @Override
 //            public void onChanged(Float aFloat) {
 //                tvAccz.setText(aFloat.toString());
@@ -95,19 +94,19 @@ public class TabWatchMonitoring extends Fragment {
 //        });
 //
 //        //Observers de Accl
-//        this.ticWatchViewModel.getAcclx().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//        this.ticWatchRepository.getAcclx().observe(getViewLifecycleOwner(), new Observer<Float>() {
 //            @Override
 //            public void onChanged(Float aFloat) {
 //                tvAcclx.setText(aFloat.toString());
 //            }
 //        });
-//        this.ticWatchViewModel.getAccly().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//        this.ticWatchRepository.getAccly().observe(getViewLifecycleOwner(), new Observer<Float>() {
 //            @Override
 //            public void onChanged(Float aFloat) {
 //                tvAccly.setText(aFloat.toString());
 //            }
 //        });
-//        this.ticWatchViewModel.getAcclz().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//        this.ticWatchRepository.getAcclz().observe(getViewLifecycleOwner(), new Observer<Float>() {
 //            @Override
 //            public void onChanged(Float aFloat) {
 //                tvAcclz.setText(aFloat.toString());
@@ -115,19 +114,19 @@ public class TabWatchMonitoring extends Fragment {
 //        });
 //
 //        //Observers de Giroscopio
-//        this.ticWatchViewModel.getGirx().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//        this.ticWatchRepository.getGirx().observe(getViewLifecycleOwner(), new Observer<Float>() {
 //            @Override
 //            public void onChanged(Float aFloat) {
 //                tvgirx.setText(aFloat.toString());
 //            }
 //        });
-//        this.ticWatchViewModel.getGiry().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//        this.ticWatchRepository.getGiry().observe(getViewLifecycleOwner(), new Observer<Float>() {
 //            @Override
 //            public void onChanged(Float aFloat) {
 //                tvgiry.setText(aFloat.toString());
 //            }
 //        });
-//        this.ticWatchViewModel.getGirz().observe(getViewLifecycleOwner(), new Observer<Float>() {
+//        this.ticWatchRepository.getGirz().observe(getViewLifecycleOwner(), new Observer<Float>() {
 //            @Override
 //            public void onChanged(Float aFloat) {
 //                tvgirz.setText(aFloat.toString());
@@ -135,7 +134,7 @@ public class TabWatchMonitoring extends Fragment {
 //        });
 
         //Observers de hrppg
-        this.ticWatchViewModel.getHrppg().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.ticWatchRepository.getHrppg().observe(getViewLifecycleOwner(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvhrppg.setText(aFloat.toString());
@@ -143,7 +142,7 @@ public class TabWatchMonitoring extends Fragment {
         });
 
         //Observers de hrppgraw
-        this.ticWatchViewModel.getHrppgraw().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.ticWatchRepository.getHrppgraw().observe(getViewLifecycleOwner(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvhrppgraw.setText(aFloat.toString());
@@ -151,7 +150,7 @@ public class TabWatchMonitoring extends Fragment {
         });
 
         //Observers de hrppgraw
-        this.ticWatchViewModel.getHb().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.ticWatchRepository.getHb().observe(getViewLifecycleOwner(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvhb.setText(aFloat.toString());
@@ -159,7 +158,7 @@ public class TabWatchMonitoring extends Fragment {
         });
 
         //Observers de step
-        this.ticWatchViewModel.getStep().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.ticWatchRepository.getStep().observe(getViewLifecycleOwner(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvsteps.setText(aFloat.toString());

@@ -17,12 +17,12 @@ import android.widget.Button;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hdrescuer.hdrescuer.R;
-import com.hdrescuer.hdrescuer.data.E4BandViewModel;
+import com.hdrescuer.hdrescuer.data.E4BandRepository;
 
 
 public class DevicesMonitoringFragment extends Fragment implements View.OnClickListener {
 
-    E4BandViewModel e4BandViewModel;
+    E4BandRepository e4BandRepository;
     TabLayout tabLayout;
     ViewPager2 viewPager;
     Button btnStopMonitor;
@@ -46,7 +46,7 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        this.e4BandViewModel = new ViewModelProvider(requireActivity()).get(E4BandViewModel.class);
+        this.e4BandRepository = new ViewModelProvider(requireActivity()).get(E4BandRepository.class);
 
 
         // Inflate the layout for this fragment
@@ -87,7 +87,7 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
 
 
 
-            this.e4BandViewModel.getCurrentTemp().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            this.e4BandRepository.getCurrentTemp().observe(getViewLifecycleOwner(), new Observer<Float>() {
                 @Override
                 public void onChanged(Float temp) {
 

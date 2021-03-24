@@ -49,12 +49,13 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
-import com.hdrescuer.hdrescuer.data.E4BandViewModel;
-import com.hdrescuer.hdrescuer.data.TicWatchViewModel;
+import com.hdrescuer.hdrescuer.data.E4BandRepository;
+import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
+import com.hdrescuer.hdrescuer.data.TicWatchRepository;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateService;
 
 
-import java.time.Clock;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -66,8 +67,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         DataClient.OnDataChangedListener {
 
     //ViewModelS
-    E4BandViewModel e4BandViewModel;
-    TicWatchViewModel ticWatchViewModel;
+    E4BandRepository e4BandRepository;
+    TicWatchRepository ticWatchRepository;
 
     TextView tvUsernameMonitoring;
     TextView tvDateMonitoring;
@@ -104,7 +105,13 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/MONITORING");
     PutDataRequest putDataReq;
 
+    private static final String MONITORING_STOP_KEY = "MONITORINGSTOP";
+    PutDataMapRequest putDataMapRequestStop = PutDataMapRequest.create("/MONITORINGSTOP");
+    PutDataRequest putDataReqStop;
 
+    //Acciones para iniciar el IntentService que cada X tiempo leerá de los viewmodels
+    private static final String ACTION_START = "START_MONITORING";
+    private static final String ACTION_STOP = "STOP_MONITORING";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,31 +157,24 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         findWearDevicesWithApp();
         findAllWearDevices();
 
-
     }
 
 
 
     private void initViewModels() {
 
-        //ViewModelFactory
+        //ViewModelFactory para el repositorio Global
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new E4BandViewModel(getApplication(),user_id);
+                return (T) new GlobalMonitoringViewModel(getApplication(),user_id);
             }
         };
-        ViewModelProvider.Factory factoryWatch = new ViewModelProvider.Factory() {
-            @NonNull
-            @Override
-            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new TicWatchViewModel(getApplication(),user_id);
-            }
-        };
-        //iniciamos viewmodels
-        this.e4BandViewModel = new ViewModelProvider(this,factory).get(E4BandViewModel.class);
-        this.ticWatchViewModel = new ViewModelProvider(this,factoryWatch).get(TicWatchViewModel.class);
+
+        //iniciamos Repositorios
+        this.e4BandRepository = new E4BandRepository();
+        this.ticWatchRepository = new TicWatchRepository();
     }
 
 
@@ -292,7 +292,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             }
 
             // Creamos el deviceManager y hacemos que el ViewModel que vamos a compartir con el fragment de monitorización obtenga los datos
-            deviceManager = new EmpaDeviceManager(getApplicationContext(), this.e4BandViewModel, this);
+            deviceManager = new EmpaDeviceManager(getApplicationContext(), this.e4BandRepository, this);
 
             // Initialize the Device Manager using your API key. You need to have Internet access at this point.
             deviceManager.authenticateWithAPIKey(Constants.EMPATICA_API_KEY);
@@ -326,7 +326,13 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     }
                 });
 
-
+                /*Iniciamos IntentService de muestreo
+                Cada X tiempo según hayamos indicado en la configuración, recogerá los datos de los ViewModels y los pondrá en un
+                ViewModel Global, del que sí que observará el fragment de monitorización.
+                 */
+                Intent intent = new Intent(this, SampleRateService.class);
+                intent.setAction(ACTION_START);
+                this.startService(intent);
 
 
                 //Iniciaríamos el fragment para la monitorización en Tabs
@@ -336,6 +342,20 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 fragmentTransaction.add(R.id.fragment_monitoring_show, fragment);
                 fragmentTransaction.commit();
+
+                break;
+
+            case R.id.btn_stop_monitoring:
+                String timeStop = String.valueOf(System.currentTimeMillis());
+                this.putDataMapRequestStop.getDataMap().putString(MONITORING_STOP_KEY, timeStop);
+                this.putDataReqStop = this.putDataMapRequestStop.asPutDataRequest();
+                Task<DataItem> putDataTaskStop = this.dataClient.putDataItem(this.putDataReqStop);
+                putDataTaskStop.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
+                    }
+                });
 
                 break;
         }
@@ -578,32 +598,32 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 DataItem item = event.getDataItem();
 //                if (item.getUri().getPath().compareTo("/ACC") == 0) {
 //                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-//                    this.ticWatchViewModel.setAccx(dataMap.getFloat("ACCX"));
-//                    this.ticWatchViewModel.setAccy(dataMap.getFloat("ACCY"));
-//                    this.ticWatchViewModel.setAccz(dataMap.getFloat("ACCZ"));
+//                    this.ticWatchRepository.setAccx(dataMap.getFloat("ACCX"));
+//                    this.ticWatchRepository.setAccy(dataMap.getFloat("ACCY"));
+//                    this.ticWatchRepository.setAccz(dataMap.getFloat("ACCZ"));
 //                }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
 //                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-//                    this.ticWatchViewModel.setAcclx(dataMap.getFloat("ACCLX"));
-//                    this.ticWatchViewModel.setAccly(dataMap.getFloat("ACCLY"));
-//                    this.ticWatchViewModel.setAcclz(dataMap.getFloat("ACCLZ"));
+//                    this.ticWatchRepository.setAcclx(dataMap.getFloat("ACCLX"));
+//                    this.ticWatchRepository.setAccly(dataMap.getFloat("ACCLY"));
+//                    this.ticWatchRepository.setAcclz(dataMap.getFloat("ACCLZ"));
 //                }else if(item.getUri().getPath().compareTo("/GIR") == 0) {
 //                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-//                    this.ticWatchViewModel.setGirx(dataMap.getFloat("GIRX"));
-//                    this.ticWatchViewModel.setGiry(dataMap.getFloat("GIRY"));
-//                    this.ticWatchViewModel.setGirz(dataMap.getFloat("GIRZ"));
+//                    this.ticWatchRepository.setGirx(dataMap.getFloat("GIRX"));
+//                    this.ticWatchRepository.setGiry(dataMap.getFloat("GIRY"));
+//                    this.ticWatchRepository.setGirz(dataMap.getFloat("GIRZ"));
 //                }else
                 if(item.getUri().getPath().compareTo("/HRPPG") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchViewModel.setHrppg(dataMap.getFloat("HRPPG"));
+                    this.ticWatchRepository.setHrppg(dataMap.getFloat("HRPPG"));
                 }else if(item.getUri().getPath().compareTo("/HRPPGRAW") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchViewModel.setHrppgraw(dataMap.getFloat("HRPPGRAW"));
+                    this.ticWatchRepository.setHrppgraw(dataMap.getFloat("HRPPGRAW"));
                 }else if(item.getUri().getPath().compareTo("/HB") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchViewModel.setHb(dataMap.getFloat("HB"));
+                    this.ticWatchRepository.setHb(dataMap.getFloat("HB"));
                 }else if(item.getUri().getPath().compareTo("/STEP") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchViewModel.setStep(dataMap.getFloat("STEP"));
+                    this.ticWatchRepository.setStep(dataMap.getFloat("STEP"));
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {
                 // DataItem deleted
