@@ -53,7 +53,7 @@ import com.hdrescuer.hdrescuer.data.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.TicWatchRepository;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateService;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 
 
 import java.util.Calendar;
@@ -66,9 +66,13 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         CapabilityClient.OnCapabilityChangedListener,
         DataClient.OnDataChangedListener {
 
-    //ViewModelS
+    //Repositorios
     E4BandRepository e4BandRepository;
     TicWatchRepository ticWatchRepository;
+    //GlobalMonitoringRepository globalMonitoringRepository;
+
+    //ViewModel
+    GlobalMonitoringViewModel globalMonitoringViewModel;
 
     TextView tvUsernameMonitoring;
     TextView tvDateMonitoring;
@@ -105,13 +109,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/MONITORING");
     PutDataRequest putDataReq;
 
-    private static final String MONITORING_STOP_KEY = "MONITORINGSTOP";
-    PutDataMapRequest putDataMapRequestStop = PutDataMapRequest.create("/MONITORINGSTOP");
-    PutDataRequest putDataReqStop;
 
-    //Acciones para iniciar el IntentService que cada X tiempo leerá de los viewmodels
-    private static final String ACTION_START = "START_MONITORING";
-    private static final String ACTION_STOP = "STOP_MONITORING";
+    private SampleRateFilterThread sampleRateThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +162,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     private void initViewModels() {
 
+        //iniciamos Repositorios temporales
+        this.e4BandRepository = new E4BandRepository();
+        this.ticWatchRepository = new TicWatchRepository();
+        //this.globalMonitoringRepository = new GlobalMonitoringRepository(this.user_id);
+
         //ViewModelFactory para el repositorio Global
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
             @NonNull
@@ -171,10 +175,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 return (T) new GlobalMonitoringViewModel(getApplication(),user_id);
             }
         };
+        this.globalMonitoringViewModel = new ViewModelProvider(this,factory).get(GlobalMonitoringViewModel.class);
 
-        //iniciamos Repositorios
-        this.e4BandRepository = new E4BandRepository();
-        this.ticWatchRepository = new TicWatchRepository();
     }
 
 
@@ -304,9 +306,20 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId()){
             case R.id.btn_back_new_monitoring:
-
+                String timeback = String.valueOf(System.currentTimeMillis());
+                this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, timeback);
+                this.putDataReq = this.putDataMapRequest.asPutDataRequest();
+                Task <DataItem> putDataTask1 = this.dataClient.putDataItem(this.putDataReq);
+                putDataTask1.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataItem> task) {
+                        Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
+                    }
+                });
+                SampleRateFilterThread.STATUS = "INACTIVO";
                 finish();
 
                 break;
@@ -315,8 +328,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                 //Informamos al Reloj que vamos a iniciar la monitorización
                 /**NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO**/
-                String time = String.valueOf(System.currentTimeMillis());
-                this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, time);
+                String timeStart = String.valueOf(System.currentTimeMillis());
+                this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, timeStart);
                 this.putDataReq = this.putDataMapRequest.asPutDataRequest();
                 Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
                 putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
@@ -326,13 +339,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     }
                 });
 
-                /*Iniciamos IntentService de muestreo
-                Cada X tiempo según hayamos indicado en la configuración, recogerá los datos de los ViewModels y los pondrá en un
-                ViewModel Global, del que sí que observará el fragment de monitorización.
+                /*Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
                  */
-                Intent intent = new Intent(this, SampleRateService.class);
-                intent.setAction(ACTION_START);
-                this.startService(intent);
+                SampleRateFilterThread.STATUS = "ACTIVO";
+                this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.globalMonitoringViewModel);
+                this.sampleRateThread.start();
 
 
                 //Iniciaríamos el fragment para la monitorización en Tabs
@@ -345,19 +356,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                 break;
 
-            case R.id.btn_stop_monitoring:
-                String timeStop = String.valueOf(System.currentTimeMillis());
-                this.putDataMapRequestStop.getDataMap().putString(MONITORING_STOP_KEY, timeStop);
-                this.putDataReqStop = this.putDataMapRequestStop.asPutDataRequest();
-                Task<DataItem> putDataTaskStop = this.dataClient.putDataItem(this.putDataReqStop);
-                putDataTaskStop.addOnCompleteListener(new OnCompleteListener<DataItem>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataItem> task) {
-                        Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
-                    }
-                });
-
-                break;
         }
     }
 

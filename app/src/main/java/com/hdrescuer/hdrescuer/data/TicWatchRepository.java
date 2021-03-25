@@ -67,7 +67,7 @@ public class TicWatchRepository {
 //        this.girx = 0.0f;//
 //        this.giry = 0.0f;//
 //        this.girz = 0.0f;
-//        this.hrppg = 0.0f;
+        this.hrppg = 0.0f;
         this.hrppgraw = 0.0f;
         this.hb = 0.0f;
         this.step = 0.0f;

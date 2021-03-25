@@ -11,12 +11,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.TicWatchRepository;
 
 
 public class TabWatchMonitoring extends Fragment {
 
-    TicWatchRepository ticWatchRepository;
+    GlobalMonitoringViewModel globalMonitoringViewModel;
 
 //    TextView tvAccx;
 //    TextView tvAccy;
@@ -45,7 +46,7 @@ public class TabWatchMonitoring extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tab_watch_monitoring, container, false);
         findViews(view);
 
-        this.ticWatchRepository = new ViewModelProvider(requireActivity()).get(TicWatchRepository.class);
+        this.globalMonitoringViewModel = new ViewModelProvider(requireActivity()).get(GlobalMonitoringViewModel.class);
 
         createObserverForViewModel();
         // Inflate the layout for this fragment
@@ -134,7 +135,7 @@ public class TabWatchMonitoring extends Fragment {
 //        });
 
         //Observers de hrppg
-        this.ticWatchRepository.getHrppg().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getHrppg().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvhrppg.setText(aFloat.toString());
@@ -142,7 +143,7 @@ public class TabWatchMonitoring extends Fragment {
         });
 
         //Observers de hrppgraw
-        this.ticWatchRepository.getHrppgraw().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getHrppgraw().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvhrppgraw.setText(aFloat.toString());
@@ -150,7 +151,7 @@ public class TabWatchMonitoring extends Fragment {
         });
 
         //Observers de hrppgraw
-        this.ticWatchRepository.getHb().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getHb().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvhb.setText(aFloat.toString());
@@ -158,7 +159,7 @@ public class TabWatchMonitoring extends Fragment {
         });
 
         //Observers de step
-        this.ticWatchRepository.getStep().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getStep().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvsteps.setText(aFloat.toString());

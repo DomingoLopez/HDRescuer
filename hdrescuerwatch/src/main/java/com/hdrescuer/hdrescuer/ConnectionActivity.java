@@ -371,7 +371,7 @@ public class ConnectionActivity extends FragmentActivity implements
                 putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
-                       // Log.i("INFOTASK", "PUESTO VALOR HRRAW EN DATACLIENT");
+                        Log.i("INFOTASK", "PUESTO VALOR HRRAW EN DATACLIENT");
                     }
                 });
 
@@ -385,7 +385,7 @@ public class ConnectionActivity extends FragmentActivity implements
                 putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
-                        Log.i("INFOTASK", "PUESTO VALOR STEP EN DATACLIENT");
+                        //Log.i("INFOTASK", "PUESTO VALOR STEP EN DATACLIENT");
                     }
                 });
                 Log.d(TAG, msg);
@@ -427,29 +427,32 @@ public class ConnectionActivity extends FragmentActivity implements
         //Método que vamos a usar para escuchar cuando se inicia y se termina la monitorización
         for (DataEvent event : dataEventBuffer) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
-
                 // DataItem changed
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().compareTo("/MONITORING") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.monitorizacionActiva = dataMap.getString("MONITORING");
-                    Log.i("MONITORING_ACTIVADA", dataMap.getString("MONITORING"));
-                    this.tv_status_watch.setText("MONITORIZACIÓN RECIBIDA. \n ENVIANDO DATOS...");
-                    this.btn_connected_watch.setText("SENDING...");
-                    this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.blue_secondary,getTheme()));
+                    if (this.monitorizacionActiva == null) {
+                        DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                        this.monitorizacionActiva = dataMap.getString("MONITORING");
+                        Log.i("MONITORING_ACTIVADA", dataMap.getString("MONITORING"));
+                        this.tv_status_watch.setText("MONITORIZACIÓN RECIBIDA. \n ENVIANDO DATOS...");
+                        this.btn_connected_watch.setText("SENDING...");
+                        this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.blue_secondary, getTheme()));
+                    } else {
+                        this.monitorizacionActiva = null;
+                        Log.i("MONITORING DESACTIVADA", "RECIBIDO STOP");
+                        this.btn_connected_watch.setText("Conectado");
+                        this.tv_status_watch.setText("Ambos dispositivos vinculados correctamente.\n Esperando monitorización...");
+                        this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.e4connected,getTheme()));
 
-                }else if(item.getUri().getPath().compareTo("/MONITORINGSTOP") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.monitorizacionActiva = null;
-                    Log.i("MONITORING DESACTIVADA", String.valueOf(dataMap.getInt("MONITORINGTOP")));
-                    this.btn_connected_watch.setText("Conectado");
-                    this.tv_status_watch.setText("Ambos dispositivos vinculados correctamente.\n Esperando monitorización...");
+                    }
+
+                } else if (event.getType() == DataEvent.TYPE_DELETED) {
+                    // DataItem deleted
                 }
-            } else if (event.getType() == DataEvent.TYPE_DELETED) {
-                // DataItem deleted
+
+
             }
         }
-
     }
 
     private class MyAmbientCallback extends AmbientModeSupport.AmbientCallback {

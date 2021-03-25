@@ -22,7 +22,6 @@ import com.hdrescuer.hdrescuer.data.E4BandRepository;
 
 public class DevicesMonitoringFragment extends Fragment implements View.OnClickListener {
 
-    E4BandRepository e4BandRepository;
     TabLayout tabLayout;
     ViewPager2 viewPager;
     Button btnStopMonitor;
@@ -46,7 +45,6 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        this.e4BandRepository = new ViewModelProvider(requireActivity()).get(E4BandRepository.class);
 
 
         // Inflate the layout for this fragment
@@ -86,13 +84,6 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
         tabLayoutMediator.attach();
 
 
-
-            this.e4BandRepository.getCurrentTemp().observe(getViewLifecycleOwner(), new Observer<Float>() {
-                @Override
-                public void onChanged(Float temp) {
-
-                }
-            });
     }
 
     private void findViews(View view) {
