@@ -11,19 +11,30 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
+import java.text.DecimalFormat;
+
 
 public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewModelProvider.Factory {
 
 
     private int user_id;
-    //public GlobalMonitoringRepository globalMonitoringRepository;
 
-
+    //Atributos de los sensores del TicWatch
     private MutableLiveData<Float> hrppg;
     private MutableLiveData<Float> hb;
     private MutableLiveData<Float> hrppgraw;
     private MutableLiveData<Float> step;
+    private MutableLiveData<Float> accx;
+    private MutableLiveData<Float> accy;
+    private MutableLiveData<Float> accz;
+    private MutableLiveData<Float> acclx;
+    private MutableLiveData<Float> accly;
+    private MutableLiveData<Float> acclz;
+    private MutableLiveData<Float> girx;
+    private MutableLiveData<Float> giry;
+    private MutableLiveData<Float> girz;
 
+    //Atributos de los sensores de la Empática
     private MutableLiveData<Float> battery;
     private MutableLiveData<Double> tag;
     private MutableLiveData<Integer> currentAccX;
@@ -41,6 +52,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         //Obtenemos la instancia singleton del globalMonitoringRepository
         //this.globalMonitoringRepository = GlobalMonitoringRepository.getInstance(id);
 
+        //Iniciamos las mutablelivedata para la empática
         this.battery = new MutableLiveData<>();
         this.tag = new MutableLiveData<>();
         this.currentAccX = new MutableLiveData<>();
@@ -51,10 +63,22 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         this.currentHr = new MutableLiveData<>();
         this.currentIbi = new MutableLiveData<>();
         this.currentTemp = new MutableLiveData<>();
+
+
+        //Iniciamos las mutablelivedata para el reloj
         this.hrppg = new MutableLiveData<>();
         this.hb = new MutableLiveData<>();
         this.hrppgraw = new MutableLiveData<>();
         this.step = new MutableLiveData<>();
+        this.accx = new MutableLiveData<>();
+        this.accy = new MutableLiveData<>();
+        this.accz = new MutableLiveData<>();
+        this.acclx = new MutableLiveData<>();
+        this.accly = new MutableLiveData<>();
+        this.acclz = new MutableLiveData<>();
+        this.girx = new MutableLiveData<>();
+        this.giry = new MutableLiveData<>();
+        this.girz = new MutableLiveData<>();
 
     }
 
@@ -63,6 +87,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         return user_id;
     }
 
+    //GETTERS DEL TICWATCH
     public MutableLiveData<Float> getHrppg() {
         return hrppg;
     }
@@ -78,6 +103,47 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     public MutableLiveData<Float> getStep() {
         return step;
     }
+
+    public MutableLiveData<Float> getAccx() { return accx; }
+
+    public MutableLiveData<Float> getAccy() {
+        return accy;
+    }
+
+    public MutableLiveData<Float> getAccz() {
+        return accz;
+    }
+
+    public MutableLiveData<Float> getAcclx() {
+        return acclx;
+    }
+
+    public MutableLiveData<Float> getAccly() {
+        return accly;
+    }
+
+    public MutableLiveData<Float> getAcclz() {
+        return acclz;
+    }
+
+    public MutableLiveData<Float> getGirx() {
+        return girx;
+    }
+
+    public MutableLiveData<Float> getGiry() {
+        return giry;
+    }
+
+    public MutableLiveData<Float> getGirz() {
+        return girz;
+    }
+
+
+
+
+
+
+    //GETTERS DE LA EMPÁTICA
 
     public MutableLiveData<Float> getBattery() {
         return battery;
@@ -119,6 +185,12 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         return currentTemp;
     }
 
+
+
+
+
+
+    //METODOS SETTER DEL TICWATCH
     public void setHrppg(Float hrppg) {
         this.hrppg.postValue(hrppg);
     }
@@ -131,10 +203,38 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         this.hrppgraw.postValue(hrppgraw);
     }
 
-    public void setStep(Float step) {
-        this.step.postValue(step);
+    public void setStep(Float step){ this.step.postValue(step);}
+
+    public void setAccx(Float accx) { this.accx.postValue(accx);   }
+
+    public void setAccy(Float accy) { this.accy.postValue(accy);   }
+
+    public void setAccz(Float accz) { this.accz.postValue(accz);   }
+
+    public void setAcclx(Float acclx) {
+        this.acclx.postValue(acclx);
     }
 
+    public void setAccly(Float accly) {
+        this.accly.postValue(accly);
+    }
+
+    public void setAcclz(Float acclz) {
+        this.acclz.postValue(acclz);
+    }
+
+    public void setGirx(Float girx) { this.girx.postValue(girx);  }
+
+    public void setGiry(Float giry) {
+        this.giry.postValue(giry);
+    }
+
+    public void setGirz(Float girz) {
+        this.girz.postValue(girz);
+    }
+
+
+    //Métodos SETTER DE LA EMPATICA
     public void setBattery(Float battery) {
         this.battery.postValue(battery);
     }

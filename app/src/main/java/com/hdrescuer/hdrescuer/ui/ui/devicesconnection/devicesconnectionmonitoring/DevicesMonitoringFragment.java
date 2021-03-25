@@ -98,5 +98,8 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     public void onClick(View view) {
 
         getActivity().finish();
+
     }
+
+
 }

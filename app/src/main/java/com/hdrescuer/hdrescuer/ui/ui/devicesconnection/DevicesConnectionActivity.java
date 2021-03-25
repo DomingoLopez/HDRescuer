@@ -494,6 +494,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             Log.d("E4Service", "Disconnecting");
             deviceManager.disconnect();
         }
+        SampleRateFilterThread.STATUS = "INACTIVE";
     }
 
     @Override
@@ -594,22 +595,22 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             if (event.getType() == DataEvent.TYPE_CHANGED) {
                 // DataItem changed
                 DataItem item = event.getDataItem();
-//                if (item.getUri().getPath().compareTo("/ACC") == 0) {
-//                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-//                    this.ticWatchRepository.setAccx(dataMap.getFloat("ACCX"));
-//                    this.ticWatchRepository.setAccy(dataMap.getFloat("ACCY"));
-//                    this.ticWatchRepository.setAccz(dataMap.getFloat("ACCZ"));
-//                }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
-//                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-//                    this.ticWatchRepository.setAcclx(dataMap.getFloat("ACCLX"));
-//                    this.ticWatchRepository.setAccly(dataMap.getFloat("ACCLY"));
-//                    this.ticWatchRepository.setAcclz(dataMap.getFloat("ACCLZ"));
-//                }else if(item.getUri().getPath().compareTo("/GIR") == 0) {
-//                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-//                    this.ticWatchRepository.setGirx(dataMap.getFloat("GIRX"));
-//                    this.ticWatchRepository.setGiry(dataMap.getFloat("GIRY"));
-//                    this.ticWatchRepository.setGirz(dataMap.getFloat("GIRZ"));
-//                }else
+                if (item.getUri().getPath().compareTo("/ACC") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchRepository.setAccx(dataMap.getFloat("ACCX"));
+                    this.ticWatchRepository.setAccy(dataMap.getFloat("ACCY"));
+                    this.ticWatchRepository.setAccz(dataMap.getFloat("ACCZ"));
+                }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchRepository.setAcclx(dataMap.getFloat("ACCLX"));
+                    this.ticWatchRepository.setAccly(dataMap.getFloat("ACCLY"));
+                    this.ticWatchRepository.setAcclz(dataMap.getFloat("ACCLZ"));
+                }else if(item.getUri().getPath().compareTo("/GIR") == 0) {
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                    this.ticWatchRepository.setGirx(dataMap.getFloat("GIRX"));
+                    this.ticWatchRepository.setGiry(dataMap.getFloat("GIRY"));
+                    this.ticWatchRepository.setGirz(dataMap.getFloat("GIRZ"));
+                }else
                 if(item.getUri().getPath().compareTo("/HRPPG") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setHrppg(dataMap.getFloat("HRPPG"));
@@ -627,5 +628,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 // DataItem deleted
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

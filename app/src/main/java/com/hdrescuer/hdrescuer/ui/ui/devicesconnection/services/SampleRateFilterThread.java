@@ -69,7 +69,15 @@ public class SampleRateFilterThread extends Thread{
         this.globalMonitoringViewModel.setHb(this.ticWatchRepository.getHb());
         this.globalMonitoringViewModel.setHrppgraw(this.ticWatchRepository.getHrppgraw());
         this.globalMonitoringViewModel.setStep(this.ticWatchRepository.getStep());
-
+        this.globalMonitoringViewModel.setAccx(this.ticWatchRepository.getAccx());
+        this.globalMonitoringViewModel.setAccy(this.ticWatchRepository.getAccy());
+        this.globalMonitoringViewModel.setAccz(this.ticWatchRepository.getAccz());
+        this.globalMonitoringViewModel.setAcclx(this.ticWatchRepository.getAcclx());
+        this.globalMonitoringViewModel.setAccly(this.ticWatchRepository.getAccly());
+        this.globalMonitoringViewModel.setAcclz(this.ticWatchRepository.getAcclz());
+        this.globalMonitoringViewModel.setGirx(this.ticWatchRepository.getGirx());
+        this.globalMonitoringViewModel.setGiry(this.ticWatchRepository.getGiry());
+        this.globalMonitoringViewModel.setGirz(this.ticWatchRepository.getGirz());
 
     }
 
