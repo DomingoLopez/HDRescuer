@@ -161,10 +161,10 @@ public class TabWatchMonitoring extends Fragment {
         });
 
         //Observers de step
-        this.globalMonitoringViewModel.getStep().observe(requireActivity(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getStep().observe(requireActivity(), new Observer<Integer>() {
             @Override
-            public void onChanged(Float aFloat) {
-                tvsteps.setText(aFloat.toString());
+            public void onChanged(Integer inte) {
+                tvsteps.setText(inte.toString());
             }
         });
 

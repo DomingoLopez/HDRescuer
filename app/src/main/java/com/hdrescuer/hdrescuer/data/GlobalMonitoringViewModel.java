@@ -23,7 +23,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     private MutableLiveData<Float> hrppg;
     private MutableLiveData<Float> hb;
     private MutableLiveData<Float> hrppgraw;
-    private MutableLiveData<Float> step;
+    private MutableLiveData<Integer> step;
     private MutableLiveData<Float> accx;
     private MutableLiveData<Float> accy;
     private MutableLiveData<Float> accz;
@@ -100,7 +100,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         return hrppgraw;
     }
 
-    public MutableLiveData<Float> getStep() {
+    public MutableLiveData<Integer> getStep() {
         return step;
     }
 
@@ -203,7 +203,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         this.hrppgraw.postValue(hrppgraw);
     }
 
-    public void setStep(Float step){ this.step.postValue(step);}
+    public void setStep(Integer step){ this.step.postValue(step);}
 
     public void setAccx(Float accx) { this.accx.postValue(accx);   }
 

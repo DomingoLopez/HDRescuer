@@ -587,7 +587,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         }
     }
 
-
+    private int i = 0;
     @Override
     public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
 
@@ -600,6 +600,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     this.ticWatchRepository.setAccx(dataMap.getFloat("ACCX"));
                     this.ticWatchRepository.setAccy(dataMap.getFloat("ACCY"));
                     this.ticWatchRepository.setAccz(dataMap.getFloat("ACCZ"));
+                    this.i++;
+                    Log.i("ACCAPP",""+ this.i +":  "+ dataMap.getFloat("ACCX"));
                 }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setAcclx(dataMap.getFloat("ACCLX"));
@@ -622,7 +624,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     this.ticWatchRepository.setHb(dataMap.getFloat("HB"));
                 }else if(item.getUri().getPath().compareTo("/STEP") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchRepository.setStep(dataMap.getFloat("STEP"));
+                    this.ticWatchRepository.setStep(dataMap.getInt("STEP"));
                 }
             } else if (event.getType() == DataEvent.TYPE_DELETED) {
                 // DataItem deleted

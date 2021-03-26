@@ -31,6 +31,6 @@ public class Constants {
     public static final String CAPABILITY_WEAR_APP = "verify_remote_example_wear_app";
 
     //SAMPLE RATE
-    public static int SAMPLE_RATE = 500;
+    public static int SAMPLE_RATE = 200;
 
 }

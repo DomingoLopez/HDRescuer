@@ -38,7 +38,6 @@ public class SampleRateFilterThread extends Thread{
                Thread.sleep(Constants.SAMPLE_RATE);
                updateE4BandData();
                updateTicWatchData();
-               Log.i("INSIDE","THREAD");
 
            }
 
