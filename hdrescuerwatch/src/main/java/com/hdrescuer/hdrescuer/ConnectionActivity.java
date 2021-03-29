@@ -306,7 +306,7 @@ public class ConnectionActivity extends FragmentActivity implements
                 // DataItem changed
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().compareTo("/MONITORING") == 0) {
-                    if (this.monitorizacionActiva == null) {
+
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                         this.monitorizacionActiva = dataMap.getString("MONITORING");
                         Log.i("MONITORING_ACTIVADA", dataMap.getString("MONITORING"));
@@ -318,15 +318,14 @@ public class ConnectionActivity extends FragmentActivity implements
                         SampleRateFilterThread thread = new SampleRateFilterThread(this.dataRepository, this.dataClient);
                         SampleRateFilterThread.STATUS = "ACTIVO";
                         thread.start();
-                    } else {
-                        this.monitorizacionActiva = null;
-                        Log.i("MONITORING DESACTIVADA", "RECIBIDO STOP");
-                        this.btn_connected_watch.setText("Conectado");
-                        this.tv_status_watch.setText("Ambos dispositivos vinculados correctamente.\n Esperando monitorización...");
-                        this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.e4connected,getTheme()));
-                        SampleRateFilterThread.STATUS = "INACTIVO";
 
-                    }
+                }else if(item.getUri().getPath().compareTo("/MONITORINGSTOP") == 0){
+                    this.monitorizacionActiva = null;
+                    Log.i("MONITORING DESACTIVADA", "RECIBIDO STOP");
+                    this.btn_connected_watch.setText("Conectado");
+                    this.tv_status_watch.setText("Ambos dispositivos vinculados correctamente.\n Esperando monitorización...");
+                    this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.e4connected,getTheme()));
+                    SampleRateFilterThread.STATUS = "INACTIVO";
 
                 } else if (event.getType() == DataEvent.TYPE_DELETED) {
                     // DataItem deleted

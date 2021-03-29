@@ -9,15 +9,23 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.DataClient;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.E4BandRepository;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 
 
 public class DevicesMonitoringFragment extends Fragment implements View.OnClickListener {
@@ -26,8 +34,19 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     ViewPager2 viewPager;
     Button btnStopMonitor;
 
+    DataClient dataclient;
+    PutDataMapRequest putDataMapRequestStop;
+    PutDataRequest putDataReqStop;
+
+
     public DevicesMonitoringFragment() {
         // Required empty public constructor
+    }
+
+    public DevicesMonitoringFragment(DataClient dataClient, PutDataMapRequest stopMapRequest, PutDataRequest stopRequest){
+        this.dataclient = dataClient;
+        this.putDataMapRequestStop = stopMapRequest;
+        this.putDataReqStop = stopRequest;
     }
 
 
@@ -96,6 +115,18 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+
+        String timeback = String.valueOf(System.currentTimeMillis());
+        this.putDataMapRequestStop.getDataMap().putString("MONITORINGSTOP", timeback);
+        this.putDataReqStop = this.putDataMapRequestStop.asPutDataRequest();
+        Task<DataItem> putDataTask1 = this.dataclient.putDataItem(this.putDataReqStop);
+        putDataTask1.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+            @Override
+            public void onComplete(@NonNull Task<DataItem> task) {
+                Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
+            }
+        });
+        SampleRateFilterThread.STATUS = "INACTIVO";
 
         getActivity().finish();
 

@@ -1,5 +1,6 @@
 package com.hdrescuer.hdrescuer.retrofit;
 
+import com.hdrescuer.hdrescuer.retrofit.request.RequestSendData;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestUserDetails;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
@@ -24,4 +25,7 @@ public interface AuthApiService {
 
     @POST("api/updateuser")
     Call<UserDetails> updateUser(@Body UserDetails userDetails);
+
+    @POST("apit/datarecovery")
+    Call<String> setUserData(@Body RequestSendData userData);
 }
