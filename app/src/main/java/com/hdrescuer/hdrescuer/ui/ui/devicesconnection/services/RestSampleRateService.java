@@ -75,7 +75,7 @@ public class RestSampleRateService extends IntentService {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         if(response.isSuccessful()){
-
+                            Log.i("SUCCESS","CORRECTO");
                         }else {
 
                             Log.i("ERROR", "ERROR EN EL ENVÍO DE LOS DATOS");

@@ -26,6 +26,6 @@ public interface AuthApiService {
     @POST("api/updateuser")
     Call<UserDetails> updateUser(@Body UserDetails userDetails);
 
-    @POST("apit/datarecovery")
+    @POST("api/datarecovery")
     Call<String> setUserData(@Body RequestSendData userData);
 }
