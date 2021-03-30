@@ -16,7 +16,7 @@ public class RequestSendData implements Serializable
     @SerializedName("tic_hrppg")
     @Expose
     private String ticHrppg;
-    @SerializedName("tic hrppgraw")
+    @SerializedName("tic_hrppgraw")
     @Expose
     private String ticHrppgraw;
     @SerializedName("tic_step")

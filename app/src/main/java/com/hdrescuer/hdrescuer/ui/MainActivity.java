@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }else{
                         Toast.makeText(MainActivity.this, "Algo salió mal. Revise sus datos de acceso", Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                        startActivity(i);
                     }
 
                 }
