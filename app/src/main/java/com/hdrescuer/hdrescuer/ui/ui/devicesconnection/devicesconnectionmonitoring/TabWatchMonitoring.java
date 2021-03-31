@@ -140,7 +140,7 @@ public class TabWatchMonitoring extends Fragment {
         this.globalMonitoringViewModel.getHrppg().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvhrppg.setText(aFloat.toString());
+                tvhrppg.setText(String.valueOf(Math.round(aFloat)));
             }
         });
 
@@ -148,15 +148,15 @@ public class TabWatchMonitoring extends Fragment {
         this.globalMonitoringViewModel.getHrppgraw().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvhrppgraw.setText(aFloat.toString());
+                tvhrppgraw.setText(String.valueOf(Math.round(aFloat)));
             }
         });
 
-        //Observers de hrppgraw
+        //Observers de Hb
         this.globalMonitoringViewModel.getHb().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvhb.setText(aFloat.toString());
+                tvhb.setText(String.valueOf(Math.round(aFloat)));
             }
         });
 

@@ -236,9 +236,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_PERMISSION_ACCESS_COARSE_LOCATION:
-                // If request is cancelled, the result arrays are empty.
+                // Si se cancela la eleccion de permisos, no se llena el array
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted, yay!
+                    //Permisos concedidos
                     initEmpaticaDeviceManager();
                 } else {
                     // Permission denied, boo!

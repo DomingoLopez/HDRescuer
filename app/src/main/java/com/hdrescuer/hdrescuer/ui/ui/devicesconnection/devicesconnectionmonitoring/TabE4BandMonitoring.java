@@ -14,11 +14,13 @@ import android.widget.TextView;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 
+import java.text.DecimalFormat;
+
 
 public class TabE4BandMonitoring extends Fragment {
 
     GlobalMonitoringViewModel globalMonitoringViewModel;
-
+    DecimalFormat df = new DecimalFormat("#.##");
 
     TextView tvTemp;
     //TextView tvBattery;
@@ -75,7 +77,7 @@ public class TabE4BandMonitoring extends Fragment {
         this.globalMonitoringViewModel.getCurrentTemp().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvTemp.setText(aFloat.toString());
+                tvTemp.setText(df.format(aFloat));
             }
         });
 
