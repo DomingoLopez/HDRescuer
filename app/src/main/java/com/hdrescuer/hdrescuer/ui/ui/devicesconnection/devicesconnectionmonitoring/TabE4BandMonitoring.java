@@ -12,13 +12,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hdrescuer.hdrescuer.R;
-import com.hdrescuer.hdrescuer.data.E4BandViewModel;
+import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
+
+import java.text.DecimalFormat;
 
 
 public class TabE4BandMonitoring extends Fragment {
 
-    E4BandViewModel e4BandViewModel;
-
+    GlobalMonitoringViewModel globalMonitoringViewModel;
+    DecimalFormat df = new DecimalFormat("#.##");
 
     TextView tvTemp;
     //TextView tvBattery;
@@ -45,7 +47,7 @@ public class TabE4BandMonitoring extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tab_e4_band_monitoring, container, false);
         findViews(view);
 
-        this.e4BandViewModel = new ViewModelProvider(requireActivity()).get(E4BandViewModel.class);
+        this.globalMonitoringViewModel = new ViewModelProvider(requireActivity()).get(GlobalMonitoringViewModel.class);
 
         createObserverForViewModel();
         // Inflate the layout for this fragment
@@ -72,66 +74,58 @@ public class TabE4BandMonitoring extends Fragment {
     private void createObserverForViewModel() {
 
         //Observer de temperatura
-        this.e4BandViewModel.getCurrentTemp().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getCurrentTemp().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvTemp.setText(aFloat.toString());
+                tvTemp.setText(df.format(aFloat));
             }
         });
 
-        //Observer de Batería
-//        this.e4BandViewModel.getBattery().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvBattery.setText(aFloat.toString());
-//            }
-//        });
-
 
         //Observer de GSR
-        this.e4BandViewModel.getCurrentGsr().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getCurrentGsr().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvGSR.setText(aFloat.toString());
             }
         });
         //Observer de HR
-        this.e4BandViewModel.getCurrentHr().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getCurrentHr().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvHR.setText(aFloat.toString());
             }
         });
         //Observer de IBI
-        this.e4BandViewModel.getCurrentIbi().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getCurrentIbi().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvIBI.setText(aFloat.toString());
             }
         });
         //Observer de AccX
-        this.e4BandViewModel.getCurrentAccX().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        this.globalMonitoringViewModel.getCurrentAccX().observe(requireActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer aFloat) {
                 tvAccX.setText(aFloat.toString());
             }
         });
         //Observer de AccY
-        this.e4BandViewModel.getCurrentAccY().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        this.globalMonitoringViewModel.getCurrentAccY().observe(requireActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer aFloat) {
                 tvAccY.setText(aFloat.toString());
             }
         });
         //Observer de AccZ
-        this.e4BandViewModel.getCurrentAccZ().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        this.globalMonitoringViewModel.getCurrentAccZ().observe(requireActivity(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer aFloat) {
                 tvAccZ.setText(aFloat.toString());
             }
         });
         //Observer de BVP
-        this.e4BandViewModel.getCurrentBvp().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getCurrentBvp().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 tvBVP.setText(aFloat.toString());

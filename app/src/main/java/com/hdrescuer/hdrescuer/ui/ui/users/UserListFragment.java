@@ -70,7 +70,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         }
 
 
-        this.userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
+        this.userListViewModel = new ViewModelProvider(getActivity()).get(UserListViewModel.class);
 
     }
 
@@ -135,7 +135,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
 
     private void loadUserData() {
 
-        this.userListViewModel.users.observe(this.getViewLifecycleOwner(), new Observer<List<User>>() {
+        this.userListViewModel.getUsers().observe(requireActivity(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
                 Log.i("USERS", users.toString());
@@ -149,7 +149,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     @Override
     public void onListItemClick(int position) {
 
-        int id = this.userList.get(position).getId();
+        String id = this.userList.get(position).getId();
         Intent i = new Intent(MyApp.getContext(), UserDetailsActivity.class);
         i.putExtra("id", id);
         startActivity(i);
@@ -167,6 +167,6 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     @Override
     public void onResume() {
         super.onResume();
-        this.userListViewModel.refreshUsers();
+        //this.userListViewModel.refreshUsers();
     }
 }

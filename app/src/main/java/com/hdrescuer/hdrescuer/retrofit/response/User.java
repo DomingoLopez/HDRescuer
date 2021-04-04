@@ -4,20 +4,25 @@ package com.hdrescuer.hdrescuer.retrofit.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 public class User {
 
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private String id;
     @SerializedName("username")
     @Expose
     private String username;
     @SerializedName("lastname")
     @Expose
     private String lastname;
-    @SerializedName("last_monitoring")
+   /* @SerializedName("last_monitoring")
     @Expose
-    private String lastMonitoring;
+    private String lastMonitoring;*/
+    @SerializedName("createdAt")
+    @Expose
+    private Date createdAt;
 
     /**
      * No args constructor for use in serialization
@@ -32,11 +37,11 @@ public class User {
      * @param id
      * @param username
      */
-    public User(Integer id, String username,String lastname, String lastMonitoring) {
+    public User(String id, String username,String lastname, String lastMonitoring) {
         super();
         this.id = id;
         this.username = username;
-        this.lastMonitoring = lastMonitoring;
+        //this.lastMonitoring = lastMonitoring;
         this.lastname = lastname;
     }
 
@@ -44,16 +49,16 @@ public class User {
         super();
         this.id = user.getId();
         this.username = user.getUsername();
-        this.lastMonitoring = user.getLastMonitoring();
+        //this.lastMonitoring = user.getLastMonitoring();
         this.lastname = user.getLastname();
     }
 
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -73,12 +78,12 @@ public class User {
         this.username = lastname;
     }
 
-    public String getLastMonitoring() {
+    /*public String getLastMonitoring() {
         return lastMonitoring;
     }
 
     public void setLastMonitoring(String lastMonitoring) {
         this.lastMonitoring = lastMonitoring;
-    }
+    }*/
 
 }

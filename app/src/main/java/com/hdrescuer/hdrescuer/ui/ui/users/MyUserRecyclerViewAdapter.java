@@ -40,7 +40,7 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
             holder.mItem = mValues.get(position);
 
             holder.user_name.setText(holder.mItem.getUsername() + " " +holder.mItem.getLastname());
-            holder.last_monitoring.setText(holder.mItem.getLastMonitoring());
+            //holder.last_monitoring.setText(holder.mItem.getLastMonitoring());
         }
     }
 
@@ -64,14 +64,14 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public final View mView;
         public final TextView user_name;
-        public final TextView last_monitoring;
+        //public final TextView last_monitoring;
         public User mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             user_name = (TextView) view.findViewById(R.id.textViewUserName);
-            last_monitoring = (TextView) view.findViewById(R.id.textViewLastMonitoring);
+            //last_monitoring = (TextView) view.findViewById(R.id.textViewLastMonitoring);
 
             view.setOnClickListener(this);
         }

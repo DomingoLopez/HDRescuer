@@ -1,16 +1,13 @@
 package com.hdrescuer.hdrescuer.data;
 
+import android.util.Log;
 import android.widget.Toast;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
-import com.hdrescuer.hdrescuer.retrofit.request.RequestUserDetails;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
@@ -24,26 +21,26 @@ import retrofit2.Response;
 public class UserDetailsRepository {
 
     AuthApiService authApiService;
-    AuthConectionClient authConectionClient;
+    AuthConectionClientUsersModule authConectionClientUsersModule;
     MutableLiveData<UserDetails> user;
 
-    UserDetailsRepository(int id){
-        this.authConectionClient = AuthConectionClient.getInstance();
-        this.authApiService = this.authConectionClient.getAuthApiService();
-        //this.user = this.getUser(id);
+    UserDetailsRepository(String id){
+        this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
+        this.authApiService = this.authConectionClientUsersModule.getAuthApiService();
+        this.user = this.getUser(id);
     }
 
-    public MutableLiveData<UserDetails> getUser(int id){
-        final MutableLiveData<UserDetails> data = new MutableLiveData<>();
+    public MutableLiveData<UserDetails> getUser(String id){
 
-        //Obtenemos el usuario
+        if(user == null)
+            user = new MutableLiveData<>();
 
-        Call<UserDetails> call = authApiService.getUserDetails(new RequestUserDetails(id));
+        Call<UserDetails> call = authApiService.getUserDetails(id);
         call.enqueue(new Callback<UserDetails>() {
             @Override
             public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
                 if(response.isSuccessful()){
-                    data.setValue(response.body());
+                    user.setValue(response.body());
                 }else {
 
                     Toast.makeText(MyApp.getContext(), "Error al cargar el usuario", Toast.LENGTH_SHORT).show();
@@ -57,33 +54,22 @@ public class UserDetailsRepository {
         });
 
 
-
-        UserDetails user = new UserDetails(1,
-                                        "DOMINGO",
-                                        "LÓPEZ PACHECO",
-                                        29,
-                                        "1.73",
-                                        75,
-                                        "M",
-                                        "domin68914@gmail.com",
-                                        637447471,
-                                        "2021-03-05 08:40:35");
-
-        data.setValue(user);
-        this.user = data;
-
-        return data;
+        return user;
 
     }
 
+    public MutableLiveData<UserDetails> getUser(){
+        return this.user;
+    }
 
-    public void updateUser(UserDetails user){
-        MutableLiveData<List<User>> data = new MutableLiveData<>();
-        Call<UserDetails> call = authApiService.updateUser(user);
+
+    public void updateUser(UserDetails user_devuelto){
+        Call<UserDetails> call = authApiService.updateUser(user_devuelto);
         call.enqueue(new Callback<UserDetails>() {
             @Override
             public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
                 if(response.isSuccessful()){
+                    user.setValue(response.body());
                     Toast.makeText(MyApp.getContext(), "Usuario modificado de forma satisfactoria", Toast.LENGTH_SHORT).show();
                 }else {
 

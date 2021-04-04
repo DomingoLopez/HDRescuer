@@ -11,23 +11,25 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.hdrescuer.hdrescuer.R;
-import com.hdrescuer.hdrescuer.data.E4BandViewModel;
-import com.hdrescuer.hdrescuer.data.TicWatchViewModel;
+import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
+
+import java.text.DecimalFormat;
 
 
 public class TabWatchMonitoring extends Fragment {
 
-    TicWatchViewModel ticWatchViewModel;
+    GlobalMonitoringViewModel globalMonitoringViewModel;
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
 
-//    TextView tvAccx;
-//    TextView tvAccy;
-//    TextView tvAccz;
-//    TextView tvAcclx;
-//    TextView tvAccly;
-//    TextView tvAcclz;
-//    TextView tvgirx;
-//    TextView tvgiry;
-//    TextView tvgirz;
+    TextView tvAccx;
+    TextView tvAccy;
+    TextView tvAccz;
+    TextView tvAcclx;
+    TextView tvAccly;
+    TextView tvAcclz;
+    TextView tvgirx;
+    TextView tvgiry;
+    TextView tvgirz;
     TextView tvhrppg;
     TextView tvhrppgraw;
     TextView tvsteps;
@@ -46,7 +48,7 @@ public class TabWatchMonitoring extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tab_watch_monitoring, container, false);
         findViews(view);
 
-        this.ticWatchViewModel = new ViewModelProvider(requireActivity()).get(TicWatchViewModel.class);
+        this.globalMonitoringViewModel = new ViewModelProvider(requireActivity()).get(GlobalMonitoringViewModel.class);
 
         createObserverForViewModel();
         // Inflate the layout for this fragment
@@ -55,17 +57,17 @@ public class TabWatchMonitoring extends Fragment {
 
     private void findViews(View view) {
 
-//        this.tvAccx = view.findViewById(R.id.tvWatchAccx);
-//        this.tvAccy = view.findViewById(R.id.tvWatchAccy);
-//        this.tvAccz = view.findViewById(R.id.tvWatchAccz);
-//
-//        this.tvAcclx = view.findViewById(R.id.tvAcclx);
-//        this.tvAccly = view.findViewById(R.id.tvAccly);
-//        this.tvAcclz = view.findViewById(R.id.tvAcclz);
-//
-//        this.tvgirx = view.findViewById(R.id.tvgirx);
-//        this.tvgiry = view.findViewById(R.id.tvgiry);
-//        this.tvgirz = view.findViewById(R.id.tvgirz);
+        this.tvAccx = view.findViewById(R.id.tvAccxWatch);
+        this.tvAccy = view.findViewById(R.id.tvAccyWatch);
+        this.tvAccz = view.findViewById(R.id.tvAcczWatch);
+
+        this.tvAcclx = view.findViewById(R.id.tvAcclxWatch);
+        this.tvAccly = view.findViewById(R.id.tvAcclyWatch);
+        this.tvAcclz = view.findViewById(R.id.tvAcclzWatch);
+
+        this.tvgirx = view.findViewById(R.id.tvGirxWatch);
+        this.tvgiry = view.findViewById(R.id.tvGiryWatch);
+        this.tvgirz = view.findViewById(R.id.tvGirzWatch);
 
         this.tvhrppg = view.findViewById(R.id.tvhrppg);
         this.tvhrppgraw = view.findViewById(R.id.tvhrppgraw);
@@ -75,94 +77,94 @@ public class TabWatchMonitoring extends Fragment {
 
     private void createObserverForViewModel() {
         //Observers de Acc
-//        this.ticWatchViewModel.getAccx().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvAccx.setText(aFloat.toString());
-//            }
-//        });
-//        this.ticWatchViewModel.getAccy().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvAccy.setText(aFloat.toString());
-//            }
-//        });
-//        this.ticWatchViewModel.getAccz().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvAccz.setText(aFloat.toString());
-//            }
-//        });
-//
-//        //Observers de Accl
-//        this.ticWatchViewModel.getAcclx().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvAcclx.setText(aFloat.toString());
-//            }
-//        });
-//        this.ticWatchViewModel.getAccly().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvAccly.setText(aFloat.toString());
-//            }
-//        });
-//        this.ticWatchViewModel.getAcclz().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvAcclz.setText(aFloat.toString());
-//            }
-//        });
-//
-//        //Observers de Giroscopio
-//        this.ticWatchViewModel.getGirx().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvgirx.setText(aFloat.toString());
-//            }
-//        });
-//        this.ticWatchViewModel.getGiry().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvgiry.setText(aFloat.toString());
-//            }
-//        });
-//        this.ticWatchViewModel.getGirz().observe(getViewLifecycleOwner(), new Observer<Float>() {
-//            @Override
-//            public void onChanged(Float aFloat) {
-//                tvgirz.setText(aFloat.toString());
-//            }
-//        });
+        this.globalMonitoringViewModel.getAccx().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                tvAccx.setText(df2.format(aFloat));
+            }
+        });
+        this.globalMonitoringViewModel.getAccy().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                tvAccy.setText(df2.format(aFloat));
+            }
+        });
+        this.globalMonitoringViewModel.getAccz().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                tvAccz.setText(df2.format(aFloat));
+            }
+        });
+
+        //Observers de Accl
+        this.globalMonitoringViewModel.getAcclx().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                tvAcclx.setText(df2.format(aFloat));
+            }
+        });
+        this.globalMonitoringViewModel.getAccly().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                tvAccly.setText(df2.format(aFloat));
+            }
+        });
+        this.globalMonitoringViewModel.getAcclz().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                tvAcclz.setText(df2.format(aFloat));
+            }
+        });
+
+        //Observers de Giroscopio
+        this.globalMonitoringViewModel.getGirx().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                tvgirx.setText(df2.format(aFloat));
+            }
+        });
+        this.globalMonitoringViewModel.getGiry().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                tvgiry.setText(df2.format(aFloat));
+            }
+        });
+        this.globalMonitoringViewModel.getGirz().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                tvgirz.setText(df2.format(aFloat));
+            }
+        });
 
         //Observers de hrppg
-        this.ticWatchViewModel.getHrppg().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getHrppg().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvhrppg.setText(aFloat.toString());
+                tvhrppg.setText(String.valueOf(Math.round(aFloat)));
             }
         });
 
         //Observers de hrppgraw
-        this.ticWatchViewModel.getHrppgraw().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getHrppgraw().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvhrppgraw.setText(aFloat.toString());
+                tvhrppgraw.setText(String.valueOf(Math.round(aFloat)));
             }
         });
 
-        //Observers de hrppgraw
-        this.ticWatchViewModel.getHb().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        //Observers de Hb
+        this.globalMonitoringViewModel.getHb().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvhb.setText(aFloat.toString());
+                tvhb.setText(String.valueOf(Math.round(aFloat)));
             }
         });
 
         //Observers de step
-        this.ticWatchViewModel.getStep().observe(getViewLifecycleOwner(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getStep().observe(requireActivity(), new Observer<Integer>() {
             @Override
-            public void onChanged(Float aFloat) {
-                tvsteps.setText(aFloat.toString());
+            public void onChanged(Integer inte) {
+                tvsteps.setText(inte.toString());
             }
         });
 

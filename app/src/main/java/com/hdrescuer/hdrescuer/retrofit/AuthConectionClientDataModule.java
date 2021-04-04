@@ -3,22 +3,23 @@ package com.hdrescuer.hdrescuer.retrofit;
 import com.hdrescuer.hdrescuer.common.Constants;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AuthConectionClient {
+public class AuthConectionClientDataModule {
 
 
 
-    private static AuthConectionClient instance = null;
+    private static AuthConectionClientDataModule instance = null;
 
     private AuthApiService authApiService;
 
     private Retrofit retrofit;
 
-    public AuthConectionClient() {
+    public AuthConectionClientDataModule() {
 
-       /* HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         // set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -26,7 +27,7 @@ public class AuthConectionClient {
         // add your other interceptors …
 
         // add logging as last interceptor
-        httpClient.addInterceptor(logging);  // <-- this is the important line!*/
+        httpClient.addInterceptor(logging);  // <-- this is the important line!
 
         //Incluímos en la cabecera de la petición el TOKEN que autoriza al usuario
         OkHttpClient.Builder ok = new OkHttpClient.Builder();
@@ -35,10 +36,10 @@ public class AuthConectionClient {
 
 
         this.retrofit = new Retrofit.Builder()
-                            .baseUrl(Constants.API_BASE_URL)
+                            .baseUrl(Constants.DATA_RESCUER_DATA_MODULE_URL)
                             .addConverterFactory(GsonConverterFactory.create())
                             .client(cliente) //adjunta a todas las peticiones que hagan uso del AuthConnectionClient el token
-                            //.client(httpClient.build())
+                            .client(httpClient.build())
                             .build();
 
         this.authApiService = this.retrofit.create(AuthApiService.class);
@@ -46,10 +47,10 @@ public class AuthConectionClient {
     }
 
 
-    public static AuthConectionClient getInstance(){
+    public static AuthConectionClientDataModule getInstance(){
 
         if(instance == null){
-            instance = new AuthConectionClient();
+            instance = new AuthConectionClientDataModule();
         }
 
         return instance;

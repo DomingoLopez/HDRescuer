@@ -15,28 +15,20 @@ import java.util.List;
 public class UserListViewModel extends AndroidViewModel {
 
     private UserListRepository userListRepository;
-    public MutableLiveData<List<User>> users;
 
     public UserListViewModel(@NonNull Application application) {
         super(application);
         this.userListRepository = new UserListRepository();
-        this.users = getUsers();
     }
 
-    public UserListRepository getRepo(){
-        return this.userListRepository;
-    }
 
     public MutableLiveData<List<User>> getUsers(){
-        return this.userListRepository.getAllUsers();
+        return this.userListRepository.getUsers();
     }
 
     public void setNewUser(UserDetails userDetails){
         this.userListRepository.setNewUser(userDetails);
     }
 
-    public void refreshUsers(){
-        this.users = getUsers();
-    }
 
 }
