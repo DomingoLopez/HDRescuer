@@ -16,9 +16,8 @@ import android.widget.TextView;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
-import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
@@ -29,12 +28,12 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
 
     //Servicio de Login y ConectionClient
-    AuthConectionClient authConectionClient;
+    AuthConectionClientUsersModule authConectionClientUsersModule;
     AuthApiService authApiService;
     //ViewModel
     UserDetailsViewModel userDetailsViewModel;
     //Parámetros de la ficha del usuario
-    int id;
+    String id;
     TextView username;
     TextView height;
     TextView weight;
@@ -42,6 +41,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     TextView gender;
     TextView email;
     TextView phone;
+    TextView phone2;
+    TextView address;
+    TextView city;
+    TextView cp;
     TextView last_monitoring;
     ImageView btn_back;
     Button btn_new_monitoring;
@@ -60,7 +63,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
         //Obtenemos el id del usuario
         Intent i = getIntent();
-        int id = i.getIntExtra("id", 0);
+        String id = i.getStringExtra("id");
 
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
             @NonNull
@@ -96,25 +99,33 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         this.gender = findViewById(R.id.tvGender);
         this.email = findViewById(R.id.tvEmail);
         this.phone = findViewById(R.id.tvPhone);
+        this.phone2 = findViewById(R.id.tvPhone2);
+        this.address = findViewById(R.id.tvaddress);
+        this.city = findViewById(R.id.tvcity);
+        this.cp = findViewById(R.id.tvcp);
+
         this.last_monitoring = findViewById(R.id.tvLastMonitoring);
         this.btn_back = findViewById(R.id.btn_back_new_monitoring);
         this.btn_new_monitoring = findViewById(R.id.btn_new_monitoring);
         this.btn_edit_data = findViewById(R.id.btn_edit_data);
+
 
     }
 
 
     private void loadUserData() {
 
-        this.userDetailsViewModel.userDetails.observe(this, new Observer<UserDetails>() {
+        this.userDetailsViewModel.getUser().observe(this, new Observer<UserDetails>() {
             @Override
             public void onChanged(UserDetails userDetails) {
                 id = userDetails.getId();
                 //Setear todos los parámetros de la UI
-                username.setText(userDetails.getUsername() + " " + userDetails.getLastName());
+                username.setText(userDetails.getUsername() + " " + userDetails.getLastname());
                 age.setText(userDetails.getAge().toString());
-                height.setText(userDetails.getHeight().toString());
+                height.setText(userDetails.getHeight());
                 weight.setText(userDetails.getWeight().toString());
+
+
 
                 if(userDetails.getGender().equals("M"))
                     gender.setText("Varón");
@@ -122,8 +133,25 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                     gender.setText("Mujer");
 
                 email.setText(userDetails.getEmail());
-                phone.setText(userDetails.getPhone().toString());
-                last_monitoring.setText(userDetails.getLastMonitoring());
+
+                if(userDetails.getPhone() == 0)
+                    phone.setText("");
+                else
+                    phone.setText(userDetails.getPhone().toString());
+
+                if(userDetails.getPhone2() == 0)
+                    phone2.setText("");
+                else
+                    phone2.setText(userDetails.getPhone2().toString());
+
+                if(userDetails.getCp() == 0)
+                    cp.setText("");
+                else
+                    cp.setText(userDetails.getCp().toString());
+
+                city.setText(userDetails.getCity());
+                address.setText(userDetails.getAddress());
+                //last_monitoring.setText(userDetails.getLastMonitoring());
 
                 //Seteamos un userDetails para tenerlo en memoria
                 user = userDetails;
@@ -164,6 +192,5 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-        this.userDetailsViewModel.refreshUserDetails(this.user.getId());
     }
 }

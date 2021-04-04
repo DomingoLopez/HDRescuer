@@ -1,17 +1,16 @@
 package com.hdrescuer.hdrescuer.data;
 
-import android.util.Log;
 import android.widget.Toast;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,24 +21,25 @@ import retrofit2.Response;
 public class UserListRepository {
 
     AuthApiService authApiService;
-    AuthConectionClient authConectionClient;
+    AuthConectionClientUsersModule authConectionClientUsersModule;
+    MutableLiveData<List<User>> users;
 
     UserListRepository(){
-        this.authConectionClient = AuthConectionClient.getInstance();
-        this.authApiService = this.authConectionClient.getAuthApiService();
-
+        this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
+        this.authApiService = this.authConectionClientUsersModule.getAuthApiService();
+        users = getAllUsers();
     }
 
     public MutableLiveData<List<User>> getAllUsers(){
-        //Obtenemos usuarios
-        MutableLiveData<List<User>> data = new MutableLiveData<>();
+        if(users == null)
+            users = new MutableLiveData<>();
 
         Call<List<User>> call = authApiService.getAllUsers();
         call.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if(response.isSuccessful()){
-                    data.setValue(response.body());
+                    users.setValue(response.body());
                 }else {
 
                     Toast.makeText(MyApp.getContext(), "Error al cargar la lista de usuarios", Toast.LENGTH_SHORT).show();
@@ -53,24 +53,12 @@ public class UserListRepository {
         });
 
 
+        return users;
 
-        //MIETNRAS QUE GENERO EL SERVIDOR
-        List<User>userList= new ArrayList<>();
+    }
 
-        User user1 = new User(1,"DOMINGO","LOPEZ PACHECO","2020-13-32");
-        User user2 = new User(2,"JOSER LUIS","GARRIDO BULLEJOS","2020-13-32");
-        User user3 = new User(3,"MARÍA","BERMUDEZ EDO","2020-13-32");
-        User user4 = new User(4,"MARÍA JOSÉ","RODRIGUEZ FORTIZ","2020-13-32");
-
-        userList.add(user1);
-        userList.add(user2);
-        userList.add(user3);
-        userList.add(user4);
-
-        data.setValue(userList);
-
-        return data;
-
+    public MutableLiveData<List<User>> getUsers(){
+        return this.users;
     }
 
     public void setNewUser(UserDetails user){
@@ -80,6 +68,13 @@ public class UserListRepository {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()){
+                    List<User> listaClonada = new ArrayList<>();
+                    listaClonada.add(response.body());
+                    for (int i = 0; i<users.getValue().size(); i++){
+                        listaClonada.add(new User(users.getValue().get(i)));
+                    }
+                    users.setValue(listaClonada);
+
                     Toast.makeText(MyApp.getContext(), "Usuario creado de forma satisfactoria", Toast.LENGTH_SHORT).show();
                 }else {
 

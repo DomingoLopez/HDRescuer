@@ -16,32 +16,24 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
 
 
     public UserDetailsRepository userDetailsRepository;
-    public MutableLiveData<UserDetails> userDetails;
 
-    public UserDetailsViewModel(@NonNull Application application, int id) {
+    public UserDetailsViewModel(@NonNull Application application, String id) {
         super(application);
         this.userDetailsRepository = new UserDetailsRepository(id);
-        this.userDetails = getUser(id);
 
     }
 
 
-    public MutableLiveData<UserDetails> getUser(int id) {
+    public MutableLiveData<UserDetails> getUser() {
 
-        return this.userDetailsRepository.getUser(id);
-    }
-
-    public UserDetailsRepository getRepo(){
-        return this.userDetailsRepository;
+        return this.userDetailsRepository.getUser();
     }
 
     public void updateUserDetails(UserDetails userDetails){
         this.userDetailsRepository.updateUser(userDetails);
     }
 
-    public void refreshUserDetails(int id){
-        this.userDetails = getUser(id);
-    }
+
 
     @NonNull
     @Override

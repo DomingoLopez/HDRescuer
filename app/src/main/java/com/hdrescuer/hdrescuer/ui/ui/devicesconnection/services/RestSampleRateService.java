@@ -2,17 +2,11 @@ package com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestSendData;
-import com.hdrescuer.hdrescuer.retrofit.response.User;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,13 +19,13 @@ public class RestSampleRateService extends IntentService {
     private static final String ACTION_SEND = "ACTION_SEND";
 
     AuthApiService authApiService;
-    AuthConectionClient authConectionClient;
+    AuthConectionClientUsersModule authConectionClientUsersModule;
 
 
     public RestSampleRateService() {
         super("RestSampleRateService");
-        this.authConectionClient = AuthConectionClient.getInstance();
-        this.authApiService = this.authConectionClient.getAuthApiService();
+        this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
+        this.authApiService = this.authConectionClientUsersModule.getAuthApiService();
     }
 
 

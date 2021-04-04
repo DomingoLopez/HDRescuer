@@ -4,17 +4,28 @@ package com.hdrescuer.hdrescuer.retrofit.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserDetails {
+import java.io.Serializable;
 
+public class UserDetails implements Serializable
+{
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private String id;
     @SerializedName("username")
     @Expose
     private String username;
     @SerializedName("lastname")
     @Expose
     private String lastname;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("password")
+    @Expose
+    private String password;
+    @SerializedName("gender")
+    @Expose
+    private String gender;
     @SerializedName("age")
     @Expose
     private Integer age;
@@ -24,60 +35,72 @@ public class UserDetails {
     @SerializedName("weight")
     @Expose
     private Integer weight;
-    @SerializedName("gender")
-    @Expose
-    private String gender;
-    @SerializedName("email")
-    @Expose
-    private String email;
     @SerializedName("phone")
     @Expose
     private Integer phone;
-    @SerializedName("last_monitoring")
+    @SerializedName("phone2")
     @Expose
-    private String lastMonitoring;
+    private Integer phone2;
+    @SerializedName("city")
+    @Expose
+    private String city;
+    @SerializedName("address")
+    @Expose
+    private String address;
+    @SerializedName("cp")
+    @Expose
+    private Integer cp;
+    private final static long serialVersionUID = 9212788480303221900L;
 
     /**
      * No args constructor for use in serialization
-     * 
+     *
      */
     public UserDetails() {
     }
 
     /**
-     * 
-     * @param gender
-     * @param phone
-     * @param lastMonitoring
-     * @param weight
+     *
+     * @param address
      * @param id
-     * @param age
+     * @param gender
+     * @param city
+     * @param phone2
+     * @param weight
+     * @param cp
+     * @param lastname
+     * @param password
+     * @param phone
      * @param email
+     * @param age
      * @param username
      * @param height
      */
-    public UserDetails(Integer id, String username,String lastname, Integer age, String height, Integer weight, String gender, String email, Integer phone, String lastMonitoring) {
+    public UserDetails(String id, String username, String lastname, String email, String password, String gender, Integer age, String height, Integer weight, Integer phone, Integer phone2, String city, String address, Integer cp) {
         super();
         this.id = id;
         this.username = username;
         this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.gender = gender;
         this.age = age;
         this.height = height;
         this.weight = weight;
-        this.gender = gender;
-        this.email = email;
         this.phone = phone;
-        this.lastMonitoring = lastMonitoring;
+        this.phone2 = phone2;
+        this.city = city;
+        this.address = address;
+        this.cp = cp;
     }
 
-    public Integer getId() {
+    public String getId(){
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id){
         this.id = id;
     }
-
     public String getUsername() {
         return username;
     }
@@ -86,12 +109,36 @@ public class UserDetails {
         this.username = username;
     }
 
-    public String getLastName() {
+    public String getLastname() {
         return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastname = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public Integer getAge() {
@@ -118,22 +165,6 @@ public class UserDetails {
         this.weight = weight;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Integer getPhone() {
         return phone;
     }
@@ -142,12 +173,36 @@ public class UserDetails {
         this.phone = phone;
     }
 
-    public String getLastMonitoring() {
-        return lastMonitoring;
+    public Integer getPhone2() {
+        return phone2;
     }
 
-    public void setLastMonitoring(String lastMonitoring) {
-        this.lastMonitoring = lastMonitoring;
+    public void setPhone2(Integer phone2) {
+        this.phone2 = phone2;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getCp() {
+        return cp;
+    }
+
+    public void setCp(Integer cp) {
+        this.cp = cp;
     }
 
 }

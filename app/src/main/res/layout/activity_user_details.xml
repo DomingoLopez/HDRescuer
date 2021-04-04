@@ -127,11 +127,55 @@
         app:layout_constraintTop_toBottomOf="@+id/label_email" />
 
     <TextView
+        android:id="@+id/label_phone2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/label_phone2"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/label_phone"
+        app:layout_constraintTop_toBottomOf="@+id/label_phone" />
+
+    <TextView
+        android:id="@+id/label_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/label_address"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/label_phone2"
+        app:layout_constraintTop_toBottomOf="@+id/label_phone2" />
+
+    <TextView
+        android:id="@+id/label_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/label_city"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/label_address"
+        app:layout_constraintTop_toBottomOf="@+id/label_address" />
+
+    <TextView
+        android:id="@+id/label_cp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/label_cp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/label_city"
+        app:layout_constraintTop_toBottomOf="@+id/label_city" />
+
+    <TextView
         android:id="@+id/label_last_monitoring"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/label_last_monitoring"
         android:textAlignment="textStart"
         android:textSize="12sp"
@@ -148,8 +192,8 @@
         android:textAlignment="viewStart"
         android:textSize="12sp"
         app:icon="@drawable/edit_user_data_2"
-        app:layout_constraintStart_toStartOf="@+id/label_phone"
-        app:layout_constraintTop_toBottomOf="@+id/label_phone" />
+        app:layout_constraintStart_toStartOf="@+id/label_cp"
+        app:layout_constraintTop_toBottomOf="@+id/label_cp" />
 
     <TextView
         android:id="@+id/tvAge"
@@ -212,6 +256,46 @@
         app:layout_constraintTop_toTopOf="@+id/label_phone" />
 
     <TextView
+        android:id="@+id/tvPhone2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/label_phone2"
+        app:layout_constraintTop_toTopOf="@+id/label_phone2" />
+
+    <TextView
+        android:id="@+id/tvaddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/label_address"
+        app:layout_constraintTop_toTopOf="@+id/label_address" />
+
+    <TextView
+        android:id="@+id/tvcity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/label_city"
+        app:layout_constraintTop_toTopOf="@+id/label_city" />
+
+    <TextView
+        android:id="@+id/tvcp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/label_cp"
+        app:layout_constraintTop_toTopOf="@+id/label_cp" />
+
+    <TextView
         android:id="@+id/tvLastMonitoring"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -227,11 +311,12 @@
         android:id="@+id/btn_new_monitoring"
         android:layout_width="233dp"
         android:layout_height="47dp"
-        android:layout_marginTop="452dp"
+        android:layout_marginTop="544dp"
         android:text="@string/btn_new_monitoring"
         android:textSize="12sp"
         app:icon="@drawable/ic_add_user"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
 

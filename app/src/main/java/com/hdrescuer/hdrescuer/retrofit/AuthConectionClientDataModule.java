@@ -7,17 +7,17 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AuthConectionClient {
+public class AuthConectionClientDataModule {
 
 
 
-    private static AuthConectionClient instance = null;
+    private static AuthConectionClientDataModule instance = null;
 
     private AuthApiService authApiService;
 
     private Retrofit retrofit;
 
-    public AuthConectionClient() {
+    public AuthConectionClientDataModule() {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         // set your desired log level
@@ -36,7 +36,7 @@ public class AuthConectionClient {
 
 
         this.retrofit = new Retrofit.Builder()
-                            .baseUrl(Constants.DATA_RESCUER_BASE_URL)
+                            .baseUrl(Constants.DATA_RESCUER_DATA_MODULE_URL)
                             .addConverterFactory(GsonConverterFactory.create())
                             .client(cliente) //adjunta a todas las peticiones que hagan uso del AuthConnectionClient el token
                             .client(httpClient.build())
@@ -47,10 +47,10 @@ public class AuthConectionClient {
     }
 
 
-    public static AuthConectionClient getInstance(){
+    public static AuthConectionClientDataModule getInstance(){
 
         if(instance == null){
-            instance = new AuthConectionClient();
+            instance = new AuthConectionClientDataModule();
         }
 
         return instance;
