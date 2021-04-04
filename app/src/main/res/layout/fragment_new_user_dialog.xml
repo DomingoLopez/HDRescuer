@@ -186,6 +186,21 @@
         app:layout_constraintTop_toBottomOf="@+id/numPhone" />
 
     <EditText
+        android:id="@+id/txtCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/blue_secondary"
+        android:ems="10"
+        android:hint="Ciudad"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/blue_secondary"
+        android:textColorHint="@color/blue_secondary"
+        android:textColorLink="@color/blue_secondary"
+        app:layout_constraintStart_toStartOf="@+id/txtAddress"
+        app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
+
+    <EditText
         android:id="@+id/numcp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -202,21 +217,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/txtCity"
         app:layout_constraintTop_toTopOf="@+id/txtCity" />
-
-    <EditText
-        android:id="@+id/txtCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/blue_secondary"
-        android:ems="10"
-        android:hint="Ciudad"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/blue_secondary"
-        android:textColorHint="@color/blue_secondary"
-        android:textColorLink="@color/blue_secondary"
-        app:layout_constraintStart_toStartOf="@+id/txtAddress"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
 
     <RadioGroup
         android:id="@+id/rgGender"

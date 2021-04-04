@@ -6,17 +6,85 @@
     android:layout_height="match_parent"
     tools:context=".ui.ui.config.ConfigFragment">
 
-    <TextView
-        android:id="@+id/text_config"
-        android:layout_width="match_parent"
+    <RadioGroup
+        android:id="@+id/radioGroupSample"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/label_desc_sample_rate"
+        app:layout_constraintTop_toBottomOf="@+id/label_desc_sample_rate">
+
+        <RadioButton
+            android:id="@+id/sr_150"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sr_150"
+            android:textColorHint="@color/blue_secondary"
+            android:textColorLink="@color/blue_secondary"
+            app:buttonTint="@color/blue_secondary"/>
+
+        <RadioButton
+            android:id="@+id/sr_200"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="200"
+            android:textColorHint="@color/blue_secondary"
+            android:textColorLink="@color/blue_secondary"
+            app:buttonTint="@color/blue_secondary"/>
+
+        <RadioButton
+            android:id="@+id/sr_300"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="300"
+            android:textColorHint="@color/blue_secondary"
+            android:textColorLink="@color/blue_secondary"
+            app:buttonTint="@color/blue_secondary"/>
+
+        <RadioButton
+            android:id="@+id/sr_500"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="500"
+            android:textColorHint="@color/blue_secondary"
+            android:textColorLink="@color/blue_secondary"
+            app:buttonTint="@color/blue_secondary"/>
+
+        <RadioButton
+            android:id="@+id/sr_1000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1000"
+            android:textColorHint="@color/blue_secondary"
+            android:textColorLink="@color/blue_secondary"
+            app:buttonTint="@color/blue_secondary"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/label_tasa_muestreo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/label_tasa_muestreo"
+        android:textAlignment="viewStart"
+        android:textColor="@color/blue_secondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/label_desc_sample_rate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/label_desc_sample_rate"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/label_tasa_muestreo"
+        app:layout_constraintTop_toBottomOf="@+id/label_tasa_muestreo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

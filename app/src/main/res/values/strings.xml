@@ -62,6 +62,10 @@
     <string name="label_address">Dirección:</string>
     <string name="label_city">Ciudad:</string>
     <string name="label_cp">C.P.:</string>
+    <string name="label_tasa_muestreo">Sample Rate (Tasa de muestreo)</string>
+    <string name="label_desc_sample_rate">La tasa de muestreo indica el intervalo de tiempo entre cada medición de datos (en ms).</string>
+    <string name="label_desc_sample_rate_2" />
+    <string name="sr_150">150</string>
 
 
 </resources>
