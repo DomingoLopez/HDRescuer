@@ -7,9 +7,9 @@ import com.google.gson.annotations.SerializedName;
 public class RequestSendData implements Serializable
 {
 
-    @SerializedName("user_id")
+    @SerializedName("id")
     @Expose
-    private Integer userId;
+    private String id;
     @SerializedName("timeStamp")
     @Expose
     private String timeStamp;
@@ -107,9 +107,9 @@ public class RequestSendData implements Serializable
      * @param e4Temp
      * @param e4Gsr
      */
-    public RequestSendData(Integer userId, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp) {
+    public RequestSendData(String userId, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp) {
         super();
-        this.userId = userId;
+        this.id = userId;
         this.timeStamp = timeStamp;
         this.ticHrppg = ticHrppg;
         this.ticHrppgraw = ticHrppgraw;
@@ -133,12 +133,12 @@ public class RequestSendData implements Serializable
         this.e4Temp = e4Temp;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public String getUserId() {
+        return id;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setUserId(String userId) {
+        this.id = userId;
     }
 
     public String getTimeStamp() {

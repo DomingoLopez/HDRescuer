@@ -32,13 +32,13 @@ public class SampleRateFilterThread extends Thread{
     public static  String STATUS="ACTIVO";
     private static String ACTION_SEND = "ACTION_SEND";
 
-    private int user_id;
+    private String user_id;
 //    private long instant = 0;
     private Instant instant;
 
     public SampleRateFilterThread(TicWatchRepository ticWatchRepository,
                                   E4BandRepository e4BandRepository,
-                                  GlobalMonitoringViewModel globalMonitoringViewModel, int user_id){
+                                  GlobalMonitoringViewModel globalMonitoringViewModel, String user_id){
 
         this.user_id = user_id;
         this.ticWatchRepository = ticWatchRepository;
@@ -95,7 +95,7 @@ public class SampleRateFilterThread extends Thread{
                restIntent.putExtra("e4_ibi",this.e4BandRepository.getCurrentIbi().toString());
                restIntent.putExtra("e4_temp",this.e4BandRepository.getCurrentTemp().toString());
                restIntent.putExtra("timestamp",this.instant.toString());
-               restIntent.putExtra("user_id",this.user_id);
+               restIntent.putExtra("id",this.user_id);
 
                MyApp.getContext().startService(restIntent);
 

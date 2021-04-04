@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientDataModule;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestSendData;
 
@@ -19,13 +20,13 @@ public class RestSampleRateService extends IntentService {
     private static final String ACTION_SEND = "ACTION_SEND";
 
     AuthApiService authApiService;
-    AuthConectionClientUsersModule authConectionClientUsersModule;
+    AuthConectionClientDataModule authConectionClientDataModule;
 
 
     public RestSampleRateService() {
         super("RestSampleRateService");
-        this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
-        this.authApiService = this.authConectionClientUsersModule.getAuthApiService();
+        this.authConectionClientDataModule = AuthConectionClientDataModule.getInstance();
+        this.authApiService = this.authConectionClientDataModule.getAuthApiService();
     }
 
 
@@ -38,7 +39,7 @@ public class RestSampleRateService extends IntentService {
 
                 //Recogemos todos los parámetros y creamos el objeto a mandar por REST (de momento)
                 RequestSendData newRequest = new RequestSendData(
-                        intent.getIntExtra("user_id",0),
+                        intent.getStringExtra("id"),
                         intent.getStringExtra("timestamp"),
                         intent.getStringExtra("tic_hrppg"),
                         intent.getStringExtra("tic_hrppgraw"),

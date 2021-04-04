@@ -17,7 +17,7 @@ import java.text.DecimalFormat;
 public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewModelProvider.Factory {
 
 
-    private int user_id;
+    private String user_id;
 
     //Atributos de los sensores del TicWatch
     private MutableLiveData<Float> hrppg;
@@ -46,7 +46,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     private MutableLiveData<Float> currentIbi;
     private MutableLiveData<Float> currentTemp;
 
-    public GlobalMonitoringViewModel(@NonNull Application application, int id) {
+    public GlobalMonitoringViewModel(@NonNull Application application, String id) {
         super(application);
         this.user_id = id;
         //Obtenemos la instancia singleton del globalMonitoringRepository
@@ -83,7 +83,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     }
 
 
-    public int getUserId() {
+    public String getUserId() {
         return user_id;
     }
 

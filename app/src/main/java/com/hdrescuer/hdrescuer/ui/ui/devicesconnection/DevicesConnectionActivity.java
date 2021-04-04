@@ -85,7 +85,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Botón de start monitoring
     Button btnStartMonitoring;
 
-    int user_id;
+    String user_id;
     String user_name;
     Date currentDate;
 
@@ -126,7 +126,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         //Obtenemos el id del usuario
         Intent i = getIntent();
-        this. user_id = i.getIntExtra("id", 0);
+        this. user_id = i.getStringExtra("id");
         this.user_name = i.getStringExtra("username");
 
         //Obtenemos la fecha:hora actual
