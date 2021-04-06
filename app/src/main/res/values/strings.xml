@@ -66,6 +66,7 @@
     <string name="label_desc_sample_rate">La tasa de muestreo indica el intervalo de tiempo entre cada medición de datos (en ms).</string>
     <string name="label_desc_sample_rate_2" />
     <string name="sr_150">150</string>
+    <string name="label_ehealthboard">Placa eHealth2.0</string>
 
 
 </resources>

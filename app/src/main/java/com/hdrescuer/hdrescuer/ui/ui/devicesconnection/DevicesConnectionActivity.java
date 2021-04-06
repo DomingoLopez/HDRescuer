@@ -81,6 +81,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Botones de conexión
     Button btnE4BandConnect;
     Button btnWatchConnect;
+    Button btnEHealthBoardConnect;
 
     //Botón de start monitoring
     Button btnStartMonitoring;
@@ -144,6 +145,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         //La empática va en esta misma Actividad. Los demás en principio en servicios a parte
 
         //Pensar en mover esto a ONRESUME
+        /**
+         *Búsqueda de la Banda Empática
+         */
         initEmpaticaDeviceManager();
 
     }
@@ -152,12 +156,21 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
 
+        /**
+         *Búsqueda de los Wearables con App instalada cercanos
+         */
         Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_WEAR_APP);
         this.dataClient = Wearable.getDataClient(this);
         Wearable.getDataClient(this).addListener(this);
         // Initial request for devices with our capability, aka, our Wear app installed.
         findWearDevicesWithApp();
         findAllWearDevices();
+
+        /**
+         *Búsqueda de la placa eHealth Board de Cooking Hacks
+         */
+
+
 
     }
 
@@ -190,6 +203,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.tvDateMonitoring = findViewById(R.id.tv_date_monitoring);
         this.btnStartMonitoring = findViewById(R.id.btn_start_monitoring);
 
+
         //Botones para la conexión de los dispositivos
 
         //E4BAND
@@ -198,6 +212,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         //WATCH. Hacerlo no clickable
         this.btnWatchConnect = findViewById(R.id.btn_connect_watch);
+
+        //EHealthBoard
+        this.btnE4BandConnect = findViewById(R.id.btn_connect_ehealthboard);
     }
 
     private void events() {
@@ -217,6 +234,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         //Botón del watch
         this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
         this.btnWatchConnect.setText("Desconectado");
+
+        //Botón de la ehealthBoard
+        this.btnEHealthBoardConnect.setBackgroundColor(this.btnEHealthBoardConnect.getContext().getResources().getColor(R.color.e4disconnected));
+        this.btnEHealthBoardConnect.setText("Desconectado");
 
 
     }
@@ -569,7 +590,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     private void verifyNodeAndWaitForMonitoring() {
 
         if ((this.wearNodesWithApp == null) || (this.allConnectedNodes == null)) {
-            Log.d("ERROR", "Waiting on Results for both connected nodes and nodes with app");
+            Log.d("ERROR", "Esperando resultados de nodos conectados con la app");
         } else if (this.allConnectedNodes.isEmpty()) {
             Log.d("INFO", "No hay nodos conectados");
         } else if (this.wearNodesWithApp.isEmpty()) {
