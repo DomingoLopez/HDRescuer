@@ -54,12 +54,12 @@
 
             <Button
                 android:id="@+id/btn_connect_watch"
-                android:layout_width="104dp"
-                android:layout_height="29dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:clickable="false"
                 android:text="Button"
-                android:textSize="8sp"
+                android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/label_watch_monitoring"
                 app:layout_constraintStart_toStartOf="@+id/label_watch_monitoring"
                 app:layout_constraintTop_toBottomOf="@+id/label_watch_monitoring" />
@@ -105,12 +105,12 @@
 
             <Button
                 android:id="@+id/btn_connect_e4"
-                android:layout_width="104dp"
-                android:layout_height="29dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:clickable="false"
                 android:text="Button"
-                android:textSize="8sp"
+                android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/label_e4band"
                 app:layout_constraintHorizontal_bias="0.538"
                 app:layout_constraintStart_toStartOf="@+id/label_e4band"
@@ -155,12 +155,11 @@
 
             <Button
                 android:id="@+id/btn_connect_ehealthboard"
-                android:layout_width="104dp"
-                android:layout_height="29dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:clickable="false"
                 android:text="Button"
-                android:textSize="8sp"
+                android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/label_ehealthboard"
                 app:layout_constraintHorizontal_bias="0.538"
                 app:layout_constraintStart_toStartOf="@+id/label_ehealthboard"

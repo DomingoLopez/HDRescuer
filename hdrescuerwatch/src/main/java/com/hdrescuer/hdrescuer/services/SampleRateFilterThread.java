@@ -101,6 +101,7 @@ public class SampleRateFilterThread extends Thread{
 
     }
 
+    private int i = 0;
     private void sendData(){
                 //ACCELEROMETER
                 this.putDataMapRequestACC.getDataMap().putFloat(ACCX_KEY,this.dataRepository.getAccx());
@@ -113,6 +114,8 @@ public class SampleRateFilterThread extends Thread{
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
                         //Log.i("INFOTASK", "PUESTO VALOR ACC EN DATACLIENT");
+                        i++;
+                        Log.d("INFOWATCH", " "+i);
                     }
                 });
 
