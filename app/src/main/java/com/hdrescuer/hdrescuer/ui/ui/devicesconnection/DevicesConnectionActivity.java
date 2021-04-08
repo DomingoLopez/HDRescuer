@@ -429,6 +429,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                         Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
                     }
                 });
+                EhealthBoardService.STATUS = "INACTIVO";
                 SampleRateFilterThread.STATUS = "INACTIVO";
                 finish();
 
@@ -454,6 +455,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                 /**INICIO DE LA EHEALTHBOARD**/
                 if(this.ehealthConectada){ //Si está conectada
+                    Log.i("INFOEHEALTH","ENTRO");
                     initEHeatlhBoard(); //Solo hace el inicio para mandar una instrucción de inicio al arduino
                     EhealthBoardService.STATUS = "ACTIVO";
                     this.ehealthBoardService = new EhealthBoardService(this.eHealthBoardRepository, this.myInputStream, this.myOutStrem);
@@ -462,20 +464,20 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
 
 
-
-                /**Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos*/
+/*
+                *//**Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos*//*
                 SampleRateFilterThread.STATUS = "ACTIVO";
                 this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.globalMonitoringViewModel, this.user_id);
                 this.sampleRateThread.start();
 
 
-                /**Iniciamos Fragment de monitorización*/
+                *//**Iniciamos Fragment de monitorización*//*
                 DevicesMonitoringFragment fragment = new DevicesMonitoringFragment(this.dataClient,this.putDataMapRequestStop,this.putDataReqStop);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 fragmentTransaction.add(R.id.fragment_monitoring_show, fragment);
-                fragmentTransaction.commit();
+                fragmentTransaction.commit();*/
 
                 break;
 
@@ -517,8 +519,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     void stopEHealthBoard(){
         try{
-            byte[] parada = "N".getBytes();
-            this.myOutStrem.write(parada);
+            if(this.myOutStrem != null) {
+                byte[] parada = "N".getBytes();
+                this.myOutStrem.write(parada);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -660,7 +664,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             Log.d("E4Service", "Disconnecting");
             deviceManager.disconnect();
         }
-        SampleRateFilterThread.STATUS = "INACTIVE";
+        SampleRateFilterThread.STATUS = "INACTIVO";
+        EhealthBoardService.STATUS = "INACTIVO";
 
         if(this.ehealthConectada)
             this.stopEHealthBoard();
