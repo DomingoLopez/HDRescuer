@@ -35,7 +35,6 @@ public class EhealthBoardService extends Thread {
 
             try{
                 //Espera de cortesía para que se cargue algo el buffer
-                Thread.sleep(500);
                 int bytesDisponibles = this.inputStream.available();
                 if(bytesDisponibles > 0){
 
@@ -47,9 +46,11 @@ public class EhealthBoardService extends Thread {
                     byte[] bytesRecibidos;
 
                     if(tmp != null){
-                        bytesRecibidos = new byte[tmp.length + bytesLeidos.length];
+                        bytesDisponibles = tmp.length + bytesLeidos.length;
+                        bytesRecibidos = new byte[bytesDisponibles];
                         System.arraycopy(tmp, 0, bytesRecibidos, 0, tmp.length);
-                        System.arraycopy(bytesLeidos,0, bytesRecibidos, tmp.length-1, bytesLeidos.length);
+                        System.arraycopy(bytesLeidos,0, bytesRecibidos, tmp.length, bytesLeidos.length);
+
                     }else{
                         bytesRecibidos = bytesLeidos;
                     }
@@ -77,9 +78,10 @@ public class EhealthBoardService extends Thread {
 
                     if(bytesDisponibles > final_cadena){ //Quiere decir que nos hemos dejado Bytes sin procesar y en la siguiente lectura del buffer no estarán...
                         //Tenemos que añadirselos al array que procesaremos posteriormente
-                        tmp = new byte[(bytesDisponibles - final_cadena) +1];
+                        int diferencia = (bytesDisponibles - final_cadena) -1;
+                        tmp = new byte[diferencia];
                         //Los copiamos al array de bytes temporal
-                        System.arraycopy(bytesRecibidos, final_cadena+1, tmp, 0, bytesDisponibles);
+                        System.arraycopy(bytesRecibidos, final_cadena+1, tmp, 0, diferencia);
 
                     }else{
                         tmp = null;
