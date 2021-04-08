@@ -264,7 +264,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         //iniciamos Repositorios temporales
         this.e4BandRepository = new E4BandRepository();
         this.ticWatchRepository = new TicWatchRepository();
-        //this.globalMonitoringRepository = new GlobalMonitoringRepository(this.user_id);
+        this.eHealthBoardRepository = new EHealthBoardRepository();
 
         //ViewModelFactory para el repositorio Global
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
@@ -293,7 +293,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.btnE4BandConnect = findViewById(R.id.btn_connect_e4);
 
 
-        //WATCH. Hacerlo no clickable
+        //WATCH.
         this.btnWatchConnect = findViewById(R.id.btn_connect_watch);
 
         //EHealthBoard
@@ -305,6 +305,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.btn_back.setOnClickListener(this);
         this.btnStartMonitoring.setOnClickListener(this);
     }
+
+
     private void loadUserData() {
 
         //Iniciamos las views a los valores iniciales por defecto
