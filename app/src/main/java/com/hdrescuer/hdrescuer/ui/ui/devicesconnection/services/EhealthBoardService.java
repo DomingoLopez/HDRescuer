@@ -38,6 +38,7 @@ public class EhealthBoardService extends Thread {
                 int bytesDisponibles = this.inputStream.available();
                 if(bytesDisponibles > 0){
 
+
                     byte[] bytesLeidos = new byte[bytesDisponibles];
 
                     this.inputStream.read(bytesLeidos);

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -53,6 +55,7 @@ import com.hdrescuer.hdrescuer.data.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.TicWatchRepository;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardService;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 
@@ -444,17 +447,19 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     this.bluetoothAdapter.cancelDiscovery();
 
                 /**INICIO DEL RELOJ**/
-                //NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO
-                String timeStart = String.valueOf(System.currentTimeMillis());
-                this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, timeStart);
-                this.putDataReq = this.putDataMapRequest.asPutDataRequest();
-                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
-                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataItem> task) {
-                        Log.i("INFOTASK", "PUESTO VALOR START MONITORING EN DATACLIENT");
-                    }
-                });
+                if(this.ticwatchConnected) {
+                    //NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO
+                    String timeStart = String.valueOf(System.currentTimeMillis());
+                    this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, timeStart);
+                    this.putDataReq = this.putDataMapRequest.asPutDataRequest();
+                    Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
+                    putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataItem> task) {
+                            Log.i("INFOTASK", "PUESTO VALOR START MONITORING EN DATACLIENT");
+                        }
+                    });
+                }
 
                 /**INICIO DE LA EHEALTHBOARD**/
                 if(this.ehealthConnected){ //Si está conectada
@@ -466,14 +471,13 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
 
 
-/*
-                *//**Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos*//*
+               /* //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
                 SampleRateFilterThread.STATUS = "ACTIVO";
                 this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.globalMonitoringViewModel, this.user_id);
                 this.sampleRateThread.start();
 
 
-                *//**Iniciamos Fragment de monitorización*//*
+                //Iniciamos Fragment de monitorización
                 DevicesMonitoringFragment fragment = new DevicesMonitoringFragment(this.dataClient,this.putDataMapRequestStop,this.putDataReqStop);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
