@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -52,6 +53,7 @@ import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.data.E4BandRepository;
+import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.TicWatchRepository;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
@@ -61,6 +63,7 @@ import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilter
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.Date;
@@ -75,6 +78,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Repositorios
     E4BandRepository e4BandRepository;
     TicWatchRepository ticWatchRepository;
+    EHealthBoardRepository eHealthBoardRepository;
 
 
     //ViewModel
@@ -124,7 +128,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     BluetoothDevice ehealthBoardDevice;
     BluetoothSocket bluetoothSocket;
     InputStream myInputStream;
+    OutputStream myOutStrem;
     String macAddress = "00:14:03:05:0C:99";
+    boolean ehealthConectada = false;
 
 
     //Hebra para el envío de datos al servidor
@@ -182,20 +188,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         findWearDevicesWithApp();
         findAllWearDevices();
 
-        /**
-         *Búsqueda de la placa eHealth Board de Cooking Hacks
-         */
-        //Gestionar la conexión aquí e iniciar la hebra posteriormente
-        /*EhealthBoardService.STATUS = "CONECTANDO";
-        this.ehealthBoardService = new EhealthBoardService();
-        this.ehealthBoardService.start();*/
-        /*this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        conectar();*/
 
     }
 
-    private void conectar(){
-        Log.i("EHEALTH","ENTRO CONECTAR");
+    private boolean conectareHealthBoardBT(){
             try{
                 if(this.bluetoothAdapter.isEnabled()){
                     this.bluetoothAdapter.startDiscovery();
@@ -210,6 +206,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     }catch(Exception e){
                         e.printStackTrace();
                         Log.i("BOARD_ERROR","La conexión del socket tmp no ha funcionado");
+                        Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                        this.ehealthConectada =  false;
+                        return false;
                     }
 
                     this.bluetoothSocket = tmp;
@@ -219,25 +218,43 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     }catch (Exception e){
                         e.printStackTrace();
                         Log.i("BOARD_ERROR","No se ha podido crear el socket bluetooth");
+                        Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                        this.ehealthConectada =  false;
+                        return false;
                     }
 
                     try{
                         this.myInputStream = this.bluetoothSocket.getInputStream();
                     }catch (Exception e ){
                         Log.i("BOARD_ERROR","Error "+e.getMessage());
+                        Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                        this.ehealthConectada =  false;
+                        return false;
                     }
 
-                        Log.i("BOARD_OK","Conectado a la placa");
-                        this.bluetoothAdapter.cancelDiscovery();
-                        this.btnEHealthBoardConnect.setBackgroundColor(this.btnEHealthBoardConnect.getContext().getResources().getColor(R.color.e4connected));
-                        this.btnEHealthBoardConnect.setText("Conectado");
+                    try{
+                        this.myOutStrem = this.bluetoothSocket.getOutputStream();
+                    }catch (Exception e ){
+                        Log.i("BOARD_ERROR","Error "+e.getMessage());
+                        Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                        this.ehealthConectada =  false;
+                        return false;
+                    }
+
+                    Log.i("BOARD_OK","Conectado a la placa");
+                    this.ehealthConectada =  true;
 
                 }
-
             }catch (Exception e){
                 e.printStackTrace();
                 Log.i("BOARD_ERROR","No se ha podido conectar a la placa");
+                Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                this.ehealthConectada =  false;
+                return false;
             }
+
+
+            return this.ehealthConectada;
     }
 
 
@@ -417,10 +434,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
             case R.id.btn_start_monitoring:
 
-                this.bluetoothAdapter.cancelDiscovery();
+                if(this.bluetoothAdapter != null)
+                    this.bluetoothAdapter.cancelDiscovery();
 
-                //Informamos al Reloj que vamos a iniciar la monitorización
-                /**NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO**/
+                /**INICIO DEL RELOJ**/
+                //NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO
                 String timeStart = String.valueOf(System.currentTimeMillis());
                 this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, timeStart);
                 this.putDataReq = this.putDataMapRequest.asPutDataRequest();
@@ -432,14 +450,24 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     }
                 });
 
-                /*Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
-                 */
+                /**INICIO DE LA EHEALTHBOARD**/
+                if(this.ehealthConectada){ //Si está conectada
+                    initEHeatlhBoard(); //Solo hace el inicio para mandar una instrucción de inicio al arduino
+                    EhealthBoardService.STATUS = "ACTIVO";
+                    this.ehealthBoardService = new EhealthBoardService(this.eHealthBoardRepository, this.myInputStream, this.myOutStrem);
+                    this.ehealthBoardService.start();
+                }
+
+
+
+
+                /**Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos*/
                 SampleRateFilterThread.STATUS = "ACTIVO";
                 this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.globalMonitoringViewModel, this.user_id);
                 this.sampleRateThread.start();
 
 
-                //Iniciaríamos el fragment para la monitorización en Tabs
+                /**Iniciamos Fragment de monitorización*/
                 DevicesMonitoringFragment fragment = new DevicesMonitoringFragment(this.dataClient,this.putDataMapRequestStop,this.putDataReqStop);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -450,14 +478,50 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 break;
 
             case R.id.btn_connect_ehealthboard:
-                this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                conectar();
 
+                if(this.ehealthConectada){
+                    this.ehealthConectada = false;
+                    this.btnEHealthBoardConnect.setBackgroundColor(this.btnEHealthBoardConnect.getContext().getResources().getColor(R.color.e4disconnected));
+                    this.btnEHealthBoardConnect.setText("Pulsa para Conectar");
+                    this.bluetoothAdapter.cancelDiscovery();
+                    try{
+                        this.bluetoothSocket.close();
+                    }catch(Exception e){
+                        Log.i("ERRORSOCKET", "Erro al cerrar socket bluetooth ehealthBoard");
+                    }
+                }else{
+                    this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    boolean conectado = conectareHealthBoardBT();
+                    if(conectado){
+                        this.bluetoothAdapter.cancelDiscovery();
+                        this.btnEHealthBoardConnect.setBackgroundColor(this.btnEHealthBoardConnect.getContext().getResources().getColor(R.color.e4connected));
+                        this.btnEHealthBoardConnect.setText("Conectado");
+                    }
+                }
 
                 break;
 
         }
     }
+
+    void initEHeatlhBoard(){
+        try{
+            byte[] inicio = "S".getBytes();
+            this.myOutStrem.write(inicio);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    void stopEHealthBoard(){
+        try{
+            byte[] parada = "N".getBytes();
+            this.myOutStrem.write(parada);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
 
     @Override
@@ -595,6 +659,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             deviceManager.disconnect();
         }
         SampleRateFilterThread.STATUS = "INACTIVE";
+
+        if(this.ehealthConectada)
+            this.stopEHealthBoard();
 
         if(this.bluetoothSocket != null){
             try {
@@ -744,6 +811,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        if(this.ehealthConectada)
+            this.stopEHealthBoard();
+
         if(this.bluetoothSocket != null){
             try {
                 this.bluetoothSocket.close();

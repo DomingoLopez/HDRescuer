@@ -26,8 +26,6 @@ import java.util.concurrent.TimeUnit;
 public class E4BandRepository implements EmpaDataDelegate {
 
 
-    private int user_id ;
-
     private final static double timezoneOffset = TimeZone.getDefault().getRawOffset() / 1000d;
 
 
@@ -139,9 +137,6 @@ public class E4BandRepository implements EmpaDataDelegate {
      ********************************************/
 
 
-    public int getUser_id() {
-        return user_id;
-    }
 
     public static double getTimezoneOffset() {
         return timezoneOffset;

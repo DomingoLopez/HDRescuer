@@ -56,7 +56,6 @@ public class SampleRateFilterThread extends Thread{
 
        try{
 
-           int i = 0;
            while (STATUS.equals("ACTIVO")){
                Thread.sleep(Constants.SAMPLE_RATE);
                updateE4BandData();

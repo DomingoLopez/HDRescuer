@@ -26,8 +26,6 @@ import java.util.concurrent.TimeUnit;
 public class TicWatchRepository {
 
 
-    private int user_id ;
-
 
     private Float accx;
     private Float accy;

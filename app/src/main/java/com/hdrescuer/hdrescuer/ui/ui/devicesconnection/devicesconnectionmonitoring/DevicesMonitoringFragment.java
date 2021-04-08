@@ -25,6 +25,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.E4BandRepository;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardService;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 
 
@@ -127,6 +128,7 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
             }
         });
         SampleRateFilterThread.STATUS = "INACTIVO";
+        EhealthBoardService.STATUS = "INACTIVO";
 
         getActivity().finish();
 
