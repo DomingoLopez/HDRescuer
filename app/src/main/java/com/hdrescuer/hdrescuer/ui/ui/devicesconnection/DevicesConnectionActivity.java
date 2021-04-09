@@ -461,17 +461,20 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     });
                 }
 
+
                 /**INICIO DE LA EHEALTHBOARD**/
                 if(this.ehealthConnected){ //Si está conectada
                     initEHeatlhBoard(); //Solo hace el inicio para mandar una instrucción de inicio al arduino
                     EhealthBoardService.STATUS = "ACTIVO";
                     this.ehealthBoardService = new EhealthBoardService(this.eHealthBoardRepository, this.myInputStream, this.myOutStrem);
                     this.ehealthBoardService.start();
+                }else{
+                    EhealthBoardService.STATUS ="INACTIVO";
                 }
 
 
 
-               /* //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
+                //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
                 SampleRateFilterThread.STATUS = "ACTIVO";
                 this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.globalMonitoringViewModel, this.user_id);
                 this.sampleRateThread.start();
@@ -483,7 +486,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
                 fragmentTransaction.add(R.id.fragment_monitoring_show, fragment);
-                fragmentTransaction.commit();*/
+                fragmentTransaction.commit();
 
                 break;
 
@@ -497,7 +500,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     try{
                         this.bluetoothSocket.close();
                     }catch(Exception e){
-                        Log.i("ERRORSOCKET", "Erro al cerrar socket bluetooth ehealthBoard");
+                        Log.i("ERRORSOCKET", "Error al cerrar socket bluetooth ehealthBoard");
                     }
                 }else{
                     this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -608,7 +611,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             try {
                 // Connect to the device
                 deviceManager.connectDevice(bluetoothDevice);
-                Log.i("ENTRO","DISCOVER");
             } catch (ConnectionNotAllowedException e) {
                 // This should happen only if you try to connect when allowed == false.
                 Toast.makeText(DevicesConnectionActivity.this, "Sorry, you can't connect to this device", Toast.LENGTH_SHORT).show();
@@ -785,7 +787,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         }
     }
 
-    private int i = 0;
     @Override
     public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
 
@@ -798,8 +799,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     this.ticWatchRepository.setAccx(dataMap.getFloat("ACCX"));
                     this.ticWatchRepository.setAccy(dataMap.getFloat("ACCY"));
                     this.ticWatchRepository.setAccz(dataMap.getFloat("ACCZ"));
-                    i++;
-                    Log.d("INFOWATCH", " "+i);
+
                 }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setAcclx(dataMap.getFloat("ACCLX"));

@@ -14,7 +14,7 @@
     <string name="action_settings">Configuración</string>
 
     <string name="menu_users">Usuarios</string>
-    <string name="menu_support">Soporte</string>
+    <string name="menu_support">Información</string>
     <string name="menu_config">Configuración</string>
     <string name="label_last_monitoring">Última monitorización: </string>
     <string name="label_edad">Edad:</string>
@@ -64,7 +64,6 @@
     <string name="label_cp">C.P.:</string>
     <string name="label_tasa_muestreo">Sample Rate (Tasa de muestreo)</string>
     <string name="label_desc_sample_rate">La tasa de muestreo indica el intervalo de tiempo entre cada medición de datos (en ms).</string>
-    <string name="label_desc_sample_rate_2" />
     <string name="sr_150">150</string>
     <string name="label_ehealthboard">Placa eHealth2.0</string>
 

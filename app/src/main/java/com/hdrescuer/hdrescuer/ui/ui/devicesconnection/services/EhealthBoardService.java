@@ -1,7 +1,9 @@
 package com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services;
 
+import android.content.Intent;
 import android.util.Log;
 
+import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
 
 import java.io.InputStream;
@@ -17,6 +19,7 @@ public class EhealthBoardService extends Thread {
     OutputStream outputStream;
 
     public static String STATUS;
+
 
     //Array temporal para manejar los bytes que se queden sin procesar
     byte[] tmp = null;
@@ -65,13 +68,13 @@ public class EhealthBoardService extends Thread {
                     for(int i = 0; i<bytesDisponibles; i++){
 
                         byte mibyte = bytesRecibidos[i];
-                        if(mibyte == 10) { //El \n es 10 en ASCII, ASÍ que lo usaremos como decodificador
+                        if(mibyte == 43) { //El + es 43 en ASCII, ASÍ que lo usaremos como delimitador de las cadenas de datos
                             final_cadena = i ;
-                            byte[] bufferFinal = Arrays.copyOf(bytesRecibidos,(final_cadena - inicio_cadena)+1); //+1 porque es el tamaño, no el índice
+                            byte[] bufferFinal = Arrays.copyOf(bytesRecibidos,(final_cadena - inicio_cadena));
                             String cadena = new String(bufferFinal);
                             parseData(cadena);
 
-                            inicio_cadena = final_cadena;
+                            inicio_cadena = final_cadena+1; //+1 para que no coja el '+' que se ha quedado ahí en medio
                         }
 
 
@@ -102,7 +105,27 @@ public class EhealthBoardService extends Thread {
 
 
     void parseData(String cadena){
-        Log.i("STRING","PROCESADO: "+cadena);
+
+        if(cadena.contains("#")){ //Damos el dato como bueno
+
+            String cadena_resultante = cadena.replace("#","");
+
+            String[] partes = cadena_resultante.split(":");
+
+            if(partes.length == 2){ //Si hay dos partes...Si hay más es que algo ha ido mal
+                //Formato-> tipoDato:valor
+
+                if(partes[0].equals("pulse"))
+                    this.eHealthBoardRepository.setBMP(Integer.parseInt(partes[1]));
+                else if(partes[0].equals("oxigensaturation"))
+                    this.eHealthBoardRepository.setOxBlood(Integer.parseInt(partes[1]));
+
+            }
+
+        }else{
+
+        }
+
     }
 
 

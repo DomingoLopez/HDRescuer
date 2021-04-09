@@ -138,10 +138,12 @@
                 android:layout_width="112dp"
                 android:layout_height="107dp"
                 android:layout_marginTop="7dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/ehealthboard_round" />
+                app:srcCompat="@mipmap/ehealthboard_logo" />
 
             <TextView
                 android:id="@+id/label_ehealthboard"

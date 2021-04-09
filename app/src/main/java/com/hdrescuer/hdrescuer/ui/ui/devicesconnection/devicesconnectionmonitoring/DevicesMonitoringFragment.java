@@ -134,5 +134,22 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        String timeback = String.valueOf(System.currentTimeMillis());
+        this.putDataMapRequestStop.getDataMap().putString("MONITORINGSTOP", timeback);
+        this.putDataReqStop = this.putDataMapRequestStop.asPutDataRequest();
+        Task<DataItem> putDataTask1 = this.dataclient.putDataItem(this.putDataReqStop);
+        putDataTask1.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+            @Override
+            public void onComplete(@NonNull Task<DataItem> task) {
+                Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
+            }
+        });
+        SampleRateFilterThread.STATUS = "INACTIVO";
+        EhealthBoardService.STATUS = "INACTIVO";
 
+
+    }
 }

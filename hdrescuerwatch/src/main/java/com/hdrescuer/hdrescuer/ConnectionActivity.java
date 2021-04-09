@@ -138,6 +138,24 @@ public class ConnectionActivity extends FragmentActivity implements
             this.sensorManager = null;
         }
 
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy()");
+        super.onDestroy();
+
+        this.monitorizacionActiva = null;
+        Log.i("MONITORING DESACTIVADA", "CERRANDO APP");
+        SampleRateFilterThread.STATUS = "INACTIVO";
+
+        Wearable.getCapabilityClient(this).removeListener(this, Constants.CAPABILITY_PHONE_APP);
+        Wearable.getDataClient(this).removeListener(this);
+        this.sensorManager.unregisterListener(this);
+        this.sensorManager = null;
+
+
+
+    }
+
 
 
         public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
