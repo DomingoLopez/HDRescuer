@@ -478,7 +478,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                 //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
                 SampleRateFilterThread.STATUS = "ACTIVO";
-                this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.globalMonitoringViewModel, this.user_id);
+                this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.eHealthBoardRepository, this.globalMonitoringViewModel, this.user_id);
                 this.sampleRateThread.start();
 
 

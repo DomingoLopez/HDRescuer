@@ -119,7 +119,9 @@ public class EhealthBoardService extends Thread {
                     this.eHealthBoardRepository.setBMP(Integer.parseInt(partes[1]));
                 else if(partes[0].equals("oxigensaturation"))
                     this.eHealthBoardRepository.setOxBlood(Integer.parseInt(partes[1]));
-
+                else if(partes[0].equals("airflow")){
+                    this.eHealthBoardRepository.setAirFlow(Integer.parseInt(partes[1]));
+                }
             }
 
         }else{

@@ -45,6 +45,11 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     private MutableLiveData<Float> currentIbi;
     private MutableLiveData<Float> currentTemp;
 
+    //Atributos de los sensores de la board
+    private MutableLiveData<Integer> oxi_bpm;
+    private MutableLiveData<Integer> oxi_o2;
+    private MutableLiveData<Integer> oxi_air;
+
     public GlobalMonitoringViewModel(@NonNull Application application, String id) {
         super(application);
         this.user_id = id;
@@ -77,6 +82,11 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         this.girx = new MutableLiveData<>();
         this.giry = new MutableLiveData<>();
         this.girz = new MutableLiveData<>();
+
+        //Iniciamos las mutablelivedata para la board
+        this.oxi_bpm = new MutableLiveData<>();
+        this.oxi_o2 = new MutableLiveData<>();
+        this.oxi_air = new MutableLiveData<>();
 
     }
 
@@ -134,9 +144,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
 
 
 
-
-
-
     //GETTERS DE LA EMPÁTICA
 
     public MutableLiveData<Float> getBattery() {
@@ -178,6 +185,14 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     public MutableLiveData<Float> getCurrentTemp() {
         return currentTemp;
     }
+
+
+    //GETTERS DE LA BOARD
+    public MutableLiveData<Integer> getOxi_bpm() { return oxi_bpm;}
+
+    public MutableLiveData<Integer> getOxi_o2() {return oxi_o2;}
+
+    public MutableLiveData<Integer> getOxi_air() {return oxi_air;}
 
 
 
@@ -264,6 +279,15 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     public void setCurrentTemp(Float currentTemp) {
         this.currentTemp.postValue(currentTemp);
     }
+
+
+    //Métodos SETTER de la BOARD
+
+    public void setOxi_bpm(Integer bpm){this.oxi_bpm.postValue(bpm);}
+
+    public void setOxi_o2(Integer o2){this.oxi_o2.postValue(o2);}
+
+    public void setOxi_air(Integer air){this.oxi_air.postValue(air);}
 
     @NonNull
     @Override

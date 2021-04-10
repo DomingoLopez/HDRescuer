@@ -10,11 +10,95 @@
         android:id="@+id/label_oxi_bpm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="36dp"
-        android:text="BPM"
+        android:text="BPM:"
+        android:textColor="@color/blue_secondary"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView17"
+        app:layout_constraintStart_toEndOf="@+id/imageView17"
+        app:layout_constraintTop_toTopOf="@+id/imageView17" />
+
+    <ImageView
+        android:id="@+id/imageView17"
+        android:layout_width="56dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:scaleX="1.3"
+        android:scaleY="1.3"
+        android:src="@mipmap/e4band_hr"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bpm_oxi_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="- -"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/label_oxi_bpm"
+        app:layout_constraintStart_toEndOf="@+id/label_oxi_bpm"
+        app:layout_constraintTop_toTopOf="@+id/label_oxi_bpm" />
+
+    <ImageView
+        android:id="@+id/imageView19"
+        android:layout_width="56dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="16dp"
+        android:scaleX="1.6"
+        android:scaleY="1.6"
+        android:src="@mipmap/oximeter_board_foreground"
+        app:layout_constraintEnd_toStartOf="@+id/label_oxi_bpm"
+        app:layout_constraintStart_toStartOf="@+id/imageView17"
+        app:layout_constraintTop_toBottomOf="@+id/imageView17"
+        app:srcCompat="@mipmap/oximeter_board_foreground" />
+
+    <TextView
+        android:id="@+id/label_oxi_o2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="%SpO2:"
+        android:textColor="@color/blue_secondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView19"
+        app:layout_constraintStart_toEndOf="@+id/imageView19"
+        app:layout_constraintTop_toTopOf="@+id/imageView19" />
+
+    <TextView
+        android:id="@+id/o2_oxi_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="- -"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/label_oxi_o2"
+        app:layout_constraintStart_toEndOf="@+id/label_oxi_o2"
+        app:layout_constraintTop_toTopOf="@+id/label_oxi_o2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="48dp"
+        android:text="AirFlow:"
+        android:textColor="@color/blue_secondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/imageView19"
+        app:layout_constraintTop_toBottomOf="@+id/label_oxi_o2" />
+
+    <TextView
+        android:id="@+id/oxi_air"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="- -"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

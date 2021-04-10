@@ -13,7 +13,7 @@ public class EHealthBoardRepository {
 
     private Integer BMP;
     private Integer OxBlood;
-
+    private Integer airFlow;
 
 
     public EHealthBoardRepository() {
@@ -21,6 +21,7 @@ public class EHealthBoardRepository {
 
        this.BMP = 0;
        this.OxBlood = 0;
+       this.airFlow = 0;
     }
 
     public Integer getBMP() {
@@ -39,11 +40,16 @@ public class EHealthBoardRepository {
         OxBlood = oxBlood;
     }
 
+    public Integer getAirFlow(){return this.airFlow; }
+
+    public void setAirFlow(Integer air){this.airFlow = air;}
+
 
 
 
     public void reset(){
         this.BMP = 0;
         this.OxBlood = 0;
+        this.airFlow = 0;
     }
 }
