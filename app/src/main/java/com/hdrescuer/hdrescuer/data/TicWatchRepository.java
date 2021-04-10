@@ -27,15 +27,15 @@ public class TicWatchRepository {
 
 
 
-    private Float accx;
-    private Float accy;
-    private Float accz;
-    private Float acclx;
-    private Float accly;
-    private Float acclz;
-    private Float girx;
-    private Float giry;
-    private Float girz;
+    private Integer accx;
+    private Integer accy;
+    private Integer accz;
+    private Integer acclx;
+    private Integer accly;
+    private Integer acclz;
+    private Integer girx;
+    private Integer giry;
+    private Integer girz;
     private Float hrppg;
     private Float hb;
     private Float hrppgraw;
@@ -56,15 +56,15 @@ public class TicWatchRepository {
 
         this.stepCounter = 0;
 
-        this.accx = 0.0f;//
-        this.accy = 0.0f;//
-        this.accz = 0.0f;//
-        this.acclx = 0.0f;//
-        this.accly = 0.0f;//
-        this.acclz = 0.0f;//
-        this.girx = 0.0f;//
-        this.giry = 0.0f;//
-        this.girz = 0.0f;
+        this.accx = 0;
+        this.accy = 0;
+        this.accz = 0;
+        this.acclx = 0;
+        this.accly = 0;
+        this.acclz = 0;
+        this.girx = 0;
+        this.giry = 0;
+        this.girz = 0;
         this.hrppg = 0.0f;
         this.hrppgraw = 0.0f;
         this.hb = 0.0f;
@@ -80,39 +80,39 @@ public class TicWatchRepository {
      *
      ********************************************/
 
-    public Float getAccx() {
+    public Integer getAccx() {
         return accx;
     }
 
-    public Float getAccy() {
+    public Integer getAccy() {
         return accy;
     }
 
-    public Float getAccz() {
+    public Integer getAccz() {
         return accz;
     }
 
-    public Float getAcclx() {
+    public Integer getAcclx() {
         return acclx;
     }
 
-    public Float getAccly() {
+    public Integer getAccly() {
         return accly;
     }
 
-    public Float getAcclz() {
+    public Integer getAcclz() {
         return acclz;
     }
 
-    public Float getGirx() {
+    public Integer getGirx() {
         return girx;
     }
 
-    public Float getGiry() {
+    public Integer getGiry() {
         return giry;
     }
 
-    public Float getGirz() {
+    public Integer getGirz() {
         return girz;
     }
 
@@ -147,40 +147,38 @@ public class TicWatchRepository {
      *
      ********************************************/
 
-    public void setAccx(Float accx) {
-        this.accx = accx;
-    }
+    public void setAccx(Float accx) { this.accx = Math.round(accx); }
 
     public void setAccy(Float accy) {
-        this.accy = accy;
+        this.accy = Math.round(accy);
     }
 
     public void setAccz(Float accz) {
-        this.accz = accz;
+        this.accz = Math.round(accz);
     }
 
     public void setAcclx(Float acclx) {
-        this.acclx = acclx;
+        this.acclx = Math.round(acclx);
     }
 
     public void setAccly(Float accly) {
-        this.accly = accly;
+        this.accly = Math.round(accly);
     }
 
     public void setAcclz(Float acclz) {
-        this.acclz = acclz;
+        this.acclz = Math.round(acclz);
     }
 
     public void setGirx(Float girx) {
-        this.girx = girx;
+        this.girx = Math.round(girx);
     }
 
     public void setGiry(Float giry) {
-        this.giry = giry;
+        this.giry = Math.round(giry);
     }
 
     public void setGirz(Float girz) {
-        this.girz = girz;
+        this.girz = Math.round(girz);
     }
 
     public void setHrppg(Float hrppg) {
@@ -198,5 +196,25 @@ public class TicWatchRepository {
     public void setStep(Integer step) {
         //OJO. vamos a probar a que sume los pasos
         this.step = step;
+    }
+
+
+
+    public void reset(){
+        this.stepCounter = 0;
+
+        this.accx = 0;
+        this.accy = 0;
+        this.accz = 0;
+        this.acclx = 0;
+        this.accly = 0;
+        this.acclz = 0;
+        this.girx = 0;
+        this.giry = 0;
+        this.girz = 0;
+        this.hrppg = 0.0f;
+        this.hrppgraw = 0.0f;
+        this.hb = 0.0f;
+        this.step = 0;
     }
 }

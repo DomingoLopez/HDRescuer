@@ -173,4 +173,22 @@ public class DataRepository {
     }
 
     public void setStep(Float step) { this.stepCounter += step; }
+
+
+    public void reset(){
+        this.accx = 0.0f;//
+        this.accy = 0.0f;//
+        this.accz = 0.0f;//
+        this.acclx = 0.0f;//
+        this.accly = 0.0f;//
+        this.acclz = 0.0f;//
+        this.girx = 0.0f;//
+        this.giry = 0.0f;//
+        this.girz = 0.0f;
+        this.hrppg = 0.0f;
+        this.hrppgraw = 0.0f;
+        this.hb = 0.0f;
+        this.step = 0.0f;
+        this.stepCounter = 0;
+    }
 }

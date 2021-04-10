@@ -146,6 +146,7 @@ public class ConnectionActivity extends FragmentActivity implements
         this.monitorizacionActiva = null;
         Log.i("MONITORING DESACTIVADA", "CERRANDO APP");
         SampleRateFilterThread.STATUS = "INACTIVO";
+        this.dataRepository.reset();
 
         Wearable.getCapabilityClient(this).removeListener(this, Constants.CAPABILITY_PHONE_APP);
         Wearable.getDataClient(this).removeListener(this);
@@ -344,6 +345,8 @@ public class ConnectionActivity extends FragmentActivity implements
                     this.tv_status_watch.setText("Ambos dispositivos vinculados correctamente.\n Esperando monitorización...");
                     this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.e4connected,getTheme()));
                     SampleRateFilterThread.STATUS = "INACTIVO";
+                    //Reseteamos el repositorio
+                    this.dataRepository.reset();
 
                 } else if (event.getType() == DataEvent.TYPE_DELETED) {
                     // DataItem deleted

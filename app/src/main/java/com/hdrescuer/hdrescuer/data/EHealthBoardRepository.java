@@ -38,4 +38,12 @@ public class EHealthBoardRepository {
     public void setOxBlood(Integer oxBlood) {
         OxBlood = oxBlood;
     }
+
+
+
+
+    public void reset(){
+        this.BMP = 0;
+        this.OxBlood = 0;
+    }
 }

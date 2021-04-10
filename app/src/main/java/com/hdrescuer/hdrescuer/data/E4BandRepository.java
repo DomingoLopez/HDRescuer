@@ -184,4 +184,18 @@ public class E4BandRepository implements EmpaDataDelegate {
     }
 
 
+
+    public void reset(){
+        battery = 0.0f;
+        currentAccX = 0;
+        currentAccY = 0;
+        currentAccZ = 0;
+        currentBvp = 0.0f;
+        currentHr = 0.0f;
+        currentGsr = 0.0f;
+        currentIbi = 0.0f;
+        currentTemp = 0.0f;
+        tag = 0.0;
+    }
+
 }

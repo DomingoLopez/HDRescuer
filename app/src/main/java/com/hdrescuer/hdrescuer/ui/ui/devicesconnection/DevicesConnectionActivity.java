@@ -472,7 +472,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     EhealthBoardService.STATUS ="INACTIVO";
                 }
 
-
+                /**REINICIAMOS LOS REPOSITORIOS**/
+                //Seteamos los repositorios para la nueva sesión
+                this.resetRepositories();
 
                 //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
                 SampleRateFilterThread.STATUS = "ACTIVO";
@@ -536,6 +538,17 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
     }
+
+
+
+    void resetRepositories(){
+
+        this.ticWatchRepository.reset();
+        this.e4BandRepository.reset();
+        this.eHealthBoardRepository.reset();
+
+    }
+
 
 
 
