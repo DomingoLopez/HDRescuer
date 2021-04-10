@@ -21,7 +21,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
 
     //Atributos de los sensores del TicWatch
     private MutableLiveData<Float> hrppg;
-    private MutableLiveData<Float> hb;
     private MutableLiveData<Float> hrppgraw;
     private MutableLiveData<Integer> step;
     private MutableLiveData<Integer> accx;
@@ -41,7 +40,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     private MutableLiveData<Integer> currentAccY;
     private MutableLiveData<Integer> currentAccZ;
     private MutableLiveData<Float> currentBvp;
-    private MutableLiveData<Float> currentHr;
+    private MutableLiveData<Integer> currentHr;
     private MutableLiveData<Float> currentGsr;
     private MutableLiveData<Float> currentIbi;
     private MutableLiveData<Float> currentTemp;
@@ -67,7 +66,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
 
         //Iniciamos las mutablelivedata para el reloj
         this.hrppg = new MutableLiveData<>();
-        this.hb = new MutableLiveData<>();
         this.hrppgraw = new MutableLiveData<>();
         this.step = new MutableLiveData<>();
         this.accx = new MutableLiveData<>();
@@ -90,10 +88,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     //GETTERS DEL TICWATCH
     public MutableLiveData<Float> getHrppg() {
         return hrppg;
-    }
-
-    public MutableLiveData<Float> getHb() {
-        return hb;
     }
 
     public MutableLiveData<Float> getHrppgraw() {
@@ -169,7 +163,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         return currentBvp;
     }
 
-    public MutableLiveData<Float> getCurrentHr() {
+    public MutableLiveData<Integer> getCurrentHr() {
         return currentHr;
     }
 
@@ -193,10 +187,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     //METODOS SETTER DEL TICWATCH
     public void setHrppg(Float hrppg) {
         this.hrppg.postValue(hrppg);
-    }
-
-    public void setHb(Float hb) {
-        this.hb.postValue(hb);
     }
 
     public void setHrppgraw(Float hrppgraw) {
@@ -259,7 +249,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         this.currentBvp.postValue(currentBvp);
     }
 
-    public void setCurrentHr(Float currentHr) {
+    public void setCurrentHr(Integer currentHr) {
         this.currentHr.postValue(currentHr);
     }
 

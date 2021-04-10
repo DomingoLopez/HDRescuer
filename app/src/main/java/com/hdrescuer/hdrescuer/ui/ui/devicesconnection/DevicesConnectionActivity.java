@@ -587,18 +587,33 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         } else if (status == EmpaStatus.CONNECTED) {
             Log.i("ESTADO:",status.toString());
 
-            this.btnE4BandConnect.setText("Conectado");
-            this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4connected));
+           this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btnE4BandConnect.setText("Conectado");
+                    btnE4BandConnect.setBackgroundColor(btnE4BandConnect.getContext().getResources().getColor(R.color.e4connected));
 
-            this.e4Connected = true;
+                    e4Connected = true;
+                }
+            });
+
+
 
             // The device manager disconnected from a device
         } else if (status == EmpaStatus.DISCONNECTED) {
             Log.i("ESTADO:",status.toString());
-            this.btnE4BandConnect.setText("Desconectado");
-            this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4disconnected));
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btnE4BandConnect.setText("Desconectado");
+                    btnE4BandConnect.setBackgroundColor(btnE4BandConnect.getContext().getResources().getColor(R.color.e4disconnected));
 
-            this.e4Connected =  false;
+                    e4Connected =  false;
+                }
+            });
+
+
+
         }
     }
 
@@ -829,9 +844,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 }else if(item.getUri().getPath().compareTo("/HRPPGRAW") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setHrppgraw(dataMap.getFloat("HRPPGRAW"));
-                }else if(item.getUri().getPath().compareTo("/HB") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchRepository.setHb(dataMap.getFloat("HB"));
                 }else if(item.getUri().getPath().compareTo("/STEP") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setStep(dataMap.getInt("STEP"));

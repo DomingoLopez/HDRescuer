@@ -35,7 +35,7 @@ public class E4BandRepository implements EmpaDataDelegate {
     private Integer currentAccY;
     private Integer currentAccZ;
     private Float currentBvp;
-    private Float currentHr;
+    private Integer currentHr;
     private Float currentGsr;
     private Float currentIbi;
     private Float currentTemp;
@@ -54,7 +54,7 @@ public class E4BandRepository implements EmpaDataDelegate {
         currentAccY = 0;
         currentAccZ = 0;
         currentBvp = 0.0f;
-        currentHr = 0.0f;
+        currentHr = 0;
         currentGsr = 0.0f;
         currentIbi = 0.0f;
         currentTemp = 0.0f;
@@ -99,7 +99,7 @@ public class E4BandRepository implements EmpaDataDelegate {
                     (new Runnable() {
                         public void run() {
                                 if (averageHr != 0) {
-                                    currentHr = averageHr;
+                                    currentHr = Math.round(averageHr);
                                 }
                         }
                     }, 0, 1000, TimeUnit.MILLISECONDS);
@@ -167,7 +167,7 @@ public class E4BandRepository implements EmpaDataDelegate {
         return currentBvp;
     }
 
-    public Float getCurrentHr() {
+    public Integer getCurrentHr() {
         return currentHr;
     }
 
@@ -191,7 +191,7 @@ public class E4BandRepository implements EmpaDataDelegate {
         currentAccY = 0;
         currentAccZ = 0;
         currentBvp = 0.0f;
-        currentHr = 0.0f;
+        currentHr = 0;
         currentGsr = 0.0f;
         currentIbi = 0.0f;
         currentTemp = 0.0f;

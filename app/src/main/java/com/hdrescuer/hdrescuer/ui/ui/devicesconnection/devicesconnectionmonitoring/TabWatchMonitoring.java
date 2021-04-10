@@ -71,7 +71,6 @@ public class TabWatchMonitoring extends Fragment {
 
         this.tvhrppg = view.findViewById(R.id.tvhrppg);
         this.tvhrppgraw = view.findViewById(R.id.tvhrppgraw);
-        this.tvhb = view.findViewById(R.id.tvhb);
         this.tvsteps = view.findViewById(R.id.tvsteps);
     }
 
@@ -152,13 +151,7 @@ public class TabWatchMonitoring extends Fragment {
             }
         });
 
-        //Observers de Hb
-        this.globalMonitoringViewModel.getHb().observe(requireActivity(), new Observer<Float>() {
-            @Override
-            public void onChanged(Float aFloat) {
-                tvhb.setText(String.valueOf(Math.round(aFloat)));
-            }
-        });
+
 
         //Observers de step
         this.globalMonitoringViewModel.getStep().observe(requireActivity(), new Observer<Integer>() {

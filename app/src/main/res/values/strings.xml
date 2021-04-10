@@ -36,7 +36,7 @@
     <string name="eda_label">EDA:</string>
     <string name="ibi_label">IBI:</string>
     <string name="emptyText">-</string>
-    <string name="temp_label">Temperatura:</string>
+    <string name="temp_label">Temperatura (piel):</string>
     <string name="battery_label">Batería:</string>
     <string name="label_e4band">Empatica 4 Band</string>
     <string name="label_watch_monitoring">Tic Watch Pro</string>

@@ -20,7 +20,7 @@ import java.text.DecimalFormat;
 public class TabE4BandMonitoring extends Fragment {
 
     GlobalMonitoringViewModel globalMonitoringViewModel;
-    DecimalFormat df = new DecimalFormat("#.##");
+    DecimalFormat df = new DecimalFormat("#.###");
 
     TextView tvTemp;
     //TextView tvBattery;
@@ -86,13 +86,13 @@ public class TabE4BandMonitoring extends Fragment {
         this.globalMonitoringViewModel.getCurrentGsr().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvGSR.setText(aFloat.toString());
+                tvGSR.setText(df.format(aFloat));
             }
         });
         //Observer de HR
-        this.globalMonitoringViewModel.getCurrentHr().observe(requireActivity(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getCurrentHr().observe(requireActivity(), new Observer<Integer>() {
             @Override
-            public void onChanged(Float aFloat) {
+            public void onChanged(Integer aFloat) {
                 tvHR.setText(aFloat.toString());
             }
         });
@@ -100,7 +100,7 @@ public class TabE4BandMonitoring extends Fragment {
         this.globalMonitoringViewModel.getCurrentIbi().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvIBI.setText(aFloat.toString());
+                tvIBI.setText(df.format(aFloat));
             }
         });
         //Observer de AccX
@@ -128,7 +128,7 @@ public class TabE4BandMonitoring extends Fragment {
         this.globalMonitoringViewModel.getCurrentBvp().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvBVP.setText(aFloat.toString());
+                tvBVP.setText(df.format(aFloat));
             }
         });
     }

@@ -37,17 +37,12 @@ public class TicWatchRepository {
     private Integer giry;
     private Integer girz;
     private Float hrppg;
-    private Float hb;
     private Float hrppgraw;
     private Integer step;
     private int stepCounter;
 
 
 
-
-    //Si necesitamos calcular algo en un ratio de 1 segundo.
-    //Mirar como lo he hecho en la empática Viewmodel
-    private ScheduledExecutorService scheduler;
     private float averageHr = 0;
 
 
@@ -67,7 +62,6 @@ public class TicWatchRepository {
         this.girz = 0;
         this.hrppg = 0.0f;
         this.hrppgraw = 0.0f;
-        this.hb = 0.0f;
         this.step = 0;
 
 
@@ -125,16 +119,9 @@ public class TicWatchRepository {
         return hrppgraw;
     }
 
-    public Float getHb() {
-        return hb;
-    }
 
     public Integer getStep() {
         return step;
-    }
-
-    public ScheduledExecutorService getScheduler() {
-        return scheduler;
     }
 
     public float getAverageHr() {
@@ -189,9 +176,6 @@ public class TicWatchRepository {
         this.hrppgraw = hrppgraw;
     }
 
-    public void setHb(Float hb) {
-        this.hb = hb;
-    }
 
     public void setStep(Integer step) {
         //OJO. vamos a probar a que sume los pasos
@@ -214,7 +198,6 @@ public class TicWatchRepository {
         this.girz = 0;
         this.hrppg = 0.0f;
         this.hrppgraw = 0.0f;
-        this.hb = 0.0f;
         this.step = 0;
     }
 }

@@ -124,7 +124,6 @@ public class SampleRateFilterThread extends Thread{
     private void updateTicWatchData(){
 
         this.globalMonitoringViewModel.setHrppg(this.ticWatchRepository.getHrppg());
-        this.globalMonitoringViewModel.setHb(this.ticWatchRepository.getHb());
         this.globalMonitoringViewModel.setHrppgraw(this.ticWatchRepository.getHrppgraw());
         this.globalMonitoringViewModel.setStep(this.ticWatchRepository.getStep());
         this.globalMonitoringViewModel.setAccx(this.ticWatchRepository.getAccx());
