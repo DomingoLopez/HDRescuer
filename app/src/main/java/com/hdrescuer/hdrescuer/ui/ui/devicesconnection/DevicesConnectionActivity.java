@@ -108,7 +108,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Atributos para la detección del Watch
     private Set<Node> wearNodesWithApp;
     private List<Node> allConnectedNodes;
-    private Boolean watchConnected;
 
     //Atributos de compartición de datos entre la capa de datos del reloj y la app
     /**Capa de datos para la compartición de los mismos entre el Watch y la App**/
