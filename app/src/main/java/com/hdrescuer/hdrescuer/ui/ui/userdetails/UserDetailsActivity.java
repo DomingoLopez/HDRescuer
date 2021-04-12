@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -52,6 +53,8 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
     UserDetails user;
 
+    boolean alreadyCreated = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +81,19 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         findViews();
         events();
         loadUserData();
+        this.alreadyCreated = true;
 
+    }
+
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        if(!alreadyCreated){
+            refreshUserDetails();
+        }
+        alreadyCreated = false;
 
 
     }
@@ -111,6 +126,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
 
     }
+
 
 
     private void loadUserData() {
@@ -162,6 +178,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    void refreshUserDetails(){
+        this.userDetailsViewModel.refreshUserDetails();
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -180,7 +200,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.btn_edit_data:
-
                 NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.MODIFY_USER,this.user);
                 dialog.show(this.getSupportFragmentManager(), "NewUserFragment");
                 break;
@@ -189,8 +208,4 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 }

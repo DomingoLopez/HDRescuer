@@ -25,6 +25,7 @@ import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
+import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
 
 public class NewUserDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -227,9 +228,10 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
 
                    }else if(this.type == UserActionDialog.MODIFY_USER){
 
-                       UserDetails user = new UserDetails(this.userDetails.getId(), name, lastname,email,password,gender, age, height, weight,phone, phone2, city,direccion,cp);
+                       UserInfo user = new UserInfo(this.userDetails.getId(), name, lastname,email,password,gender, age, height, weight,phone, phone2, city,direccion,cp);
                        UserDetailsViewModel userDetailsViewModel = new ViewModelProvider(this.getActivity()).get(UserDetailsViewModel.class);
                        userDetailsViewModel.updateUserDetails(user);
+                       userDetailsViewModel.refreshUserDetails();
                        getDialog().dismiss();
                    }
 

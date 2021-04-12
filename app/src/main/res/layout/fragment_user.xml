@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="2dp"
@@ -10,9 +11,7 @@
     app:cardElevation="5dp"
     app:contentPadding="5dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -32,8 +31,8 @@
             android:id="@+id/textViewUserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
             android:text="TextView"
             android:textAlignment="textStart"
             android:textColor="@color/blue_secondary"
@@ -42,6 +41,52 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/user_list_img"
             app:layout_constraintTop_toTopOf="@+id/user_list_img" />
+
+        <TextView
+            android:id="@+id/textViewLastMonitoring"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_last_monitoring_users"
+            android:textAlignment="textStart"
+            android:textColor="@color/blue_secondary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/textViewUserName"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserName" />
+
+        <TextView
+            android:id="@+id/textViewLastMonitoring2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/session_time_label_users"
+            android:textAlignment="textStart"
+            android:textColor="@color/blue_secondary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/textViewLastMonitoring"
+            app:layout_constraintTop_toBottomOf="@+id/textViewLastMonitoring" />
+
+        <TextView
+            android:id="@+id/tvLastSession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="- -"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewLastMonitoring"
+            app:layout_constraintStart_toEndOf="@+id/textViewLastMonitoring"
+            app:layout_constraintTop_toTopOf="@+id/textViewLastMonitoring" />
+
+        <TextView
+            android:id="@+id/tvTotalTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="- -"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewLastMonitoring2"
+            app:layout_constraintStart_toEndOf="@+id/textViewLastMonitoring2"
+            app:layout_constraintTop_toTopOf="@+id/textViewLastMonitoring2" />
 
         <!-- <TextView
             android:id="@+id/textViewLastMonitoring"
