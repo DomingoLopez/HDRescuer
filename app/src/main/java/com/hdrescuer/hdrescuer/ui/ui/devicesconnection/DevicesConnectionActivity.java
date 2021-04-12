@@ -13,6 +13,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -50,12 +52,18 @@ import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.data.E4BandRepository;
+import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.TicWatchRepository;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardService;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -69,7 +77,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Repositorios
     E4BandRepository e4BandRepository;
     TicWatchRepository ticWatchRepository;
-    //GlobalMonitoringRepository globalMonitoringRepository;
+    EHealthBoardRepository eHealthBoardRepository;
+
 
     //ViewModel
     GlobalMonitoringViewModel globalMonitoringViewModel;
@@ -81,6 +90,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Botones de conexión
     Button btnE4BandConnect;
     Button btnWatchConnect;
+    Button btnEHealthBoardConnect;
 
     //Botón de start monitoring
     Button btnStartMonitoring;
@@ -94,12 +104,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     private static final int REQUEST_PERMISSION_ACCESS_COARSE_LOCATION = 1;
     private EmpaDeviceManager deviceManager = null;
 
-    EmpaStatus E4BandStatus = EmpaStatus.DISCONNECTED;
 
     //Atributos para la detección del Watch
     private Set<Node> wearNodesWithApp;
     private List<Node> allConnectedNodes;
-    private Boolean watchConnected;
 
     //Atributos de compartición de datos entre la capa de datos del reloj y la app
     /**Capa de datos para la compartición de los mismos entre el Watch y la App**/
@@ -113,7 +121,27 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     PutDataRequest putDataReqStop;
 
 
+
+    //Atributos para la detección y recepción de datos de la placa
+    BluetoothAdapter bluetoothAdapter;
+    BluetoothDevice ehealthBoardDevice;
+    BluetoothSocket bluetoothSocket;
+    InputStream myInputStream;
+    OutputStream myOutStrem;
+    String macAddress = "00:14:03:05:0C:99";
+
+
+    //Hebra para el envío de datos al servidor
     private SampleRateFilterThread sampleRateThread;
+    //Hebra/Servicio que recibirá los datos vía Bluetooth del eHealthBoard
+    private EhealthBoardService ehealthBoardService;
+
+
+    //Estado de los dispositivos
+    boolean e4Connected = false;
+    boolean ticwatchConnected = false;
+    boolean ehealthConnected = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +172,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         //La empática va en esta misma Actividad. Los demás en principio en servicios a parte
 
         //Pensar en mover esto a ONRESUME
+        /**
+         *Búsqueda de la Banda Empática
+         */
         initEmpaticaDeviceManager();
 
     }
@@ -152,6 +183,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
 
+        /**
+         *Búsqueda de los Wearables con App instalada cercanos
+         */
         Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_WEAR_APP);
         this.dataClient = Wearable.getDataClient(this);
         Wearable.getDataClient(this).addListener(this);
@@ -159,6 +193,73 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         findWearDevicesWithApp();
         findAllWearDevices();
 
+
+    }
+
+    private boolean conectareHealthBoardBT(){
+            try{
+                if(this.bluetoothAdapter.isEnabled()){
+                    this.bluetoothAdapter.startDiscovery();
+                    this.ehealthBoardDevice = this.bluetoothAdapter.getRemoteDevice(this.macAddress);
+
+                    BluetoothSocket tmp = null;
+
+                    try{
+                        Method m = this.ehealthBoardDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
+                        tmp = (BluetoothSocket) m.invoke(this.ehealthBoardDevice, Integer.valueOf(1));
+
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        Log.i("BOARD_ERROR","La conexión del socket tmp no ha funcionado");
+                        Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                        this.ehealthConnected =  false;
+                        return false;
+                    }
+
+                    this.bluetoothSocket = tmp;
+
+                    try{
+                        this.bluetoothSocket.connect();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Log.i("BOARD_ERROR","No se ha podido crear el socket bluetooth");
+                        Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                        this.ehealthConnected =  false;
+                        return false;
+                    }
+
+                    try{
+                        this.myInputStream = this.bluetoothSocket.getInputStream();
+                    }catch (Exception e ){
+                        Log.i("BOARD_ERROR","Error "+e.getMessage());
+                        Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                        this.ehealthConnected =  false;
+                        return false;
+                    }
+
+                    try{
+                        this.myOutStrem = this.bluetoothSocket.getOutputStream();
+                    }catch (Exception e ){
+                        Log.i("BOARD_ERROR","Error "+e.getMessage());
+                        Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                        this.ehealthConnected =  false;
+                        return false;
+                    }
+
+                    Log.i("BOARD_OK","Conectado a la placa");
+                    this.ehealthConnected =  true;
+
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                Log.i("BOARD_ERROR","No se ha podido conectar a la placa");
+                Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
+                this.ehealthConnected =  false;
+                return false;
+            }
+
+
+            return this.ehealthConnected;
     }
 
 
@@ -168,7 +269,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         //iniciamos Repositorios temporales
         this.e4BandRepository = new E4BandRepository();
         this.ticWatchRepository = new TicWatchRepository();
-        //this.globalMonitoringRepository = new GlobalMonitoringRepository(this.user_id);
+        this.eHealthBoardRepository = new EHealthBoardRepository();
 
         //ViewModelFactory para el repositorio Global
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
@@ -190,20 +291,27 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.tvDateMonitoring = findViewById(R.id.tv_date_monitoring);
         this.btnStartMonitoring = findViewById(R.id.btn_start_monitoring);
 
+
         //Botones para la conexión de los dispositivos
 
         //E4BAND
         this.btnE4BandConnect = findViewById(R.id.btn_connect_e4);
-        this.btnE4BandConnect.setOnClickListener(this);
 
-        //WATCH. Hacerlo no clickable
+
+        //WATCH.
         this.btnWatchConnect = findViewById(R.id.btn_connect_watch);
+
+        //EHealthBoard
+        this.btnEHealthBoardConnect = findViewById(R.id.btn_connect_ehealthboard);
+        this.btnEHealthBoardConnect.setOnClickListener(this);
     }
 
     private void events() {
         this.btn_back.setOnClickListener(this);
         this.btnStartMonitoring.setOnClickListener(this);
     }
+
+
     private void loadUserData() {
 
         //Iniciamos las views a los valores iniciales por defecto
@@ -211,12 +319,16 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.tvDateMonitoring.setText(this.currentDate.toString());
 
         //Botón de la empática
-        this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4disconnected));
-        this.btnE4BandConnect.setText("Desconectado");
+        this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4Connecting));
+        this.btnE4BandConnect.setText("Detectando");
 
         //Botón del watch
-        this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
-        this.btnWatchConnect.setText("Desconectado");
+        this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4Connecting));
+        this.btnWatchConnect.setText("Detectando");
+
+        //Botón de la ehealthBoard
+        this.btnEHealthBoardConnect.setBackgroundColor(this.btnEHealthBoardConnect.getContext().getResources().getColor(R.color.e4disconnected));
+        this.btnEHealthBoardConnect.setText("Pulsa para conectar");
 
 
     }
@@ -322,6 +434,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                         Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
                     }
                 });
+                EhealthBoardService.STATUS = "INACTIVO";
                 SampleRateFilterThread.STATUS = "INACTIVO";
                 finish();
 
@@ -329,27 +442,46 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
             case R.id.btn_start_monitoring:
 
-                //Informamos al Reloj que vamos a iniciar la monitorización
-                /**NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO**/
-                String timeStart = String.valueOf(System.currentTimeMillis());
-                this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, timeStart);
-                this.putDataReq = this.putDataMapRequest.asPutDataRequest();
-                Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
-                putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataItem> task) {
-                        Log.i("INFOTASK", "PUESTO VALOR START MONITORING EN DATACLIENT");
-                    }
-                });
+                if(this.bluetoothAdapter != null)
+                    this.bluetoothAdapter.cancelDiscovery();
 
-                /*Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
-                 */
+                /**INICIO DEL RELOJ**/
+                if(this.ticwatchConnected) {
+                    //NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO
+                    String timeStart = String.valueOf(System.currentTimeMillis());
+                    this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, timeStart);
+                    this.putDataReq = this.putDataMapRequest.asPutDataRequest();
+                    Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
+                    putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataItem> task) {
+                            Log.i("INFOTASK", "PUESTO VALOR START MONITORING EN DATACLIENT");
+                        }
+                    });
+                }
+
+
+                /**INICIO DE LA EHEALTHBOARD**/
+                if(this.ehealthConnected){ //Si está conectada
+                    initEHeatlhBoard(); //Solo hace el inicio para mandar una instrucción de inicio al arduino
+                    EhealthBoardService.STATUS = "ACTIVO";
+                    this.ehealthBoardService = new EhealthBoardService(this.eHealthBoardRepository, this.myInputStream, this.myOutStrem);
+                    this.ehealthBoardService.start();
+                }else{
+                    EhealthBoardService.STATUS ="INACTIVO";
+                }
+
+                /**REINICIAMOS LOS REPOSITORIOS**/
+                //Seteamos los repositorios para la nueva sesión
+                this.resetRepositories();
+
+                //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
                 SampleRateFilterThread.STATUS = "ACTIVO";
-                this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.globalMonitoringViewModel, this.user_id);
+                this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.eHealthBoardRepository, this.globalMonitoringViewModel, this.user_id);
                 this.sampleRateThread.start();
 
 
-                //Iniciaríamos el fragment para la monitorización en Tabs
+                //Iniciamos Fragment de monitorización
                 DevicesMonitoringFragment fragment = new DevicesMonitoringFragment(this.dataClient,this.putDataMapRequestStop,this.putDataReqStop);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -359,8 +491,64 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                 break;
 
+            case R.id.btn_connect_ehealthboard:
+
+                if(this.ehealthConnected){
+                    this.ehealthConnected = false;
+                    this.btnEHealthBoardConnect.setBackgroundColor(this.btnEHealthBoardConnect.getContext().getResources().getColor(R.color.e4disconnected));
+                    this.btnEHealthBoardConnect.setText("Pulsa para Conectar");
+                    this.bluetoothAdapter.cancelDiscovery();
+                    try{
+                        this.bluetoothSocket.close();
+                    }catch(Exception e){
+                        Log.i("ERRORSOCKET", "Error al cerrar socket bluetooth ehealthBoard");
+                    }
+                }else{
+                    this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    boolean conectado = conectareHealthBoardBT();
+                    if(conectado){
+                        this.bluetoothAdapter.cancelDiscovery();
+                        this.btnEHealthBoardConnect.setBackgroundColor(this.btnEHealthBoardConnect.getContext().getResources().getColor(R.color.e4connected));
+                        this.btnEHealthBoardConnect.setText("Conectado");
+                    }
+                }
+
+                break;
+
         }
     }
+
+    void initEHeatlhBoard(){
+        try{
+            byte[] inicio = "S".getBytes();
+            this.myOutStrem.write(inicio);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    void stopEHealthBoard(){
+        try{
+            if(this.myOutStrem != null) {
+                byte[] parada = "N".getBytes();
+                this.myOutStrem.write(parada);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+    void resetRepositories(){
+
+        this.ticWatchRepository.reset();
+        this.e4BandRepository.reset();
+        this.eHealthBoardRepository.reset();
+
+    }
+
+
 
 
     @Override
@@ -398,16 +586,32 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         } else if (status == EmpaStatus.CONNECTED) {
             Log.i("ESTADO:",status.toString());
 
-            this.btnE4BandConnect.setText("Conectado");
-            this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4connected));
+           this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btnE4BandConnect.setText("Conectado");
+                    btnE4BandConnect.setBackgroundColor(btnE4BandConnect.getContext().getResources().getColor(R.color.e4connected));
+
+                    e4Connected = true;
+                }
+            });
 
 
 
             // The device manager disconnected from a device
         } else if (status == EmpaStatus.DISCONNECTED) {
             Log.i("ESTADO:",status.toString());
-            this.btnE4BandConnect.setText("Desconectado");
-            this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4disconnected));
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    btnE4BandConnect.setText("Desconectado");
+                    btnE4BandConnect.setBackgroundColor(btnE4BandConnect.getContext().getResources().getColor(R.color.e4disconnected));
+
+                    e4Connected =  false;
+                }
+            });
+
+
 
         }
     }
@@ -434,7 +638,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             try {
                 // Connect to the device
                 deviceManager.connectDevice(bluetoothDevice);
-                Log.i("ENTRO","DISCOVER");
             } catch (ConnectionNotAllowedException e) {
                 // This should happen only if you try to connect when allowed == false.
                 Toast.makeText(DevicesConnectionActivity.this, "Sorry, you can't connect to this device", Toast.LENGTH_SHORT).show();
@@ -497,7 +700,22 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             Log.d("E4Service", "Disconnecting");
             deviceManager.disconnect();
         }
-        SampleRateFilterThread.STATUS = "INACTIVE";
+        SampleRateFilterThread.STATUS = "INACTIVO";
+        EhealthBoardService.STATUS = "INACTIVO";
+
+        if(this.ehealthConnected)
+            this.stopEHealthBoard();
+
+        if(this.bluetoothSocket != null){
+            try {
+                this.bluetoothSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
     }
 
     @Override
@@ -536,6 +754,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     Log.d("ERROR", "Capability request failed to return any results.");
                     btnWatchConnect.setBackgroundColor(btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
                     btnWatchConnect.setText("Desconectado");
+                    ticwatchConnected = false;
                 }
             }
         });
@@ -558,6 +777,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     Log.d("ERROR", "Node request failed to return any results.");
                     btnWatchConnect.setBackgroundColor(btnWatchConnect.getContext().getResources().getColor(R.color.e4disconnected));
                     btnWatchConnect.setText("Desconectado");
+
+                    ticwatchConnected = false;
                 }
 
                 verifyNodeAndWaitForMonitoring();
@@ -569,7 +790,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     private void verifyNodeAndWaitForMonitoring() {
 
         if ((this.wearNodesWithApp == null) || (this.allConnectedNodes == null)) {
-            Log.d("ERROR", "Waiting on Results for both connected nodes and nodes with app");
+            Log.d("ERROR", "Esperando resultados de nodos conectados con la app");
         } else if (this.allConnectedNodes.isEmpty()) {
             Log.d("INFO", "No hay nodos conectados");
         } else if (this.wearNodesWithApp.isEmpty()) {
@@ -580,12 +801,15 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             this.btnWatchConnect.setText("Conectado");
             this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4connected));
 
+            ticwatchConnected = true;
+
         } else {
             // TODO: Add your code to communicate with the wear app(s) via
             Log.i("INFO","Todos los nodos conectados. Esperando inicio de la monitorización...");
             this.btnWatchConnect.setText("Conectado");
             this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4connected));
-            Log.i("NODOS",this.wearNodesWithApp.toString());
+
+            ticwatchConnected = true;
 
         }
     }
@@ -602,6 +826,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     this.ticWatchRepository.setAccx(dataMap.getFloat("ACCX"));
                     this.ticWatchRepository.setAccy(dataMap.getFloat("ACCY"));
                     this.ticWatchRepository.setAccz(dataMap.getFloat("ACCZ"));
+
                 }else if(item.getUri().getPath().compareTo("/ACCL") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setAcclx(dataMap.getFloat("ACCLX"));
@@ -618,9 +843,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 }else if(item.getUri().getPath().compareTo("/HRPPGRAW") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setHrppgraw(dataMap.getFloat("HRPPGRAW"));
-                }else if(item.getUri().getPath().compareTo("/HB") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchRepository.setHb(dataMap.getFloat("HB"));
                 }else if(item.getUri().getPath().compareTo("/STEP") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setStep(dataMap.getInt("STEP"));
@@ -633,6 +855,16 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        if(this.ehealthConnected)
+            this.stopEHealthBoard();
+
+        if(this.bluetoothSocket != null){
+            try {
+                this.bluetoothSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         finish();
     }
 }

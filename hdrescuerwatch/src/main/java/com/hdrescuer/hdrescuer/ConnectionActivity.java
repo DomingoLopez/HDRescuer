@@ -69,7 +69,6 @@ public class ConnectionActivity extends FragmentActivity implements
         Sensor gyroscope;
         Sensor hrppg;
         Sensor hrppgRAW;
-        Sensor hb;
         Sensor stepDetector;
 
         //Views
@@ -137,6 +136,25 @@ public class ConnectionActivity extends FragmentActivity implements
             this.sensorManager.unregisterListener(this);
             this.sensorManager = null;
         }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy()");
+        super.onDestroy();
+
+        this.monitorizacionActiva = null;
+        Log.i("MONITORING DESACTIVADA", "CERRANDO APP");
+        SampleRateFilterThread.STATUS = "INACTIVO";
+        this.dataRepository.reset();
+
+        Wearable.getCapabilityClient(this).removeListener(this, Constants.CAPABILITY_PHONE_APP);
+        Wearable.getDataClient(this).removeListener(this);
+        this.sensorManager.unregisterListener(this);
+        this.sensorManager = null;
+
+
+
+    }
 
 
 
@@ -218,7 +236,6 @@ public class ConnectionActivity extends FragmentActivity implements
             this.hrppg = this.sensorManager.getDefaultSensor(21); //21 el HR
             this.hrppgRAW = this.sensorManager.getDefaultSensor(65572); //65572 el HR Raw data
             this.stepDetector = this.sensorManager.getDefaultSensor(18); //18 el detector de pasos
-            this.hb = this.sensorManager.getDefaultSensor(Sensor.TYPE_HEART_BEAT); //31 Heart Beat
 //            Los códigos de los sensores se pueden obtener con
 //            for(int i = 0; i<deviceSensors.size();i++){
 //                Log.d("List sensors", "Name: "+deviceSensors.get(i).getName() + " /Type_String: " +deviceSensors.get(i).getStringType()+ " /Type_number: "+deviceSensors.get(i).getType());
@@ -230,7 +247,6 @@ public class ConnectionActivity extends FragmentActivity implements
             this.sensorManager.registerListener(this,this.hrppg,SensorManager.SENSOR_DELAY_NORMAL);
             this.sensorManager.registerListener(this,this.hrppgRAW,SensorManager.SENSOR_DELAY_NORMAL);
             this.sensorManager.registerListener(this,this.stepDetector,SensorManager.SENSOR_DELAY_NORMAL);
-            this.sensorManager.registerListener(this, this.hb, SensorManager.SENSOR_DELAY_NORMAL);
 
 
         }
@@ -279,11 +295,7 @@ public class ConnectionActivity extends FragmentActivity implements
 
                 this.dataRepository.setStep(event.values[0]);
 
-            } else if (event.sensor.getType() == 31) { //HB
-
-               this.dataRepository.setHb(event.values[0]);
-
-              }else
+            } else
                 Log.d(TAG, "Unknown sensor type");
 
         }
@@ -326,6 +338,8 @@ public class ConnectionActivity extends FragmentActivity implements
                     this.tv_status_watch.setText("Ambos dispositivos vinculados correctamente.\n Esperando monitorización...");
                     this.btn_connected_watch.setBackgroundColor(this.btn_connected_watch.getContext().getResources().getColor(R.color.e4connected,getTheme()));
                     SampleRateFilterThread.STATUS = "INACTIVO";
+                    //Reseteamos el repositorio
+                    this.dataRepository.reset();
 
                 } else if (event.getType() == DataEvent.TYPE_DELETED) {
                     // DataItem deleted

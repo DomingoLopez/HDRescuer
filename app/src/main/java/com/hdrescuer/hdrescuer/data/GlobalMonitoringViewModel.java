@@ -21,18 +21,17 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
 
     //Atributos de los sensores del TicWatch
     private MutableLiveData<Float> hrppg;
-    private MutableLiveData<Float> hb;
     private MutableLiveData<Float> hrppgraw;
     private MutableLiveData<Integer> step;
-    private MutableLiveData<Float> accx;
-    private MutableLiveData<Float> accy;
-    private MutableLiveData<Float> accz;
-    private MutableLiveData<Float> acclx;
-    private MutableLiveData<Float> accly;
-    private MutableLiveData<Float> acclz;
-    private MutableLiveData<Float> girx;
-    private MutableLiveData<Float> giry;
-    private MutableLiveData<Float> girz;
+    private MutableLiveData<Integer> accx;
+    private MutableLiveData<Integer> accy;
+    private MutableLiveData<Integer> accz;
+    private MutableLiveData<Integer> acclx;
+    private MutableLiveData<Integer> accly;
+    private MutableLiveData<Integer> acclz;
+    private MutableLiveData<Integer> girx;
+    private MutableLiveData<Integer> giry;
+    private MutableLiveData<Integer> girz;
 
     //Atributos de los sensores de la Empática
     private MutableLiveData<Float> battery;
@@ -41,10 +40,15 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     private MutableLiveData<Integer> currentAccY;
     private MutableLiveData<Integer> currentAccZ;
     private MutableLiveData<Float> currentBvp;
-    private MutableLiveData<Float> currentHr;
+    private MutableLiveData<Integer> currentHr;
     private MutableLiveData<Float> currentGsr;
     private MutableLiveData<Float> currentIbi;
     private MutableLiveData<Float> currentTemp;
+
+    //Atributos de los sensores de la board
+    private MutableLiveData<Integer> oxi_bpm;
+    private MutableLiveData<Integer> oxi_o2;
+    private MutableLiveData<Integer> oxi_air;
 
     public GlobalMonitoringViewModel(@NonNull Application application, String id) {
         super(application);
@@ -67,7 +71,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
 
         //Iniciamos las mutablelivedata para el reloj
         this.hrppg = new MutableLiveData<>();
-        this.hb = new MutableLiveData<>();
         this.hrppgraw = new MutableLiveData<>();
         this.step = new MutableLiveData<>();
         this.accx = new MutableLiveData<>();
@@ -79,6 +82,11 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         this.girx = new MutableLiveData<>();
         this.giry = new MutableLiveData<>();
         this.girz = new MutableLiveData<>();
+
+        //Iniciamos las mutablelivedata para la board
+        this.oxi_bpm = new MutableLiveData<>();
+        this.oxi_o2 = new MutableLiveData<>();
+        this.oxi_air = new MutableLiveData<>();
 
     }
 
@@ -92,10 +100,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         return hrppg;
     }
 
-    public MutableLiveData<Float> getHb() {
-        return hb;
-    }
-
     public MutableLiveData<Float> getHrppgraw() {
         return hrppgraw;
     }
@@ -104,42 +108,39 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         return step;
     }
 
-    public MutableLiveData<Float> getAccx() { return accx; }
+    public MutableLiveData<Integer> getAccx() { return accx; }
 
-    public MutableLiveData<Float> getAccy() {
+    public MutableLiveData<Integer> getAccy() {
         return accy;
     }
 
-    public MutableLiveData<Float> getAccz() {
+    public MutableLiveData<Integer> getAccz() {
         return accz;
     }
 
-    public MutableLiveData<Float> getAcclx() {
+    public MutableLiveData<Integer> getAcclx() {
         return acclx;
     }
 
-    public MutableLiveData<Float> getAccly() {
+    public MutableLiveData<Integer> getAccly() {
         return accly;
     }
 
-    public MutableLiveData<Float> getAcclz() {
+    public MutableLiveData<Integer> getAcclz() {
         return acclz;
     }
 
-    public MutableLiveData<Float> getGirx() {
+    public MutableLiveData<Integer> getGirx() {
         return girx;
     }
 
-    public MutableLiveData<Float> getGiry() {
+    public MutableLiveData<Integer> getGiry() {
         return giry;
     }
 
-    public MutableLiveData<Float> getGirz() {
+    public MutableLiveData<Integer> getGirz() {
         return girz;
     }
-
-
-
 
 
 
@@ -169,7 +170,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         return currentBvp;
     }
 
-    public MutableLiveData<Float> getCurrentHr() {
+    public MutableLiveData<Integer> getCurrentHr() {
         return currentHr;
     }
 
@@ -186,6 +187,14 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     }
 
 
+    //GETTERS DE LA BOARD
+    public MutableLiveData<Integer> getOxi_bpm() { return oxi_bpm;}
+
+    public MutableLiveData<Integer> getOxi_o2() {return oxi_o2;}
+
+    public MutableLiveData<Integer> getOxi_air() {return oxi_air;}
+
+
 
 
 
@@ -195,41 +204,37 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         this.hrppg.postValue(hrppg);
     }
 
-    public void setHb(Float hb) {
-        this.hb.postValue(hb);
-    }
-
     public void setHrppgraw(Float hrppgraw) {
         this.hrppgraw.postValue(hrppgraw);
     }
 
     public void setStep(Integer step){ this.step.postValue(step);}
 
-    public void setAccx(Float accx) { this.accx.postValue(accx);   }
+    public void setAccx(Integer accx) { this.accx.postValue(accx);   }
 
-    public void setAccy(Float accy) { this.accy.postValue(accy);   }
+    public void setAccy(Integer accy) { this.accy.postValue(accy);   }
 
-    public void setAccz(Float accz) { this.accz.postValue(accz);   }
+    public void setAccz(Integer accz) { this.accz.postValue(accz);   }
 
-    public void setAcclx(Float acclx) {
+    public void setAcclx(Integer acclx) {
         this.acclx.postValue(acclx);
     }
 
-    public void setAccly(Float accly) {
+    public void setAccly(Integer accly) {
         this.accly.postValue(accly);
     }
 
-    public void setAcclz(Float acclz) {
+    public void setAcclz(Integer acclz) {
         this.acclz.postValue(acclz);
     }
 
-    public void setGirx(Float girx) { this.girx.postValue(girx);  }
+    public void setGirx(Integer girx) { this.girx.postValue(girx);  }
 
-    public void setGiry(Float giry) {
+    public void setGiry(Integer giry) {
         this.giry.postValue(giry);
     }
 
-    public void setGirz(Float girz) {
+    public void setGirz(Integer girz) {
         this.girz.postValue(girz);
     }
 
@@ -259,7 +264,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
         this.currentBvp.postValue(currentBvp);
     }
 
-    public void setCurrentHr(Float currentHr) {
+    public void setCurrentHr(Integer currentHr) {
         this.currentHr.postValue(currentHr);
     }
 
@@ -274,6 +279,15 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     public void setCurrentTemp(Float currentTemp) {
         this.currentTemp.postValue(currentTemp);
     }
+
+
+    //Métodos SETTER de la BOARD
+
+    public void setOxi_bpm(Integer bpm){this.oxi_bpm.postValue(bpm);}
+
+    public void setOxi_o2(Integer o2){this.oxi_o2.postValue(o2);}
+
+    public void setOxi_air(Integer air){this.oxi_air.postValue(air);}
 
     @NonNull
     @Override

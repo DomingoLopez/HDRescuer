@@ -8,8 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragment_monitoring_show"
-        android:layout_width="416dp"
-        android:layout_height="545dp"
+        android:layout_width="412dp"
+        android:layout_height="579dp"
         android:translationZ="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,9 +18,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView4"
         android:layout_width="137dp"
         android:layout_height="215dp"
-        android:layout_marginTop="190dp"
+        android:layout_marginTop="165dp"
         app:contentPadding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.808"
@@ -53,12 +54,12 @@
 
             <Button
                 android:id="@+id/btn_connect_watch"
-                android:layout_width="104dp"
-                android:layout_height="29dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:clickable="false"
                 android:text="Button"
-                android:textSize="8sp"
+                android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/label_watch_monitoring"
                 app:layout_constraintStart_toStartOf="@+id/label_watch_monitoring"
                 app:layout_constraintTop_toBottomOf="@+id/label_watch_monitoring" />
@@ -68,9 +69,10 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView5"
         android:layout_width="146dp"
         android:layout_height="216dp"
-        android:layout_marginTop="190dp"
+        android:layout_marginTop="165dp"
         app:contentPadding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.129"
@@ -103,16 +105,67 @@
 
             <Button
                 android:id="@+id/btn_connect_e4"
-                android:layout_width="104dp"
-                android:layout_height="29dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:clickable="false"
                 android:text="Button"
-                android:textSize="8sp"
+                android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/label_e4band"
                 app:layout_constraintHorizontal_bias="0.538"
                 app:layout_constraintStart_toStartOf="@+id/label_e4band"
                 app:layout_constraintTop_toBottomOf="@+id/label_e4band" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="146dp"
+        android:layout_height="216dp"
+        android:layout_marginTop="5dp"
+        app:contentPadding="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/cardView5"
+        app:layout_constraintStart_toStartOf="@+id/cardView5"
+        app:layout_constraintTop_toBottomOf="@+id/cardView5">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView25"
+                android:layout_width="112dp"
+                android:layout_height="107dp"
+                android:layout_marginTop="7dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/ehealthboard_logo" />
+
+            <TextView
+                android:id="@+id/label_ehealthboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/label_ehealthboard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView25" />
+
+            <Button
+                android:id="@+id/btn_connect_ehealthboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Button"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="@+id/label_ehealthboard"
+                app:layout_constraintHorizontal_bias="0.538"
+                app:layout_constraintStart_toStartOf="@+id/label_ehealthboard"
+                app:layout_constraintTop_toBottomOf="@+id/label_ehealthboard" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

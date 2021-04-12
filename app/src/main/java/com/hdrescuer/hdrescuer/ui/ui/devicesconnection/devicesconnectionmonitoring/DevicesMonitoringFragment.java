@@ -25,6 +25,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.E4BandRepository;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardService;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 
 
@@ -127,10 +128,28 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
             }
         });
         SampleRateFilterThread.STATUS = "INACTIVO";
+        EhealthBoardService.STATUS = "INACTIVO";
 
         getActivity().finish();
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        String timeback = String.valueOf(System.currentTimeMillis());
+        this.putDataMapRequestStop.getDataMap().putString("MONITORINGSTOP", timeback);
+        this.putDataReqStop = this.putDataMapRequestStop.asPutDataRequest();
+        Task<DataItem> putDataTask1 = this.dataclient.putDataItem(this.putDataReqStop);
+        putDataTask1.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+            @Override
+            public void onComplete(@NonNull Task<DataItem> task) {
+                Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
+            }
+        });
+        SampleRateFilterThread.STATUS = "INACTIVO";
+        EhealthBoardService.STATUS = "INACTIVO";
 
+
+    }
 }

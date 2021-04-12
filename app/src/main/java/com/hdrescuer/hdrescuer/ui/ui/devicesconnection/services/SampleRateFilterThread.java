@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.E4BandRepository;
+import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.TicWatchRepository;
 
@@ -28,6 +29,7 @@ public class SampleRateFilterThread extends Thread{
     private TicWatchRepository ticWatchRepository;
     private E4BandRepository e4BandRepository;
     private GlobalMonitoringViewModel globalMonitoringViewModel;
+    private EHealthBoardRepository eHealthBoardRepository;
     long timestamp;
     public static  String STATUS="ACTIVO";
     private static String ACTION_SEND = "ACTION_SEND";
@@ -38,11 +40,13 @@ public class SampleRateFilterThread extends Thread{
 
     public SampleRateFilterThread(TicWatchRepository ticWatchRepository,
                                   E4BandRepository e4BandRepository,
+                                  EHealthBoardRepository eHealthBoardRepository,
                                   GlobalMonitoringViewModel globalMonitoringViewModel, String user_id){
 
         this.user_id = user_id;
         this.ticWatchRepository = ticWatchRepository;
         this.e4BandRepository = e4BandRepository;
+        this.eHealthBoardRepository = eHealthBoardRepository;
         this.globalMonitoringViewModel = globalMonitoringViewModel;
 
     }
@@ -56,11 +60,11 @@ public class SampleRateFilterThread extends Thread{
 
        try{
 
-           int i = 0;
            while (STATUS.equals("ACTIVO")){
                Thread.sleep(Constants.SAMPLE_RATE);
                updateE4BandData();
                updateTicWatchData();
+               updateBoardData();
 
                //Creamos el intent para pasarlo al IntentService
                Intent restIntent = new Intent(MyApp.getContext(), RestSampleRateService.class);
@@ -125,7 +129,6 @@ public class SampleRateFilterThread extends Thread{
     private void updateTicWatchData(){
 
         this.globalMonitoringViewModel.setHrppg(this.ticWatchRepository.getHrppg());
-        this.globalMonitoringViewModel.setHb(this.ticWatchRepository.getHb());
         this.globalMonitoringViewModel.setHrppgraw(this.ticWatchRepository.getHrppgraw());
         this.globalMonitoringViewModel.setStep(this.ticWatchRepository.getStep());
         this.globalMonitoringViewModel.setAccx(this.ticWatchRepository.getAccx());
@@ -138,6 +141,13 @@ public class SampleRateFilterThread extends Thread{
         this.globalMonitoringViewModel.setGiry(this.ticWatchRepository.getGiry());
         this.globalMonitoringViewModel.setGirz(this.ticWatchRepository.getGirz());
 
+    }
+
+
+    private void updateBoardData(){
+        this.globalMonitoringViewModel.setOxi_bpm(this.eHealthBoardRepository.getBMP());
+        this.globalMonitoringViewModel.setOxi_o2(this.eHealthBoardRepository.getOxBlood());
+        this.globalMonitoringViewModel.setOxi_air(this.eHealthBoardRepository.getAirFlow());
     }
 
 
