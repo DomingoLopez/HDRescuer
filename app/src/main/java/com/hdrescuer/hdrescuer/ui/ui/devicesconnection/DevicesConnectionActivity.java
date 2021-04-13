@@ -156,6 +156,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         Intent i = getIntent();
         this. user_id = i.getStringExtra("id");
         this.user_name = i.getStringExtra("username");
+        //Recibir el
 
         //Obtenemos la fecha:hora actual
         this.currentDate = Calendar.getInstance().getTime();

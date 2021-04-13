@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 
 
@@ -55,7 +56,7 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
                 holder.last_monitoring.setText("- -");
 
             if(holder.mItem.getTotal_time() != null)
-                holder.sesion_duration.setText(holder.mItem.getTotal_time().toString());
+                holder.sesion_duration.setText(Constants.getHMS(holder.mItem.getTotal_time()));
             else
                 holder.sesion_duration.setText("- -");
         }

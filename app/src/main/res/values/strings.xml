@@ -16,7 +16,7 @@
     <string name="menu_users">Usuarios</string>
     <string name="menu_support">Información</string>
     <string name="menu_config">Configuración</string>
-    <string name="label_last_monitoring">Última monitorización: </string>
+    <string name="label_last_monitoring">Última sesión </string>
     <string name="label_edad">Edad:</string>
     <string name="label_altura">Altura:</string>
     <string name="label_peso">Peso:</string>
@@ -24,7 +24,7 @@
     <string name="label_email">Email:</string>
     <string name="label_phone">Teléfono:</string>
     <string name="btn_edit_data">Editar</string>
-    <string name="btn_new_monitoring">Nueva Monitorización</string>
+    <string name="btn_new_monitoring">Nueva Sesión</string>
     <string name="label_data_new_monitoring">Nueva monitorización</string>
 
 
@@ -68,6 +68,7 @@
     <string name="label_ehealthboard">Placa eHealth2.0</string>
     <string name="label_last_monitoring_users">Última sesión:</string>
     <string name="session_time_label_users">Duración:</string>
+    <string name="label_no_sessions_for_user">No hay sesiones registradas para este usuario</string>
 
 
 </resources>

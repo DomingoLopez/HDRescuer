@@ -16,9 +16,6 @@ public class Constants {
 
     */
 
-
-
-
     //PREFERENCES
     public static final String PREF_TOKEN = "PREF_TOKEN";
     public static final String PREF_USERNAME = "PREF_CREATED";
@@ -35,5 +32,20 @@ public class Constants {
 
     //SAMPLE RATE
     public static int SAMPLE_RATE = 200;
+
+
+
+    public static String getHMS(int secs){
+
+        int hours = secs / 3600;
+        int minutes = (secs % 3600) / 60;
+        int seconds = secs % 60;
+
+        String chain = String.valueOf(hours)+"h : "+ String.valueOf(minutes) +"m : "+ String.valueOf(seconds)+"s";
+
+        return chain;
+
+
+    }
 
 }

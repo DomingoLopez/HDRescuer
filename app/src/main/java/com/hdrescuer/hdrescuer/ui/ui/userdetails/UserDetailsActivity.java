@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
@@ -23,6 +24,9 @@ import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
 import com.hdrescuer.hdrescuer.common.UserActionDialog;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class UserDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,7 +55,24 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     Button btn_new_monitoring;
     Button btn_edit_data;
 
+    //Cardview ultima monitorización
+    TextView tvnosession;
+    TextView tvlabelLastSession;
+    ImageView e4;
+    ImageView tic;
+    ImageView board;
+    TextView last_ini;
+    TextView last_fin;
+    TextView last_total;
+
+    TextView tvini;
+    TextView tvfin;
+    TextView tvtotal;
+
+
+
     UserDetails user;
+    private DateFormat dateFormat;
 
     boolean alreadyCreated = false;
 
@@ -67,6 +88,9 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         //Obtenemos el id del usuario
         Intent i = getIntent();
         String id = i.getStringExtra("id");
+
+        //Iniciamos el dateformat
+        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
             @NonNull
@@ -119,10 +143,25 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         this.city = findViewById(R.id.tvcity);
         this.cp = findViewById(R.id.tvcp);
 
-        this.last_monitoring = findViewById(R.id.tvLastMonitoring);
+
         this.btn_back = findViewById(R.id.btn_back_new_monitoring);
         this.btn_new_monitoring = findViewById(R.id.btn_new_monitoring);
         this.btn_edit_data = findViewById(R.id.btn_edit_data);
+
+        //Ultima sesión
+
+        this.tvnosession = findViewById(R.id.tv_no_session_label);
+        this.tvlabelLastSession = findViewById(R.id.label_last_monitoring);
+        this.e4 = findViewById(R.id.last_session_e4);
+        this.tic = findViewById(R.id.last_session_tic);
+        this.board = findViewById(R.id.last_session_board);
+        this.last_ini = findViewById(R.id.label_last_session_timini);
+        this.last_fin = findViewById(R.id.label_last_session_timfin);
+        this.last_total = findViewById(R.id.label_last_session_total);
+
+        this.tvini = findViewById(R.id.tvTimesTampIniUsersDetails);
+        this.tvfin = findViewById(R.id.tvTimesTampFinUsersDetails);
+        this.tvtotal = findViewById(R.id.tvTotalTimeUsersDetails);
 
 
     }
@@ -169,12 +208,65 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                 address.setText(userDetails.getAddress());
                 //last_monitoring.setText(userDetails.getLastMonitoring());
 
+
+                if(userDetails.getSession_id() != null){
+
+                    //Le damos valor
+                    if(userDetails.isE4band())
+                        e4.setBackgroundColor(e4.getContext().getResources().getColor(R.color.e4connected));
+                    else
+                        e4.setBackgroundColor(e4.getContext().getResources().getColor(R.color.e4disconnected));
+
+                    if(userDetails.isTicwatch())
+                        tic.setBackgroundColor(tic.getContext().getResources().getColor(R.color.e4connected));
+                    else
+                        tic.setBackgroundColor(tic.getContext().getResources().getColor(R.color.e4disconnected));
+
+                    if(userDetails.isEhealthboard())
+                        board.setBackgroundColor(board.getContext().getResources().getColor(R.color.e4connected));
+                    else
+                        board.setBackgroundColor(board.getContext().getResources().getColor(R.color.e4disconnected));
+
+                    tvini.setText(dateFormat.format(userDetails.getTimestamp_ini()));
+                    tvfin.setText(dateFormat.format(userDetails.getTimestamp_fin()));
+                    tvtotal.setText(Constants.getHMS(userDetails.getTotal_time()));
+
+
+                    //Añadimos visibilidad adecuada
+                    tvnosession.setVisibility(View.GONE);
+                    tvlabelLastSession.setVisibility(View.VISIBLE);
+                    e4.setVisibility(View.VISIBLE);
+                    tic.setVisibility(View.VISIBLE);
+                    board.setVisibility(View.VISIBLE);
+                    last_ini.setVisibility(View.VISIBLE);
+                    last_fin.setVisibility(View.VISIBLE);
+                    last_total.setVisibility(View.VISIBLE);
+                    tvini.setVisibility(View.VISIBLE);
+                    tvfin.setVisibility(View.VISIBLE);
+                    tvtotal.setVisibility(View.VISIBLE);
+
+
+                }else{
+
+
+                   tvnosession.setVisibility(View.VISIBLE);
+                   tvlabelLastSession.setVisibility(View.INVISIBLE);
+                   e4.setVisibility(View.GONE);
+                   tic.setVisibility(View.GONE);
+                   board.setVisibility(View.GONE);
+                   last_ini.setVisibility(View.GONE);
+                   last_fin.setVisibility(View.GONE);
+                   last_total.setVisibility(View.GONE);
+                   tvini.setVisibility(View.GONE);
+                   tvfin.setVisibility(View.GONE);
+                   tvtotal.setVisibility(View.GONE);
+
+                }
+
                 //Seteamos un userDetails para tenerlo en memoria
                 user = userDetails;
-
             }
         });
-
 
     }
 
