@@ -1,0 +1,58 @@
+@startuml
+
+AppCompatActivity <|-- HomeActivity
+AppCompatActivity <|-- MainActivity
+onClickListener <|.. HomeActivity
+onClickListener <|.. MainActivity
+
+
+ConnectionClient - LoginApiService: loginApiService >
+MainActivity - ConnectionClient: connectionClient >
+
+class AppCompatActivity{
+#onCreate(savedInstance:Bundle)
+#onStart()
+#onStop()
+#onResume()
+#onPause()
+#onDestroy()
++onCreateOptionsMenu(menu: Menu) : Boolean
++onSupportNavigateUp() : Boolean
+}
+
+class HomeActivity{
+#userListViewModel: UserListViewModel
+-mAppBarConfiguration: AppBarConfiguracion
+
+
+}
+
+class MainActivity{
+- retrofitIniti()
+- findViews()
+- events()
+- goToLogin()
+}
+
+Interface onClickListener{
++ onClick(v: View)
+
+}
+
+class ConnectionClient{
+- {static} instance: ConnectionClient
+
+
+ConnectionClient()
++ {static} getInstance(): ConnectionClient
++ getLoginApiService(): LoginApiService
+}
+
+Interface LoginApiService{
+
+~doLogin(requestLogin: RequestLogin): Call<ResponseAuth>
+
+}
+
+
+@enduml
