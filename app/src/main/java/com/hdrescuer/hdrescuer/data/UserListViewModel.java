@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.retrofit.response.User;
@@ -26,8 +25,12 @@ public class UserListViewModel extends AndroidViewModel {
         return this.userListRepository.getUsers();
     }
 
-    public void setNewUser(UserDetails userDetails){
-        this.userListRepository.setNewUser(userDetails);
+    public void setNewUser(UserDetails userInfo){
+        this.userListRepository.setNewUser(userInfo);
+    }
+
+    public void refreshUsers(){
+        this.userListRepository.refreshUsers();
     }
 
 
