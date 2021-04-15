@@ -95,4 +95,9 @@ public class UserListRepository {
     }
 
 
+    public void refreshUsers(){
+        this.users = getAllUsers();
+    }
+
+
 }

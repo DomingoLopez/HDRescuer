@@ -44,6 +44,8 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     UserListViewModel userListViewModel;
     FloatingActionButton btn;
 
+    boolean alreadyCreated = false;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -127,6 +129,21 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!alreadyCreated){
+            refreshUserDetails();
+        }
+        alreadyCreated = false;
+    }
+
+    private void refreshUserDetails() {
+        this.userListViewModel.refreshUsers();
+    }
+
+
     private void findViews(View view) {
         this.btn = view.findViewById(R.id.user_add_btn);
         this.btn.setOnClickListener(this);
@@ -164,9 +181,5 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //this.userListViewModel.refreshUsers();
-    }
+
 }

@@ -29,5 +29,9 @@ public class UserListViewModel extends AndroidViewModel {
         this.userListRepository.setNewUser(userInfo);
     }
 
+    public void refreshUsers(){
+        this.userListRepository.refreshUsers();
+    }
+
 
 }

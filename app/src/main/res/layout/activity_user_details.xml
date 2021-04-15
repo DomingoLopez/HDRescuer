@@ -193,7 +193,7 @@
         android:layout_width="58dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_edad"
         app:layout_constraintStart_toEndOf="@+id/label_edad"
         app:layout_constraintTop_toTopOf="@+id/label_edad" />
@@ -203,7 +203,7 @@
         android:layout_width="58dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_altura"
         app:layout_constraintStart_toEndOf="@+id/label_altura"
         app:layout_constraintTop_toTopOf="@+id/label_altura" />
@@ -213,7 +213,7 @@
         android:layout_width="58dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_peso"
         app:layout_constraintStart_toEndOf="@+id/label_peso"
         app:layout_constraintTop_toTopOf="@+id/label_peso" />
@@ -223,7 +223,7 @@
         android:layout_width="58dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_genero"
         app:layout_constraintStart_toEndOf="@+id/label_genero"
         app:layout_constraintTop_toTopOf="@+id/label_genero" />
@@ -233,7 +233,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_email"
         app:layout_constraintStart_toEndOf="@+id/label_email"
         app:layout_constraintTop_toTopOf="@+id/label_email" />
@@ -243,7 +243,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_phone"
         app:layout_constraintStart_toEndOf="@+id/label_phone"
         app:layout_constraintTop_toTopOf="@+id/label_phone" />
@@ -253,7 +253,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_phone2"
         app:layout_constraintStart_toEndOf="@+id/label_phone2"
         app:layout_constraintTop_toTopOf="@+id/label_phone2" />
@@ -263,7 +263,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_address"
         app:layout_constraintStart_toEndOf="@+id/label_address"
         app:layout_constraintTop_toTopOf="@+id/label_address" />
@@ -273,7 +273,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_city"
         app:layout_constraintStart_toEndOf="@+id/label_city"
         app:layout_constraintTop_toTopOf="@+id/label_city" />
@@ -283,7 +283,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/label_cp"
         app:layout_constraintStart_toEndOf="@+id/label_cp"
         app:layout_constraintTop_toTopOf="@+id/label_cp" />
@@ -328,8 +328,10 @@
             <ImageView
                 android:id="@+id/last_session_e4"
                 android:layout_width="54dp"
-                android:layout_height="63dp"
+                android:layout_height="54dp"
                 android:layout_marginTop="16dp"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
                 app:layout_constraintStart_toStartOf="@+id/label_last_monitoring"
                 app:layout_constraintTop_toBottomOf="@+id/label_last_monitoring"
                 app:srcCompat="@mipmap/e4band" />
@@ -337,8 +339,10 @@
             <ImageView
                 android:id="@+id/last_session_tic"
                 android:layout_width="54dp"
-                android:layout_height="63dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="4dp"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
                 app:layout_constraintBottom_toBottomOf="@+id/last_session_e4"
                 app:layout_constraintStart_toEndOf="@+id/last_session_e4"
                 app:layout_constraintTop_toTopOf="@+id/last_session_e4"
@@ -348,8 +352,10 @@
             <ImageView
                 android:id="@+id/last_session_board"
                 android:layout_width="54dp"
-                android:layout_height="63dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="4dp"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
                 app:layout_constraintBottom_toBottomOf="@+id/last_session_tic"
                 app:layout_constraintStart_toEndOf="@+id/last_session_tic"
                 app:srcCompat="@mipmap/ehealthboard_logo" />

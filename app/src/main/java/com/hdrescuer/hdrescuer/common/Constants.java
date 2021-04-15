@@ -5,6 +5,7 @@ public class Constants {
     public static final String API_BASE_URL = "http://10.0.2.2:8080/";
     public static final String DATA_RESCUER_USERS_MODULE_URL= "http://192.168.1.135:8080/";
     public static final String DATA_RESCUER_DATA_MODULE_URL= "http://192.168.1.135:8081/";
+    public static final String DATA_RESCUER_SESSIONS_MODULE_URL= "http://192.168.1.135:8082/";
     public static final String DATA_RESCUER_APICOMPOSER_MODULE_URL= "http://192.168.1.135:8083/";
 
     /*API FINAL

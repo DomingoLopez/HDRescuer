@@ -2,6 +2,7 @@ package com.hdrescuer.hdrescuer.ui.ui.userdetails;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -213,19 +214,19 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
                     //Le damos valor
                     if(userDetails.isE4band())
-                        e4.setBackgroundColor(e4.getContext().getResources().getColor(R.color.e4connected));
+                        e4.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.back_green));
                     else
-                        e4.setBackgroundColor(e4.getContext().getResources().getColor(R.color.e4disconnected));
+                        e4.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.back_red));
 
                     if(userDetails.isTicwatch())
-                        tic.setBackgroundColor(tic.getContext().getResources().getColor(R.color.e4connected));
+                        tic.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.back_green));
                     else
-                        tic.setBackgroundColor(tic.getContext().getResources().getColor(R.color.e4disconnected));
+                        tic.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.back_red));
 
                     if(userDetails.isEhealthboard())
-                        board.setBackgroundColor(board.getContext().getResources().getColor(R.color.e4connected));
+                        board.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.back_green));
                     else
-                        board.setBackgroundColor(board.getContext().getResources().getColor(R.color.e4disconnected));
+                        board.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.back_red));
 
                     tvini.setText(dateFormat.format(userDetails.getTimestamp_ini()));
                     tvfin.setText(dateFormat.format(userDetails.getTimestamp_fin()));

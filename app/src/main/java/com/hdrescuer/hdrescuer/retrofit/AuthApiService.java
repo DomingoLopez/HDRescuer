@@ -1,6 +1,7 @@
 package com.hdrescuer.hdrescuer.retrofit;
 
 import com.hdrescuer.hdrescuer.retrofit.request.RequestSendData;
+import com.hdrescuer.hdrescuer.retrofit.request.Session;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
@@ -33,6 +34,7 @@ public interface AuthApiService {
     @POST("api/datarecovery")
     Call<String> setUserData(@Body RequestSendData userData);
 
-
+    @POST("api/sessiondata/user/init")
+    Call<Session> initSession(@Body Session session);
 
 }

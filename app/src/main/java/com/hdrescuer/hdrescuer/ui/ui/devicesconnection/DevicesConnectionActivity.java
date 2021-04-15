@@ -55,6 +55,8 @@ import com.hdrescuer.hdrescuer.data.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.TicWatchRepository;
+import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientSessionsModule;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardService;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
@@ -142,6 +144,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     boolean ticwatchConnected = false;
     boolean ehealthConnected = false;
 
+    //Cliente de conexión para iniciar la sesión
+    AuthConectionClientSessionsModule authConectionClientSessionsModule;
+    AuthApiService apiService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +162,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         Intent i = getIntent();
         this. user_id = i.getStringExtra("id");
         this.user_name = i.getStringExtra("username");
-        //Recibir el
+
+        this.authConectionClientSessionsModule = AuthConectionClientSessionsModule.getInstance();
+        this.apiService = this.authConectionClientSessionsModule.getAuthApiService();
+
 
         //Obtenemos la fecha:hora actual
         this.currentDate = Calendar.getInstance().getTime();
