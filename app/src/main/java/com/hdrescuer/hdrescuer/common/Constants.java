@@ -1,5 +1,9 @@
 package com.hdrescuer.hdrescuer.common;
 
+/**
+ * Clase de variables y métodos comunes entre las distintas clases. Cosas que puedan ser usadas por más de una instancia
+ * @author Domingo Lopez
+ */
 public class Constants {
 
     public static final String API_BASE_URL = "http://10.0.2.2:8080/";
@@ -10,10 +14,6 @@ public class Constants {
 
     /*API FINAL
     public static final String API_BASE_URL = "http://localhost:8080/api/";
-
-
-
-
 
     */
 
@@ -35,7 +35,12 @@ public class Constants {
     public static int SAMPLE_RATE = 200;
 
 
-
+    /**
+     * Método que calcula las horas, minutos y segundos de un entero de segundos
+     * @author Domingo Lopez
+     * @param secs
+     * @return String
+     */
     public static String getHMS(int secs){
 
         int hours = secs / 3600;

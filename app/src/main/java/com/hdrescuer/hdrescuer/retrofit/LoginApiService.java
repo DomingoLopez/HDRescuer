@@ -10,8 +10,7 @@ import retrofit2.http.POST;
 
 public interface LoginApiService {
 
-    //Con Call le indicamos que estamos esperando una respuesta de tipo ResponseAuth
-    //En Retrofit todas las peticiones http son asíncronas
+
     @POST("authm/login")
     Call<ResponseAuth> doLogin(@Body RequestLogin requestLogin);
 

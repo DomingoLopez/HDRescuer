@@ -4,6 +4,10 @@ import java.io.Serializable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Clase RequesSendData serializable. Representa el envío de datos de un paquete de datos hacia el servidor
+ * @author Domingo López
+ */
 public class RequestSendData implements Serializable
 {
 

@@ -21,7 +21,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Clase RecyclerView para la lista de usuarios
+ * @author Domingo Lopez
+ */
 public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecyclerViewAdapter.ViewHolder> {
 
     private List<User> mValues;
@@ -43,6 +46,12 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
         return new ViewHolder(view);
     }
 
+    /**
+     * Método que se llama para cada item de la lista, para "bindearlo" con la interfaz definiendo cada campo
+     * @author Domingo Lopez
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         if(mValues != null) {
@@ -62,11 +71,21 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
         }
     }
 
+    /**
+     * Método que setea los usuarios de la lista y notifica a los observadores de que han cambiado los usuarios
+     * @author Domingo Lopez
+     * @param users
+     */
     public void setData(List<User> users){
         this.mValues = users;
         notifyDataSetChanged();
     }
 
+    /**
+     * Devuelve el número de elementos en la lista de usuarios
+     * @author Domingo Lopez
+     * @return int
+     */
     @Override
     public int getItemCount() {
 

@@ -11,6 +11,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase ViewPagerAdapter para los fragments de monitorización
+ * @author Domingo Lopez
+ */
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
     private List<Fragment> fragmentList = new ArrayList<>();

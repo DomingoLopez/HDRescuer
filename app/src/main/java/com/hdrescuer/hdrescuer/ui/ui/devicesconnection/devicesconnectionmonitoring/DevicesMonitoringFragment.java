@@ -38,7 +38,11 @@ import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSession
 
 import java.time.Clock;
 
-
+/**
+ * Fragmento que contiene a los Fragments TabE4BandMonitoring, TabOximeterMonitoring, TabWatchMonitoring.
+ * Hace uso del ViewPager y su adapter
+ * @author Domingo Lopez
+ */
 public class DevicesMonitoringFragment extends Fragment implements View.OnClickListener {
 
     TabLayout tabLayout;
@@ -70,8 +74,6 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
 
         // Inflate the layout for this fragment
          View view = inflater.inflate(R.layout.fragment_devices_monitoring, container, false);

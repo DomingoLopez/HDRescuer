@@ -21,6 +21,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Actividad principal de la aplicación. Se muestra el login de usuario
+ * @author Domingo Lopez
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btn_login;
@@ -31,7 +35,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LoginApiService loginApiService;
 
 
-
+    /**
+     * Inicia la actividad MainActivity, iniciando el cliente de conexión y las vistas, así como los eventos de click
+     * @author Domingo Lopez
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,17 +54,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         
     }
 
+    /**
+     * Inicia el cliente de conexión a la red
+     * @author Domingo Lopez
+     */
     private void retrofitInit() {
         this.conectionClient = ConectionClient.getInstance();
         this.loginApiService = conectionClient.getLoginApiService();
     }
 
+    /**
+     * Método que busca las vistas del layout cargado
+     * @author Domingo Lopez
+     */
     private void findViews() {
         this.btn_login = findViewById(R.id.btn_login);
         this.etEmail = findViewById(R.id.editTextEmail);
         this.etPassword = findViewById(R.id.editTextPassword);
     }
 
+    /**
+     * Método que inicia los eventos de click
+     * @author Domingo Lopez
+     */
     private void events() {
         this.btn_login.setOnClickListener(this);
     }
@@ -68,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    /**
+     * Método que valida el email y password del usuario y realizar petición asíncrona al servidor. Almacena el Token recibido y preferencias generales del usuario para posteriores llamadas
+     * @author Domingo Lopez
+     */
     private void goToLogin() {
         String email = this.etEmail.getText().toString();
         String pass = this.etPassword.getText().toString();

@@ -7,6 +7,10 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Clase UserDetails, Serializable con sus Getters y setters
+ * @author Domingo Lopez
+ */
 public class UserDetails implements Serializable
 {
     @SerializedName("id")
