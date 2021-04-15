@@ -1,2 +1,3 @@
+include ':hdrescuerwatch'
 include ':app'
 rootProject.name = "HDRescuer"

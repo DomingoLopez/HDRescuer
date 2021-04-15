@@ -39,6 +39,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="48dp"
+        app:tint="@color/blue_primary"
         android:src="@drawable/ic_add_user"
         app:backgroundTint="@color/blue_secondary"
         app:layout_constraintBottom_toBottomOf="parent"

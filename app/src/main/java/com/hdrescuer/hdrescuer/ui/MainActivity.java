@@ -17,10 +17,6 @@ import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestLogin;
 import com.hdrescuer.hdrescuer.retrofit.response.ResponseAuth;
 
-import java.util.logging.Logger;
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -120,20 +116,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }else{
                         Toast.makeText(MainActivity.this, "Algo salió mal. Revise sus datos de acceso", Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                        startActivity(i);
+                        finish();
                     }
 
                 }
 
                 @Override
                 public void onFailure(Call<ResponseAuth> call, Throwable t) {
-                    //Toast.makeText(MainActivity.this, "Error de conexión",Toast.LENGTH_LONG).show();
-
-                    //De momento, como no tenemos la api hecha, vamos a hacer la triquiñuela de poner aquí que pase a la siguiente pantalla
-                    Intent i = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(i);
-
-                    //Destruimos el activity de login para que no se pueda volver a él
-                    finish();
+                    Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
                 }
 
             });
