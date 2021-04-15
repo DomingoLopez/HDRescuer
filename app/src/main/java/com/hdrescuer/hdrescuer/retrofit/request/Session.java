@@ -5,6 +5,10 @@ import java.io.Serializable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Clase session serializable. Representa los datos de una sesión en el modelo de datos del servidor
+ * @author Domingo López
+ */
 public class Session implements Serializable
 {
 

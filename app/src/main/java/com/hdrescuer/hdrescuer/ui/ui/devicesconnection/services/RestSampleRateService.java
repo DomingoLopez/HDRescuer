@@ -13,7 +13,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+/**
+ * IntentService que recibe los datos a mandar al servidor y los manda
+ * @author Domingo Lopez
+ */
 public class RestSampleRateService extends IntentService {
 
 

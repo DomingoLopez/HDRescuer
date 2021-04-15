@@ -15,7 +15,10 @@ import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 
 import java.text.DecimalFormat;
 
-
+/**
+ * Fragmento de monitorización de la pestaña del TicWatch.
+ * @author Domingo Lopez
+ */
 public class TabWatchMonitoring extends Fragment {
 
     GlobalMonitoringViewModel globalMonitoringViewModel;
@@ -55,6 +58,11 @@ public class TabWatchMonitoring extends Fragment {
         return view;
     }
 
+    /**
+     * Método que encuentra las vistas y las inicia
+     * @author Domingo Lopez
+     * @param view
+     */
     private void findViews(View view) {
 
         this.tvAccx = view.findViewById(R.id.tvAccxWatch);
@@ -74,6 +82,10 @@ public class TabWatchMonitoring extends Fragment {
         this.tvsteps = view.findViewById(R.id.tvsteps);
     }
 
+    /**
+     * Método que crea los observers del ViewModel del TicWatch
+     * @author Domingo Lopez
+     */
     private void createObserverForViewModel() {
         //Observers de Acc
         this.globalMonitoringViewModel.getAccx().observe(getViewLifecycleOwner(), new Observer<Integer>() {

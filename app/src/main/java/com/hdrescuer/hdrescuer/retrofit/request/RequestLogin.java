@@ -4,6 +4,10 @@ package com.hdrescuer.hdrescuer.retrofit.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Clase RequesLogin. Para la solicitud de login en el servidor
+ * @author Domingo López
+ */
 public class RequestLogin {
 
     @SerializedName("email")

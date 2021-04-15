@@ -16,7 +16,10 @@ import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 
 import java.text.DecimalFormat;
 
-
+/**
+ * Fragmento de monitorización de la Empatica band
+ * @author Domingo Lopez
+ */
 public class TabE4BandMonitoring extends Fragment {
 
     GlobalMonitoringViewModel globalMonitoringViewModel;
@@ -54,7 +57,11 @@ public class TabE4BandMonitoring extends Fragment {
         return view;
     }
 
-
+    /**
+     * Método que inicializa las vistas
+     * @author Domingo Lopez
+     * @param view
+     */
     private void findViews(View view) {
         this.tvTemp = view.findViewById(R.id.tvTemp);
         //this.tvBattery = view.findViewById(R.id.tvBattery);
@@ -69,8 +76,10 @@ public class TabE4BandMonitoring extends Fragment {
     }
 
 
-    //Creamos los observers para el viewmodel. Habrá que implementar el envío del dato al servidor
-    //En el mismo cambio, para que sea en tiempo real.
+    /**
+     * Método que inicia los obsevers del viewmodel
+     * @author Domingo Lopez
+     */
     private void createObserverForViewModel() {
 
         //Observer de temperatura

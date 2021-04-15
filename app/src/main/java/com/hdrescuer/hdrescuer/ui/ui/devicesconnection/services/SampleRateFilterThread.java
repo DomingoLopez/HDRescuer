@@ -24,6 +24,11 @@ import java.time.format.FormatStyle;
 import java.util.Locale;
 import java.util.TimeZone;
 
+/**
+ * Clase/Servicio que hereda de Thread. Su objetivo es el de realizar mediciones de los datos almacenados localmente en la App, a fin de mandarlos al servidor
+ * cada X tiempo definido en una variable de clase SAMPLE_RATE en Constants.
+ * @author Domingo Lopez
+ */
 public class SampleRateFilterThread extends Thread{
 
     private TicWatchRepository ticWatchRepository;
@@ -38,6 +43,14 @@ public class SampleRateFilterThread extends Thread{
 //    private long instant = 0;
     private Instant instant;
 
+    /**
+     * Constructor de la clase, recibe los repositorios individuales y el Global Repository iniciado, así ocmo el id_de sesión
+     * @param ticWatchRepository
+     * @param e4BandRepository
+     * @param eHealthBoardRepository
+     * @param globalMonitoringViewModel
+     * @param session_id
+     */
     public SampleRateFilterThread(TicWatchRepository ticWatchRepository,
                                   E4BandRepository e4BandRepository,
                                   EHealthBoardRepository eHealthBoardRepository,
@@ -52,7 +65,10 @@ public class SampleRateFilterThread extends Thread{
     }
 
 
-
+    /**
+     * Método run del Thread. Empaqueta los datos y los manda al IntentService SampleRateFilterThread
+     * @author Domingo Lopez
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void run(){
@@ -112,6 +128,10 @@ public class SampleRateFilterThread extends Thread{
 
     }
 
+    /**
+     * Método para actualizar los datos de la E4 en el viewModel Global que almacena los datos
+     * @author Domingo Lopez
+     */
     private void updateE4BandData(){
         this.globalMonitoringViewModel.setBattery(this.e4BandRepository.getBattery());
         this.globalMonitoringViewModel.setTag(this.e4BandRepository.getTag());
@@ -126,6 +146,10 @@ public class SampleRateFilterThread extends Thread{
 
     }
 
+    /**
+     * Método para actualizar los datos del ticwatch en el viewModel Global que almacena los datos
+     * @author Domingo Lopez
+     */
     private void updateTicWatchData(){
 
         this.globalMonitoringViewModel.setHrppg(this.ticWatchRepository.getHrppg());
@@ -144,6 +168,10 @@ public class SampleRateFilterThread extends Thread{
     }
 
 
+    /**
+     * Método para actualizar los datos de la placa de salud en el viewModel Global que almacena los datos
+     * @author Domingo Lopez
+     */
     private void updateBoardData(){
         this.globalMonitoringViewModel.setOxi_bpm(this.eHealthBoardRepository.getBMP());
         this.globalMonitoringViewModel.setOxi_o2(this.eHealthBoardRepository.getOxBlood());

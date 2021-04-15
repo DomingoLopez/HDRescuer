@@ -15,7 +15,10 @@ import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 
 import java.text.DecimalFormat;
 
-
+/**
+ * Fragment del pulsioxímetro de monitorización
+ * @author Domingo Lopez
+ */
 public class TabOximeterMonitoring extends Fragment {
 
     GlobalMonitoringViewModel globalMonitoringViewModel;
@@ -48,9 +51,11 @@ public class TabOximeterMonitoring extends Fragment {
     }
 
 
-
-
-
+    /**
+     * Métod que inicializa las vistas
+     * @author Domingo Lopez
+     * @param view
+     */
     void findViews(View view){
         this.tvbpm = view.findViewById(R.id.bpm_oxi_value);
         this.tvo2 = view.findViewById(R.id.o2_oxi_value);
@@ -58,6 +63,10 @@ public class TabOximeterMonitoring extends Fragment {
     }
 
 
+    /**
+     * Método que inicia los observers para el viewmodel de la placa de salud/pulsioxímetro
+     * @author Domingo Lopez
+     */
     void createObserverForViewModel(){
         //Observer de bpm
         this.globalMonitoringViewModel.getOxi_bpm().observe(requireActivity(), new Observer<Integer>() {

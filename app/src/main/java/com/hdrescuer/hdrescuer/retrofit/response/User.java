@@ -6,6 +6,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
+/**
+ * Clase User con sus Getters y setters
+ * @author Domingo Lopez
+ */
 public class User {
 
     @SerializedName("id")
