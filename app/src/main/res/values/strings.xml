@@ -69,6 +69,18 @@
     <string name="label_last_monitoring_users">Última sesión:</string>
     <string name="session_time_label_users">Duración:</string>
     <string name="label_no_sessions_for_user">No hay sesiones registradas para este usuario</string>
+    <string name="label_info_credits">Información sobre la aplicación</string>
+    <string name="label_info_developedby">Developed by:</string>
+    <string name="label_app_name">HDRescuer</string>
+    <string name="label_developer_name">Domingo J. López Pacheco</string>
+    <string name="label_version">1.0</string>
+    <string name="label_repository">https://github.com/DomingoLopez</string>
+    <string name="label_info_contact">domingo6891@correo.ugr.es</string>
+    <string name="label_info_credits_credits">Créditos y atribuciones</string>
+    <string name="label_icons_made">Iconos realizados por</string>
+    <string name="label_icons_obtain">obtenidos desde</string>
+    <string name="label_icon_freepik">Freepik</string>
+    <string name="label_icon_Flaticon">Flaticon</string>
 
 
 </resources>

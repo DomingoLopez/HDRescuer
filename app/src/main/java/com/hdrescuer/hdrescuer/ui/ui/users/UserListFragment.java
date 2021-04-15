@@ -73,6 +73,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
 
 
         this.userListViewModel = new ViewModelProvider(getActivity()).get(UserListViewModel.class);
+        alreadyCreated = true;
 
     }
 

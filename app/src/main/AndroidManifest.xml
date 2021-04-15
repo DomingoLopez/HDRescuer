@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
         <service
+            android:name=".ui.ui.devicesconnection.services.StartStopSessionService"
+            android:exported="false"></service>
+        <service
             android:name=".ui.ui.devicesconnection.services.RestSampleRateService"
             android:exported="false" />
 

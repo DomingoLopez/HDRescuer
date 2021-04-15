@@ -1,6 +1,7 @@
 package com.hdrescuer.hdrescuer.ui.ui.devicesconnection;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -19,7 +20,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,6 +55,7 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
+import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
@@ -59,13 +64,17 @@ import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientSessionsModule;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardService;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.RestSampleRateService;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSessionService;
 
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -144,9 +153,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     boolean ticwatchConnected = false;
     boolean ehealthConnected = false;
 
-    //Cliente de conexión para iniciar la sesión
-    AuthConectionClientSessionsModule authConectionClientSessionsModule;
-    AuthApiService apiService;
 
 
     @Override
@@ -162,10 +168,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         Intent i = getIntent();
         this. user_id = i.getStringExtra("id");
         this.user_name = i.getStringExtra("username");
-
-        this.authConectionClientSessionsModule = AuthConectionClientSessionsModule.getInstance();
-        this.apiService = this.authConectionClientSessionsModule.getAuthApiService();
-
 
         //Obtenemos la fecha:hora actual
         this.currentDate = Calendar.getInstance().getTime();
@@ -452,52 +454,15 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
             case R.id.btn_start_monitoring:
 
-                if(this.bluetoothAdapter != null)
-                    this.bluetoothAdapter.cancelDiscovery();
+                int devices_counter = getTotalConnectedDevices();
 
-                /**INICIO DEL RELOJ**/
-                if(this.ticwatchConnected) {
-                    //NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO
-                    String timeStart = String.valueOf(System.currentTimeMillis());
-                    this.putDataMapRequest.getDataMap().putString(MONITORING_KEY, timeStart);
-                    this.putDataReq = this.putDataMapRequest.asPutDataRequest();
-                    Task<DataItem> putDataTask = this.dataClient.putDataItem(this.putDataReq);
-                    putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataItem> task) {
-                            Log.i("INFOTASK", "PUESTO VALOR START MONITORING EN DATACLIENT");
-                        }
-                    });
-                }
-
-
-                /**INICIO DE LA EHEALTHBOARD**/
-                if(this.ehealthConnected){ //Si está conectada
-                    initEHeatlhBoard(); //Solo hace el inicio para mandar una instrucción de inicio al arduino
-                    EhealthBoardService.STATUS = "ACTIVO";
-                    this.ehealthBoardService = new EhealthBoardService(this.eHealthBoardRepository, this.myInputStream, this.myOutStrem);
-                    this.ehealthBoardService.start();
+                if(devices_counter == 0){
+                    Toast.makeText(this, "No hay dispositivos conectados, debe conectar alguno antes de empezar la sesión", Toast.LENGTH_SHORT).show();
                 }else{
-                    EhealthBoardService.STATUS ="INACTIVO";
+                    //Método que inicia la sesión.
+                    initSession();
                 }
 
-                /**REINICIAMOS LOS REPOSITORIOS**/
-                //Seteamos los repositorios para la nueva sesión
-                this.resetRepositories();
-
-                //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
-                SampleRateFilterThread.STATUS = "ACTIVO";
-                this.sampleRateThread = new SampleRateFilterThread(this.ticWatchRepository, this.e4BandRepository, this.eHealthBoardRepository, this.globalMonitoringViewModel, this.user_id);
-                this.sampleRateThread.start();
-
-
-                //Iniciamos Fragment de monitorización
-                DevicesMonitoringFragment fragment = new DevicesMonitoringFragment(this.dataClient,this.putDataMapRequestStop,this.putDataReqStop);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-                fragmentTransaction.add(R.id.fragment_monitoring_show, fragment);
-                fragmentTransaction.commit();
 
                 break;
 
@@ -527,6 +492,122 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         }
     }
+
+
+
+    int getTotalConnectedDevices(){
+        int devices_counter = 0;
+        if(this.e4Connected)
+            devices_counter++;
+        if(this.ticwatchConnected)
+            devices_counter++;
+        if (this.ehealthConnected)
+            devices_counter++;
+
+        return devices_counter;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    void initSession(){
+
+        //1. Hacemos una llamada al servidor para indicarle que iniciamos la sesión
+            //1.1. Creamos un intent que pasaremos a nuestro StartStopSessionService para iniciar la sesión en el servidor y que devuelva el id_session de la nueva sesión
+        Intent intent = new Intent(this.getApplicationContext(), StartStopSessionService.class);
+        intent.setAction("START_SESSION");
+        String instant = Clock.systemUTC().instant().toString();
+        intent.putExtra("user_id",this.user_id);
+        intent.putExtra("timestamp_ini",instant);
+        intent.putExtra("e4band",this.e4Connected);
+        intent.putExtra("ticwatch",this.ticwatchConnected);
+        intent.putExtra("ehealthboard",this.ehealthConnected);
+        intent.putExtra("receiver",this.sessionResult);
+        this.startService(intent);
+    }
+
+    //ResultReceiver para llamar al servicio que empieza y acaba la sesión
+    public ResultReceiver sessionResult = new ResultReceiver(new Handler()) {
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            //Broadcast /send the result code in intent service based on your logic(success/error) handle with switch
+            switch (resultCode) {
+                case 1: //Case correcto. Sesión iniciada
+
+                    //Obtenemos el id de sesión recibido
+                    String session_id = resultData.getString("result");
+
+                    if(bluetoothAdapter != null)
+                        bluetoothAdapter.cancelDiscovery();
+
+                    /**INICIO DEL RELOJ**/
+                    if(ticwatchConnected) {
+                        //NO PODEMOS PONER EL MISMO VALOR AL MANDAR EL DATO, SI PONEMOS EL MISMO VALOR, EL ONCHANGED NO SE RECIBE. POR TANTO HEMOS DE HACER UN TIMESTAMP Y MANDARLO
+                        String timeStart = String.valueOf(System.currentTimeMillis());
+                        putDataMapRequest.getDataMap().putString(MONITORING_KEY, timeStart);
+                        putDataReq = putDataMapRequest.asPutDataRequest();
+                        Task<DataItem> putDataTask = dataClient.putDataItem(putDataReq);
+                        putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataItem> task) {
+                                Log.i("INFOTASK", "PUESTO VALOR START MONITORING EN DATACLIENT");
+                            }
+                        });
+                    }
+
+
+                    /**INICIO DE LA EHEALTHBOARD**/
+                    if(ehealthConnected){ //Si está conectada
+                        initEHeatlhBoard(); //Solo hace el inicio para mandar una instrucción de inicio al arduino
+                        EhealthBoardService.STATUS = "ACTIVO";
+                        ehealthBoardService = new EhealthBoardService(eHealthBoardRepository, myInputStream, myOutStrem);
+                        ehealthBoardService.start();
+                    }else{
+                        EhealthBoardService.STATUS ="INACTIVO";
+                    }
+
+                    /**REINICIAMOS LOS REPOSITORIOS**/
+                    //Seteamos los repositorios para la nueva sesión
+                    resetRepositories();
+
+                    //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
+                    SampleRateFilterThread.STATUS = "ACTIVO";
+                    sampleRateThread = new SampleRateFilterThread(ticWatchRepository, e4BandRepository, eHealthBoardRepository, globalMonitoringViewModel, session_id);
+                    sampleRateThread.start();
+
+
+                    //Iniciamos Fragment de monitorización
+                    DevicesMonitoringFragment fragment = new DevicesMonitoringFragment(session_id,sessionResult);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                    fragmentTransaction.add(R.id.fragment_monitoring_show, fragment);
+                    fragmentTransaction.commit();
+
+                    break;
+
+                case 2:
+
+                    stopWatchAndThreads();
+                    Toast.makeText(DevicesConnectionActivity.this, "Sesión guardada de forma satisfactoria", Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+
+                //Error al iniciar sesión
+                case 400:
+                    Toast.makeText(DevicesConnectionActivity.this, "Error al iniciar sesión. ¿Dispone de conexión?", Toast.LENGTH_SHORT).show();
+                    break;
+
+                //Error al finalizar la sesión
+                case 401:
+                    stopWatchAndThreads();
+                    Toast.makeText(DevicesConnectionActivity.this, "No se ha podido registrar el final de sesión. ¿Dispone de conexión?", Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+
+            }
+        }
+    };
 
     void initEHeatlhBoard(){
         try{
@@ -558,6 +639,23 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     }
 
+
+    void stopWatchAndThreads(){
+
+        String timeback1 = String.valueOf(System.currentTimeMillis());
+        putDataMapRequestStop.getDataMap().putString("MONITORINGSTOP", timeback1);
+        putDataReqStop = putDataMapRequestStop.asPutDataRequest();
+        Task<DataItem> putDataTask2 = dataClient.putDataItem(putDataReqStop);
+        putDataTask2.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+            @Override
+            public void onComplete(@NonNull Task<DataItem> task) {
+                Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
+            }
+        });
+        SampleRateFilterThread.STATUS = "INACTIVO";
+        EhealthBoardService.STATUS = "INACTIVO";
+
+    }
 
 
 
@@ -724,6 +822,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             }
 
         }
+
+        stopWatchAndThreads();
 
 
     }

@@ -1,5 +1,6 @@
 package com.hdrescuer.hdrescuer.retrofit;
 
+import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestSendData;
 import com.hdrescuer.hdrescuer.retrofit.request.Session;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
@@ -35,6 +36,11 @@ public interface AuthApiService {
     Call<String> setUserData(@Body RequestSendData userData);
 
     @POST("api/sessiondata/user/init")
-    Call<Session> initSession(@Body Session session);
+    Call<String> initSession(@Body Session session);
+
+    @POST("api/sessiondata/stop")
+    Call<String> stopSession(@Body JsonObject jsonObject);
+
+
 
 }
