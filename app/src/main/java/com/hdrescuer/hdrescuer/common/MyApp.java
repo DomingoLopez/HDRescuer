@@ -14,7 +14,7 @@ public class MyApp  extends Application {
     /**
      * Método de clase que devuelve el propio objeto. Patrón singleton
      * @author Domingo Lopez
-     * @return
+     * @return MyApp
      */
     public static MyApp getInstance(){
         return instance;
@@ -23,7 +23,7 @@ public class MyApp  extends Application {
     /**
      * Método que devuelve el propio objeto, el contexto
      * @author Domingo Lopez
-     * @return
+     * @return Context
      */
     public static Context getContext(){
         return instance;

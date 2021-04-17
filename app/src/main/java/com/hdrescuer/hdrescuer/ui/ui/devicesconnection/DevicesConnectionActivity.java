@@ -513,7 +513,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     /**
      * Método que devuelve el total de dispositivos conectados
      * @author Domingo Lopez
-     * @return
+     * @return int
      */
     int getTotalConnectedDevices(){
         int devices_counter = 0;

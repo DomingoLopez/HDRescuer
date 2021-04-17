@@ -37,7 +37,7 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
     /**
      * Obtiene los datos del usuario desde el respositorio
      * @author Domingo Lopez
-     * @return
+     * @return MutableLiveData
      */
     public MutableLiveData<UserDetails> getUser() {
 

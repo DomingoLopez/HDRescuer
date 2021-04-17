@@ -89,7 +89,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
      * @param inflater
      * @param container
      * @param savedInstanceState
-     * @return
+     * @return View
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

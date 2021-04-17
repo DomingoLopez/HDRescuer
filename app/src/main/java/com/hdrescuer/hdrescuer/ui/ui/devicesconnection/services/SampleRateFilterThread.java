@@ -115,6 +115,11 @@ public class SampleRateFilterThread extends Thread{
                restIntent.putExtra("e4_gsr",this.e4BandRepository.getCurrentGsr().toString());
                restIntent.putExtra("e4_ibi",this.e4BandRepository.getCurrentIbi().toString());
                restIntent.putExtra("e4_temp",this.e4BandRepository.getCurrentTemp().toString());
+
+               restIntent.putExtra("ehb_bpm",this.eHealthBoardRepository.getBMP().toString());
+               restIntent.putExtra("ehb_o2",this.eHealthBoardRepository.getOxBlood().toString());
+               restIntent.putExtra("ehb_air",this.eHealthBoardRepository.getAirFlow().toString());
+
                restIntent.putExtra("timestamp",this.instant.toString());
                restIntent.putExtra("id",this.session_id);
 

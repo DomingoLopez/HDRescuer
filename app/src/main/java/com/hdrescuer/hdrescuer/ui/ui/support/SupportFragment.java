@@ -31,7 +31,7 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
      * @param inflater
      * @param container
      * @param savedInstanceState
-     * @return
+     * @return View
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

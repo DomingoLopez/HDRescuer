@@ -71,7 +71,11 @@ public class RestSampleRateService extends IntentService {
                         intent.getStringExtra("e4_hr"),
                         intent.getStringExtra("e4_gsr"),
                         intent.getStringExtra("e4_ibi"),
-                        intent.getStringExtra("e4_temp")
+                        intent.getStringExtra("e4_temp"),
+
+                        intent.getStringExtra("ehb_bpm"),
+                        intent.getStringExtra("ehb_o2"),
+                        intent.getStringExtra("ehb_air")
 
                 );
 

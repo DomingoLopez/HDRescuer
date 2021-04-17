@@ -232,7 +232,7 @@ public class ConnectionActivity extends FragmentActivity implements
      * Método que selecciona el primer nodo no nulo encontrado. Solo debería haber un teléfono por Reloj
      * @author Domingo Lopez
      * @param nodes
-     * @return
+     * @return Node
      */
         private Node pickBestNodeId(Set<Node> nodes) {
             Log.d(TAG, "pickBestNodeId(): " + nodes);

@@ -72,7 +72,7 @@ public class AuthConectionClientApiComposerModule {
     /**
      * Obtiene el servicio para realizar las llamadas al servidor
      * @author Domingo Lopez
-     * @return
+     * @return AuthApiService
      */
     public AuthApiService getAuthApiService(){
         return this.authApiService;

@@ -77,6 +77,15 @@ public class RequestSendData implements Serializable
     @SerializedName("e4_temp")
     @Expose
     private String e4Temp;
+    @SerializedName("ehb_bpm")
+    @Expose
+    private String ehb_bpm;
+    @SerializedName("ehb_o2")
+    @Expose
+    private String ehb_o2;
+    @SerializedName("ehb_air")
+    @Expose
+    private String ehb_air;
     private final static long serialVersionUID = 4226884065588354866L;
 
     /**
@@ -88,9 +97,8 @@ public class RequestSendData implements Serializable
     }
 
 
-
     /**
-     * Constructor con parámetros
+     * Cosntructor con parámetros
      * @author Domingo Lopez
      * @param userId
      * @param timeStamp
@@ -114,8 +122,11 @@ public class RequestSendData implements Serializable
      * @param e4Gsr
      * @param e4Ibi
      * @param e4Temp
+     * @param ehb_bmp
+     * @param ehb_o2
+     * @param ehb_air
      */
-    public RequestSendData(String userId, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp) {
+    public RequestSendData(String userId, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp, String ehb_bmp, String ehb_o2, String ehb_air) {
         super();
         this.id = userId;
         this.timeStamp = timeStamp;
@@ -139,6 +150,9 @@ public class RequestSendData implements Serializable
         this.e4Gsr = e4Gsr;
         this.e4Ibi = e4Ibi;
         this.e4Temp = e4Temp;
+        this.ehb_bpm = ehb_bmp;
+        this.ehb_o2 = ehb_o2;
+        this.ehb_air = ehb_air;
     }
 
     public String getUserId() {
@@ -317,4 +331,27 @@ public class RequestSendData implements Serializable
         this.e4Temp = e4Temp;
     }
 
+    public String getEhb_bpm() {
+        return ehb_bpm;
+    }
+
+    public void setEhb_bpm(String ehb_bpm) {
+        this.ehb_bpm = ehb_bpm;
+    }
+
+    public String getEhb_o2() {
+        return ehb_o2;
+    }
+
+    public void setEhb_o2(String ehb_o2) {
+        this.ehb_o2 = ehb_o2;
+    }
+
+    public String getEhb_air() {
+        return ehb_air;
+    }
+
+    public void setEhb_air(String ehb_air) {
+        this.ehb_air = ehb_air;
+    }
 }

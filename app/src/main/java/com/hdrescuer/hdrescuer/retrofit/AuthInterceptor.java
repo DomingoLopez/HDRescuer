@@ -20,7 +20,7 @@ public class AuthInterceptor implements Interceptor {
      * Método invocado para cada petición que se realice, añadiendo el TOKEN en las cabeceras
      * @author Domingo Lopez
      * @param chain
-     * @return
+     * @return Response
      * @throws IOException
      */
     @Override
