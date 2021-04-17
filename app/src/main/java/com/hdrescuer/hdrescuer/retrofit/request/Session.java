@@ -36,14 +36,16 @@ public class Session implements Serializable
     private final static long serialVersionUID = 1292988452008497775L;
 
     /**
-     * No args constructor for use in serialization
+     * Constructor vacío
+     * @author Domingo Lopez
      * 
      */
     public Session() {
     }
 
     /**
-     * 
+     * Constructor con parámetros
+     * @author Domingo Lopez
      * @param timestampFin
      * @param e4band
      * @param ticwatch

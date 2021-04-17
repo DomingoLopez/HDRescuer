@@ -13,7 +13,10 @@ import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
 import java.text.DecimalFormat;
 
-
+/**
+ * ViewModel Global para el almacenamiento en vivo de los datos de los dispositivos. Es el núcleo de los datos que se mostrarán en pantalla y se mandará al servidor
+ * @author Domingo Lopez
+ */
 public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewModelProvider.Factory {
 
 

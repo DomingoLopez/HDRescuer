@@ -44,7 +44,8 @@ public class SampleRateFilterThread extends Thread{
     private Instant instant;
 
     /**
-     * Constructor de la clase, recibe los repositorios individuales y el Global Repository iniciado, así ocmo el id_de sesión
+     * Constructor de la clase, recibe los repositorios individuales y el Global Repository iniciado, así como el id_de sesión
+     * @author Domingo Lopez
      * @param ticWatchRepository
      * @param e4BandRepository
      * @param eHealthBoardRepository

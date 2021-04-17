@@ -4,6 +4,10 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.concurrent.ScheduledExecutorService;
 
+/**
+ * Repositorio de datos global para los datos de los sensores del reloj
+ * @author Domingo Lopez
+ */
 public class DataRepository {
 
 
@@ -29,7 +33,10 @@ public class DataRepository {
     //Mirar como lo he hecho en la empática Viewmodel
     private float averageHr = 0;
 
-
+    /**
+     * Constructor vacío
+     * @author Domingo Lopez
+     */
     public DataRepository() {
         super();
 
@@ -175,6 +182,10 @@ public class DataRepository {
     public void setStep(Float step) { this.stepCounter += step; }
 
 
+    /**
+     * Método de reseteo de los valores de los sensores almacenados
+     * @author Domingo Lopez
+     */
     public void reset(){
         this.accx = 0.0f;//
         this.accy = 0.0f;//

@@ -16,6 +16,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hdrescuer.hdrescuer.R;
 
+/**
+ * Clase SupportFragment que contiene la información de la aplicación, así como los créditos y atribuciones
+ *  @author Domingo Lopez
+ */
 public class SupportFragment extends Fragment implements View.OnClickListener {
 
     TextView Freepik;

@@ -20,6 +20,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Repositorio de datos de los detalles del usuario
+ * @author Domingo Lopez
+ */
 public class UserDetailsRepository {
 
     AuthApiService authApiService;
@@ -28,6 +32,11 @@ public class UserDetailsRepository {
     AuthConectionClientUsersModule authConectionClientUsersModule;
     MutableLiveData<UserDetails> user;
 
+    /**
+     * Cosntructor con parámetros, recibe un id de usuario y hace llamada al servidor
+     * @author Domingo Lopez
+     * @param id
+     */
     UserDetailsRepository(String id){
         this.authConectionClientApiComposerModule = AuthConectionClientApiComposerModule.getInstance();
         this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
@@ -36,6 +45,12 @@ public class UserDetailsRepository {
         this.user = this.getUser(id);
     }
 
+    /**
+     * Método que hace llamada al servidor para obtener la lista de usuarios en descripción corta
+     * @author Domingo Lopez
+     * @param id
+     * @return MutableLiveData
+     */
     public MutableLiveData<UserDetails> getUser(String id){
 
         if(user == null)
@@ -69,6 +84,11 @@ public class UserDetailsRepository {
     }
 
 
+    /**
+     * Método que hace llamada de update al servidor para actualizar los datos del usuario
+     * @author Domingo Lopez
+     * @param user_devuelto
+     */
     public void updateUser(UserInfo user_devuelto){
         Call<String> call = authApiServiceUser.updateUser(user_devuelto);
         call.enqueue(new Callback<String>() {

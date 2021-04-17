@@ -52,11 +52,20 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     ResultReceiver receiver;
 
 
-
+    /**
+     * Constructor vacío
+     * @author Domingo Lopez
+     */
     public DevicesMonitoringFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Constructor con parámetros
+     * @author Domingo Lopez
+     * @param session_id
+     * @param receiver
+     */
     public DevicesMonitoringFragment(String session_id, ResultReceiver receiver){
         this.session_id = session_id;
         this.receiver = receiver;
@@ -84,7 +93,12 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
         return view;
     }
 
-
+    /**
+     * Método onViewCreated. Cuando se crea la vista utiliza un TabLayoutMediator para elegir entre los distintos fragmentos de monitorización
+     * @author Domingo Lopez
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -114,6 +128,11 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
 
     }
 
+    /**
+     * Método que inicia las vistas
+     * @author Domingo Lopez
+     * @param view
+     */
     private void findViews(View view) {
         this.tabLayout = view.findViewById(R.id.tabLayout);
         this.viewPager = view.findViewById(R.id.view_pager_monitoring);
@@ -136,7 +155,10 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
 
     }
 
-
+    /**
+     * Método que solicita la parada de la sesión mandando un Intent al IntentService StartStopSessionService
+     * @author Domingo Lopez
+     */
     private void stopSession() {
         //Paramos las hebras que pudiera haber activas
         SampleRateFilterThread.STATUS = "INACTIVO";

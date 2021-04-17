@@ -35,13 +35,22 @@ public class User {
     private Integer total_time;
 
     /**
-     * No args constructor for use in serialization
-     * 
+     * Constructor sin parámetros
+     * @author Domingo Lopez
      */
     public User() {
     }
 
-
+    /**
+     * Cosntructor con parámetros
+     * @author Domingo Lopez
+     * @param id
+     * @param username
+     * @param lastname
+     * @param session_id
+     * @param timestamp_ini
+     * @param total_time
+     */
     public User(String id, String username,String lastname, String session_id, Date timestamp_ini, Integer total_time) {
         super();
         this.id = id;

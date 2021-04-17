@@ -19,6 +19,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Repositorio de datos de la lista de usuarios
+ * @author Domingo Lopez
+ */
 public class UserListRepository {
 
     AuthApiService authApiService;
@@ -27,6 +31,10 @@ public class UserListRepository {
     AuthConectionClientUsersModule authConectionClientUsersModule;
     MutableLiveData<List<User>> users;
 
+    /**
+     * Constructor vacío
+     * @author Domingo Lopez
+     */
     UserListRepository(){
         this.authConectionClientApiComposerModule = AuthConectionClientApiComposerModule.getInstance();
         this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
@@ -35,6 +43,11 @@ public class UserListRepository {
         users = getAllUsers();
     }
 
+    /**
+     * Método que obtiene la lista de usuarios desde el servidor
+     * @author Domingo Lopez
+     * @return MutableLiveData
+     */
     public MutableLiveData<List<User>> getAllUsers(){
         if(users == null)
             users = new MutableLiveData<>();
@@ -62,10 +75,20 @@ public class UserListRepository {
 
     }
 
+    /**
+     * Método que devuelve los usuarios almacenados hasta el momento
+     * @author Domingo Lopez
+     * @return MutableLiveData
+     */
     public MutableLiveData<List<User>> getUsers(){
         return this.users;
     }
 
+    /**
+     * Método que hace llamada al servidor para crear un nuevo usuario
+     * @author Domingo Lopez
+     * @param user
+     */
     public void setNewUser(UserDetails user){
         Call<User> call = authApiServiceUser.setNewUser(user);
         call.enqueue(new Callback<User>() {
@@ -95,6 +118,10 @@ public class UserListRepository {
     }
 
 
+    /**
+     * Método que refresca los usuarios se ha habido nuevas creaciones de usuario
+     * @author Domingo Lopez
+     */
     public void refreshUsers(){
         this.users = getAllUsers();
     }

@@ -7,6 +7,10 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Cliente de conexión hacia el microservicio ApiComposer
+ * @author Domingo Lopez
+ */
 public class AuthConectionClientApiComposerModule {
 
 
@@ -17,6 +21,10 @@ public class AuthConectionClientApiComposerModule {
 
     private Retrofit retrofit;
 
+    /**
+     * Constructor vacío. Inicializa las conexiones y añade un HttpLogginINterceptor para depurar las llamadas, así como añadir el Token del usuario en las cabeceras
+     * @author Domingo Lopez
+     */
     public AuthConectionClientApiComposerModule() {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -47,6 +55,11 @@ public class AuthConectionClientApiComposerModule {
     }
 
 
+    /**
+     * Devuelve instancia de la conexión
+     * @author Domingo Lopez
+     * @return AutConectionClientApiComposerModule
+     */
     public static AuthConectionClientApiComposerModule getInstance(){
 
         if(instance == null){
@@ -56,6 +69,11 @@ public class AuthConectionClientApiComposerModule {
         return instance;
     }
 
+    /**
+     * Obtiene el servicio para realizar las llamadas al servidor
+     * @author Domingo Lopez
+     * @return
+     */
     public AuthApiService getAuthApiService(){
         return this.authApiService;
     }

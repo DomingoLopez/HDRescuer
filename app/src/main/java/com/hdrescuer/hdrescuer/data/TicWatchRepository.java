@@ -22,7 +22,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * Repositorio de datos para el reloj Tic Watch
+ * @author Domingo Lopez
+ */
 public class TicWatchRepository {
 
 
@@ -45,7 +48,10 @@ public class TicWatchRepository {
 
     private float averageHr = 0;
 
-
+    /**
+     * Constructor vacío
+     * @author Domingo Lopez
+     */
     public TicWatchRepository() {
         super();
 
@@ -183,7 +189,10 @@ public class TicWatchRepository {
     }
 
 
-
+    /**
+     * Método que resetea los datos del repositorio
+     * @author Domingo Lopez
+     */
     public void reset(){
         this.stepCounter = 0;
 

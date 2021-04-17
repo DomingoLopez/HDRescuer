@@ -80,36 +80,40 @@ public class RequestSendData implements Serializable
     private final static long serialVersionUID = 4226884065588354866L;
 
     /**
-     * No args constructor for use in serialization
+     * Constructor vacío
+     * @author Domingo Lopez
      * 
      */
     public RequestSendData() {
     }
 
+
+
     /**
-     * 
-     * @param ticStep
-     * @param ticGirx
-     * @param ticGiry
-     * @param ticAccly
-     * @param ticAcclz
-     * @param e4Ibi
-     * @param e4Bvp
-     * @param ticGirz
+     * Constructor con parámetros
+     * @author Domingo Lopez
      * @param userId
      * @param timeStamp
-     * @param ticHrppgraw
-     * @param e4Accy
-     * @param e4Accx
-     * @param ticAccx
-     * @param ticAccz
-     * @param ticAccy
-     * @param ticAcclx
-     * @param e4Hr
      * @param ticHrppg
+     * @param ticHrppgraw
+     * @param ticStep
+     * @param ticAccx
+     * @param ticAccy
+     * @param ticAccz
+     * @param ticAcclx
+     * @param ticAccly
+     * @param ticAcclz
+     * @param ticGirx
+     * @param ticGiry
+     * @param ticGirz
+     * @param e4Accx
+     * @param e4Accy
      * @param e4Accz
-     * @param e4Temp
+     * @param e4Bvp
+     * @param e4Hr
      * @param e4Gsr
+     * @param e4Ibi
+     * @param e4Temp
      */
     public RequestSendData(String userId, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp) {
         super();

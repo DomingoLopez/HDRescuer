@@ -25,7 +25,10 @@ public class RestSampleRateService extends IntentService {
     AuthApiService authApiService;
     AuthConectionClientDataModule authConectionClientDataModule;
 
-
+    /**
+     * Constructor vacío
+     * @author Domingo Lopez
+     */
     public RestSampleRateService() {
         super("RestSampleRateService");
         this.authConectionClientDataModule = AuthConectionClientDataModule.getInstance();
@@ -33,7 +36,11 @@ public class RestSampleRateService extends IntentService {
     }
 
 
-
+    /**
+     * Método que maneja los intents que recibe el IntentService
+     * @author Domingo Lopez
+     * @param intent
+     */
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {

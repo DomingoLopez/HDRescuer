@@ -30,6 +30,7 @@ import java.util.List;
 
 /**
  * Fragmento que contiene la lista de usuarios cargados desde el servidor. Hereda de Fragment e implementa ListItemClickListener, una interfaz para detectar clicks en los items del RecyclerView
+ *  @author Domingo Lopez
  */
 public class UserListFragment extends Fragment implements ListItemClickListener, View.OnClickListener {
 

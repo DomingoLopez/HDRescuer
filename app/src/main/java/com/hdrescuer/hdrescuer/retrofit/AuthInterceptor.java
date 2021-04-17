@@ -12,10 +12,17 @@ import okhttp3.Response;
 /**
  * Clase que implementa la Interfaz Interceptor, que intercepta valga la redundancia una petición y le añade una cadena en el Header,
  * así no tenemos que estar escribiendo el token en cada petición.
+ * @author Domingo Lopez
  */
 public class AuthInterceptor implements Interceptor {
 
-    //Método que será invocado cuando hagamos una petición y la"interceptemos" para adjuntarle el token de usuario
+    /**
+     * Método invocado para cada petición que se realice, añadiendo el TOKEN en las cabeceras
+     * @author Domingo Lopez
+     * @param chain
+     * @return
+     * @throws IOException
+     */
     @Override
     public Response intercept(Chain chain) throws IOException {
             //obtenemos el token

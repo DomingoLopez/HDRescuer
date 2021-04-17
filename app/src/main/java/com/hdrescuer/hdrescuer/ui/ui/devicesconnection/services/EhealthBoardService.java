@@ -27,6 +27,13 @@ public class EhealthBoardService extends Thread {
     //Array temporal para manejar los bytes que se queden sin procesar
     byte[] tmp = null;
 
+    /**
+     * Constructor con parámetros
+     * @author Domingo Lopez
+     * @param eHealthBoardRepository
+     * @param inputStream
+     * @param outputStream
+     */
     public EhealthBoardService(EHealthBoardRepository eHealthBoardRepository, InputStream inputStream, OutputStream outputStream){
 
         this.eHealthBoardRepository = eHealthBoardRepository;
