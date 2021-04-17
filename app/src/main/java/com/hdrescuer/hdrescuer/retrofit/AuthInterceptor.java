@@ -25,9 +25,7 @@ public class AuthInterceptor implements Interceptor {
      */
     @Override
     public Response intercept(Chain chain) throws IOException {
-            //obtenemos el token
             String token = SharedPreferencesManager.getSomeStringValue(Constants.PREF_TOKEN);
-            //creamos una request genérica y asignamos a su "chain" el Header Authorization Bearer token
             Request request = chain.request().newBuilder().addHeader("Authorization", "Bearer "+token).build();
             return chain.proceed(request);
     }

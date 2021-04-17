@@ -191,12 +191,12 @@ public class ConnectionActivity extends FragmentActivity implements
                 public void onComplete(Task<CapabilityInfo> task) {
 
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "Capability request succeeded.");
+                        Log.d(TAG, "Solicitud de capability satisfactoria");
                         CapabilityInfo capabilityInfo = task.getResult();
                         mAndroidPhoneNodeWithApp = pickBestNodeId(capabilityInfo.getNodes());
 
                     } else {
-                        Log.d(TAG, "Capability request failed to return any results.");
+                        Log.d(TAG, "Solicitud de capability ha fallado");
                     }
 
                     verifyNodeAndUpdateUI();
