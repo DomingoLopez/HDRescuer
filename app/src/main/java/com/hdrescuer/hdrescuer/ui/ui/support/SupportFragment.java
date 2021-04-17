@@ -1,5 +1,7 @@
 package com.hdrescuer.hdrescuer.ui.ui.support;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,22 +16,72 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hdrescuer.hdrescuer.R;
 
-public class SupportFragment extends Fragment {
+public class SupportFragment extends Fragment implements View.OnClickListener {
 
-    private SupportViewModel supportViewModel;
+    TextView Freepik;
+    TextView Flaticons;
+    TextView Github;
 
+    /**
+     * OnCreateView del Fragmento de Información
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        supportViewModel =
-                new ViewModelProvider(this).get(SupportViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_support, container, false);
-        final TextView textView = root.findViewById(R.id.text_support);
-        supportViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
+        findViews(root);
+
         return root;
     }
+
+    /**
+     * Localización de las vistas
+     * @param view
+     */
+    void findViews(View view){
+        this.Flaticons = view.findViewById(R.id.tvFlaticons);
+        this.Freepik = view.findViewById(R.id.tvFreepik);
+        this.Github = view.findViewById(R.id.tvgithub);
+
+        this.Freepik.setOnClickListener(this);
+        this.Flaticons.setOnClickListener(this);
+        this.Github.setOnClickListener(this);
+    }
+
+    /**
+     * Gestion de eventos de click
+     * @param view
+     */
+    @Override
+    public void onClick(View view) {
+        Uri uri;
+        Intent intent;
+        switch (view.getId()){
+            case R.id.tvFlaticons:
+                uri = Uri.parse("https://www.flaticon.es/");
+                break;
+
+            case R.id.tvFreepik:
+                uri = Uri.parse("https://www.freepik.es/");
+                break;
+
+            default:
+                uri = Uri.parse("https://github.com/DomingoLopez");
+                break;
+
+        }
+        intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
+
+
+
+
+
 }

@@ -4,6 +4,10 @@ package com.hdrescuer.hdrescuer.retrofit.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Clase ResponseAuth (Respuesta tras la autorización). Contiene el token de los usuarios
+ * @author Domingo Lopez
+ */
 public class ResponseAuth {
 
     @SerializedName("token")

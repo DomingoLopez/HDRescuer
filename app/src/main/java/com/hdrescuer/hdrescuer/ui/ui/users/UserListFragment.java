@@ -29,7 +29,7 @@ import java.util.List;
 
 
 /**
- * A fragment representing a list of Items.
+ * Fragmento que contiene la lista de usuarios cargados desde el servidor. Hereda de Fragment e implementa ListItemClickListener, una interfaz para detectar clicks en los items del RecyclerView
  */
 public class UserListFragment extends Fragment implements ListItemClickListener, View.OnClickListener {
 
@@ -44,14 +44,16 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     UserListViewModel userListViewModel;
     FloatingActionButton btn;
 
+    boolean alreadyCreated = false;
+
     /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
+     * Constructor Vacío del fragmento
+     * @author Domingo Lopez
      */
     public UserListFragment() {
     }
 
-    // TODO: Customize parameter initialization
+
     @SuppressWarnings("unused")
     public static UserListFragment newInstance(int columnCount) {
         UserListFragment fragment = new UserListFragment();
@@ -61,6 +63,11 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         return fragment;
     }
 
+    /**
+     * Creación del fragmento de lista de usuarios
+     * @author Domingo Lopez
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,42 +78,27 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
 
 
         this.userListViewModel = new ViewModelProvider(getActivity()).get(UserListViewModel.class);
+        alreadyCreated = true;
 
     }
 
+    /**
+     * Inicializa la vista del Fragmento y carga los elementos de la misma, así como la información de los usuarios. Setea el adapter de la lista de usuarios
+     * @author Domingo Lopez
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-
-    /*
-
-
-        View view = inflater.inflate(R.layout.fragment_user_list, container, false);
-
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            this.recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-
-            retrofitInit();
-            loadUserData();
-            recyclerView.setAdapter(adapter);
-        }
-        return view;*/
 
 
         View view = inflater.inflate(R.layout.fragment_user_list, container, false);
         Context context = view.getContext();
         this.recyclerView = view.findViewById(R.id.list);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        //recyclerView.addItemDecoration(new DividerItemDecoration(context, LinearLayoutManager.VERTICAL));
 
         this.adapter = new MyUserRecyclerViewAdapter(
                 getActivity(),
@@ -119,20 +111,46 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         findViews(view);
         loadUserData();
 
-
-
-
         return view;
-
-
     }
 
+    /**
+     * OnResume de lista de usuarios. Refresca la lista de usuarios por se ha habido cambios en los mismos.
+     * @author Domingo Lopez
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!alreadyCreated){
+            refreshUserDetails();
+        }
+        alreadyCreated = false;
+    }
+
+    /**
+     * Método que llama al viewmodel para refrescar usuarios
+     * @author Domingo Lopez
+     */
+    private void refreshUserDetails() {
+        this.userListViewModel.refreshUsers();
+    }
+
+
+    /**
+     * Método que busca los elementos de la vista
+     * @author Domingo Lopez
+     * @param view
+     */
     private void findViews(View view) {
         this.btn = view.findViewById(R.id.user_add_btn);
         this.btn.setOnClickListener(this);
     }
 
 
+    /**
+     * Método que añade observer al viewmodel para observar cambios en la lista de usuarios
+     * @author Domingo Lopez
+     */
     private void loadUserData() {
 
         this.userListViewModel.getUsers().observe(requireActivity(), new Observer<List<User>>() {
@@ -146,6 +164,11 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
 
     }
 
+    /**
+     * Método llamado al clickar en un item de la lista. Es un método de la clase implementada ListItemClickListener
+     * @author Domingo Lopez
+     * @param position
+     */
     @Override
     public void onListItemClick(int position) {
 
@@ -155,6 +178,11 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         startActivity(i);
     }
 
+    /**
+     * Método para gestionar los eventos de click en los elementos del fragmento
+     * @author Domingo Lopez
+     * @param view
+     */
     @Override
     public void onClick(View view) {
 
@@ -164,9 +192,5 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //this.userListViewModel.refreshUsers();
-    }
+
 }

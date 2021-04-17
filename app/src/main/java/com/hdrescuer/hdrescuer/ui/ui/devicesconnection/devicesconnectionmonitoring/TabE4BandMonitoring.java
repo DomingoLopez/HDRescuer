@@ -16,11 +16,14 @@ import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 
 import java.text.DecimalFormat;
 
-
+/**
+ * Fragmento de monitorización de la Empatica band
+ * @author Domingo Lopez
+ */
 public class TabE4BandMonitoring extends Fragment {
 
     GlobalMonitoringViewModel globalMonitoringViewModel;
-    DecimalFormat df = new DecimalFormat("#.##");
+    DecimalFormat df = new DecimalFormat("#.###");
 
     TextView tvTemp;
     //TextView tvBattery;
@@ -54,7 +57,11 @@ public class TabE4BandMonitoring extends Fragment {
         return view;
     }
 
-
+    /**
+     * Método que inicializa las vistas
+     * @author Domingo Lopez
+     * @param view
+     */
     private void findViews(View view) {
         this.tvTemp = view.findViewById(R.id.tvTemp);
         //this.tvBattery = view.findViewById(R.id.tvBattery);
@@ -69,8 +76,10 @@ public class TabE4BandMonitoring extends Fragment {
     }
 
 
-    //Creamos los observers para el viewmodel. Habrá que implementar el envío del dato al servidor
-    //En el mismo cambio, para que sea en tiempo real.
+    /**
+     * Método que inicia los obsevers del viewmodel
+     * @author Domingo Lopez
+     */
     private void createObserverForViewModel() {
 
         //Observer de temperatura
@@ -86,13 +95,13 @@ public class TabE4BandMonitoring extends Fragment {
         this.globalMonitoringViewModel.getCurrentGsr().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvGSR.setText(aFloat.toString());
+                tvGSR.setText(df.format(aFloat));
             }
         });
         //Observer de HR
-        this.globalMonitoringViewModel.getCurrentHr().observe(requireActivity(), new Observer<Float>() {
+        this.globalMonitoringViewModel.getCurrentHr().observe(requireActivity(), new Observer<Integer>() {
             @Override
-            public void onChanged(Float aFloat) {
+            public void onChanged(Integer aFloat) {
                 tvHR.setText(aFloat.toString());
             }
         });
@@ -100,7 +109,7 @@ public class TabE4BandMonitoring extends Fragment {
         this.globalMonitoringViewModel.getCurrentIbi().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvIBI.setText(aFloat.toString());
+                tvIBI.setText(df.format(aFloat));
             }
         });
         //Observer de AccX
@@ -128,7 +137,7 @@ public class TabE4BandMonitoring extends Fragment {
         this.globalMonitoringViewModel.getCurrentBvp().observe(requireActivity(), new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
-                tvBVP.setText(aFloat.toString());
+                tvBVP.setText(df.format(aFloat));
             }
         });
     }

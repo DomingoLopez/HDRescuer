@@ -25,7 +25,12 @@ import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
+import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
 
+/**
+ * Clase dentro del paquete common, ya que sirve para el alta y modificación de un usuario.
+ * @author Domingo Lopez
+ */
 public class NewUserDialogFragment extends DialogFragment implements View.OnClickListener {
 
     EditText edName;
@@ -53,7 +58,11 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
     AuthConectionClientUsersModule authConectionClientUsersModule;
     AuthApiService authApiService;
 
-
+    /**
+     * Constructor del diálogo
+     * @param type
+     * @param userDetails
+     */
     public NewUserDialogFragment(UserActionDialog type, UserDetails userDetails){
         this.type = type;
         this.userDetails = userDetails;
@@ -84,6 +93,11 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
         return view;
     }
 
+    /**
+     * Método que inicia los elementos de la vista
+     * @author Domingo Lopez
+     * @param view
+     */
     private void findViews(View view) {
 
         this.edName = view.findViewById(R.id.txtName);
@@ -109,6 +123,10 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
 
     }
 
+    /**
+     * Método que setea los elementos del formulario del diálogo
+     * @author Domingo Lopez
+     */
     private void setFormValues() {
         switch (this.type){
 
@@ -171,7 +189,11 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
     }
 
 
-
+    /**
+     * Método que gestiona los eventos de click
+     * @author Domingo Lopez
+     * @param view
+     */
     @Override
     public void onClick(View view) {
 
@@ -227,9 +249,10 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
 
                    }else if(this.type == UserActionDialog.MODIFY_USER){
 
-                       UserDetails user = new UserDetails(this.userDetails.getId(), name, lastname,email,password,gender, age, height, weight,phone, phone2, city,direccion,cp);
+                       UserInfo user = new UserInfo(this.userDetails.getId(), name, lastname,email,password,gender, age, height, weight,phone, phone2, city,direccion,cp);
                        UserDetailsViewModel userDetailsViewModel = new ViewModelProvider(this.getActivity()).get(UserDetailsViewModel.class);
                        userDetailsViewModel.updateUserDetails(user);
+                       userDetailsViewModel.refreshUserDetails();
                        getDialog().dismiss();
                    }
 
@@ -240,6 +263,11 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
 
     }
 
+    /**
+     * Método que valida si los campos requeridos están rellenos y se procesan
+     * @author Domingo Lopez
+     * @return Boolean
+     */
     private Boolean validarCampos() {
 
         //Diálogo de nuevo usuario

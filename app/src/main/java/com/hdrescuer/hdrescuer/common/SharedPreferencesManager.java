@@ -8,7 +8,8 @@ import com.hdrescuer.hdrescuer.R;
 /**
  * Clase de Preferencias compartidas, en la que declaramos un método estático que devuelve una instancia de SharedPreferences
  * y sobre el que podemos "escribir" en un fichero las preferencias de nuestra aplicación.
- * Aquí guardaremos el token que recibe el usuario al hacer loguin
+ * Aquí guardaremos el token que recibe el usuario al hacer login
+ * @author Domingo Lopez
  */
 public class SharedPreferencesManager {
 

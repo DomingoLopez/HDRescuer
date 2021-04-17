@@ -17,6 +17,7 @@
     <color name="e4disconnected">#F44336</color>
     <color name="e4connected">#4CAF50</color>
     <color name="e4Managerready">#FFEB3B</color>
+    <color name="e4Connecting">#FF9800</color>
 
 
 

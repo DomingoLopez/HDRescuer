@@ -26,8 +26,6 @@ import java.util.concurrent.TimeUnit;
 public class E4BandRepository implements EmpaDataDelegate {
 
 
-    private int user_id ;
-
     private final static double timezoneOffset = TimeZone.getDefault().getRawOffset() / 1000d;
 
 
@@ -37,7 +35,7 @@ public class E4BandRepository implements EmpaDataDelegate {
     private Integer currentAccY;
     private Integer currentAccZ;
     private Float currentBvp;
-    private Float currentHr;
+    private Integer currentHr;
     private Float currentGsr;
     private Float currentIbi;
     private Float currentTemp;
@@ -56,7 +54,7 @@ public class E4BandRepository implements EmpaDataDelegate {
         currentAccY = 0;
         currentAccZ = 0;
         currentBvp = 0.0f;
-        currentHr = 0.0f;
+        currentHr = 0;
         currentGsr = 0.0f;
         currentIbi = 0.0f;
         currentTemp = 0.0f;
@@ -101,7 +99,7 @@ public class E4BandRepository implements EmpaDataDelegate {
                     (new Runnable() {
                         public void run() {
                                 if (averageHr != 0) {
-                                    currentHr = averageHr;
+                                    currentHr = Math.round(averageHr);
                                 }
                         }
                     }, 0, 1000, TimeUnit.MILLISECONDS);
@@ -139,9 +137,6 @@ public class E4BandRepository implements EmpaDataDelegate {
      ********************************************/
 
 
-    public int getUser_id() {
-        return user_id;
-    }
 
     public static double getTimezoneOffset() {
         return timezoneOffset;
@@ -172,7 +167,7 @@ public class E4BandRepository implements EmpaDataDelegate {
         return currentBvp;
     }
 
-    public Float getCurrentHr() {
+    public Integer getCurrentHr() {
         return currentHr;
     }
 
@@ -188,5 +183,19 @@ public class E4BandRepository implements EmpaDataDelegate {
         return currentTemp;
     }
 
+
+
+    public void reset(){
+        battery = 0.0f;
+        currentAccX = 0;
+        currentAccY = 0;
+        currentAccZ = 0;
+        currentBvp = 0.0f;
+        currentHr = 0;
+        currentGsr = 0.0f;
+        currentIbi = 0.0f;
+        currentTemp = 0.0f;
+        tag = 0.0;
+    }
 
 }

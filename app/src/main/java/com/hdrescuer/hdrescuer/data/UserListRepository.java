@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientApiComposerModule;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
@@ -21,12 +22,16 @@ import retrofit2.Response;
 public class UserListRepository {
 
     AuthApiService authApiService;
+    AuthApiService authApiServiceUser;
+    AuthConectionClientApiComposerModule authConectionClientApiComposerModule;
     AuthConectionClientUsersModule authConectionClientUsersModule;
     MutableLiveData<List<User>> users;
 
     UserListRepository(){
+        this.authConectionClientApiComposerModule = AuthConectionClientApiComposerModule.getInstance();
         this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
-        this.authApiService = this.authConectionClientUsersModule.getAuthApiService();
+        this.authApiService = this.authConectionClientApiComposerModule.getAuthApiService();
+        this.authApiServiceUser = this.authConectionClientUsersModule.getAuthApiService();
         users = getAllUsers();
     }
 
@@ -62,8 +67,7 @@ public class UserListRepository {
     }
 
     public void setNewUser(UserDetails user){
-        MutableLiveData<List<User>> data = new MutableLiveData<>();
-        Call<User> call = authApiService.setNewUser(user);
+        Call<User> call = authApiServiceUser.setNewUser(user);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -88,6 +92,11 @@ public class UserListRepository {
             }
         });
 
+    }
+
+
+    public void refreshUsers(){
+        this.users = getAllUsers();
     }
 
 

@@ -6,5 +6,5 @@ public class Constants {
     public static final String CAPABILITY_PHONE_APP = "verify_remote_example_phone_app";
 
     //SAMPLE RATE
-    public static int SAMPLE_RATE = 200;
+    public static int SAMPLE_RATE = 300;
 }

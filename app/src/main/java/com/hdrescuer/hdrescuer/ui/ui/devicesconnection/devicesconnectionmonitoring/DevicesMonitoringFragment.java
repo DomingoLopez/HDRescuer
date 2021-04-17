@@ -1,19 +1,25 @@
 package com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,36 +31,41 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.E4BandRepository;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardService;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSessionService;
 
+import java.time.Clock;
 
+/**
+ * Fragmento que contiene a los Fragments TabE4BandMonitoring, TabOximeterMonitoring, TabWatchMonitoring.
+ * Hace uso del ViewPager y su adapter
+ * @author Domingo Lopez
+ */
 public class DevicesMonitoringFragment extends Fragment implements View.OnClickListener {
 
     TabLayout tabLayout;
     ViewPager2 viewPager;
     Button btnStopMonitor;
+    String session_id;
+    ResultReceiver receiver;
 
-    DataClient dataclient;
-    PutDataMapRequest putDataMapRequestStop;
-    PutDataRequest putDataReqStop;
 
 
     public DevicesMonitoringFragment() {
         // Required empty public constructor
     }
 
-    public DevicesMonitoringFragment(DataClient dataClient, PutDataMapRequest stopMapRequest, PutDataRequest stopRequest){
-        this.dataclient = dataClient;
-        this.putDataMapRequestStop = stopMapRequest;
-        this.putDataReqStop = stopRequest;
+    public DevicesMonitoringFragment(String session_id, ResultReceiver receiver){
+        this.session_id = session_id;
+        this.receiver = receiver;
     }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
     }
 
@@ -63,8 +74,6 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
 
         // Inflate the layout for this fragment
          View view = inflater.inflate(R.layout.fragment_devices_monitoring, container, false);
@@ -116,21 +125,33 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     @Override
     public void onClick(View view) {
 
-        String timeback = String.valueOf(System.currentTimeMillis());
-        this.putDataMapRequestStop.getDataMap().putString("MONITORINGSTOP", timeback);
-        this.putDataReqStop = this.putDataMapRequestStop.asPutDataRequest();
-        Task<DataItem> putDataTask1 = this.dataclient.putDataItem(this.putDataReqStop);
-        putDataTask1.addOnCompleteListener(new OnCompleteListener<DataItem>() {
-            @Override
-            public void onComplete(@NonNull Task<DataItem> task) {
-                Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
-            }
-        });
-        SampleRateFilterThread.STATUS = "INACTIVO";
+        stopSession();
 
-        getActivity().finish();
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
+
+    private void stopSession() {
+        //Paramos las hebras que pudiera haber activas
+        SampleRateFilterThread.STATUS = "INACTIVO";
+        EhealthBoardService.STATUS = "INACTIVO";
+
+        Intent intent = new Intent(this.getActivity(), StartStopSessionService.class);
+        intent.setAction("STOP_SESSION");
+        String instant = Clock.systemUTC().instant().toString();
+        intent.putExtra("id_session",this.session_id);
+        intent.putExtra("timestamp_fin",instant);
+        intent.putExtra("receiver",this.receiver);
+        this.getActivity().startService(intent);
+    }
+
+
 
 
 }
