@@ -24,14 +24,16 @@ public class ResponseAuth {
     private String created;
 
     /**
-     * No args constructor for use in serialization
+     * Constructor sin parámetros
+     * @author Domingo Lopez
      * 
      */
     public ResponseAuth() {
     }
 
     /**
-     * 
+     * Constructor con parámetros
+     * @author Domingo Lopez
      * @param created
      * @param email
      * @param token

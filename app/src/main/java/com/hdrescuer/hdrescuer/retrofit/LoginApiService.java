@@ -8,9 +8,19 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
+/**
+ * Interfaz para conexiones sin estar autenticado
+ * @author Domingo Lopez
+ */
 public interface LoginApiService {
 
 
+    /**
+     * Método que realiza la llamada al servidor para autenticarse en el sistema
+     * @author Domingo Lopez
+     * @param requestLogin
+     * @return Call
+     */
     @POST("authm/login")
     Call<ResponseAuth> doLogin(@Body RequestLogin requestLogin);
 

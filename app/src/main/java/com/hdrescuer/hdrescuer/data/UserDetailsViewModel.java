@@ -11,13 +11,22 @@ import androidx.lifecycle.ViewModelProvider;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
 
-
+/**
+ * ViewModel para los detalles del usuario
+ * @author Domingo Lopez
+ */
 public class UserDetailsViewModel extends AndroidViewModel implements ViewModelProvider.Factory {
 
 
     public UserDetailsRepository userDetailsRepository;
     String user_id;
 
+    /**
+     * Constructor Factory del ViewModel
+     * @author Domingo Lopez
+     * @param application
+     * @param id
+     */
     public UserDetailsViewModel(@NonNull Application application, String id) {
         super(application);
         this.user_id = id;
@@ -25,16 +34,29 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
 
     }
 
-
+    /**
+     * Obtiene los datos del usuario desde el respositorio
+     * @author Domingo Lopez
+     * @return MutableLiveData
+     */
     public MutableLiveData<UserDetails> getUser() {
 
         return this.userDetailsRepository.getUser();
     }
 
+    /**
+     * Método que llama al repositorio para actualizar los datos
+     * @author Domingo Lopez
+     * @param userInfo
+     */
     public void updateUserDetails(UserInfo userInfo){
         this.userDetailsRepository.updateUser(userInfo);
     }
 
+    /**
+     * Método que refresca los datos del usuario en caso de que haya actualizaciones en los detalles
+     * @author Domingo Lopez
+     */
     public void refreshUserDetails(){
         this.userDetailsRepository.refreshUserDetails(this.user_id);
     }

@@ -7,7 +7,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * Repositorio para la eHealthBoard
+ * @author Domingo Lopez
+ */
 public class EHealthBoardRepository {
 
 
@@ -15,7 +18,10 @@ public class EHealthBoardRepository {
     private Integer OxBlood;
     private Integer airFlow;
 
-
+    /**
+     * Constructor vacío
+     * @author Domingo Lopez
+     */
     public EHealthBoardRepository() {
         super();
 
@@ -45,8 +51,10 @@ public class EHealthBoardRepository {
     public void setAirFlow(Integer air){this.airFlow = air;}
 
 
-
-
+    /**
+     * Método que resetea los valores del repositorio
+     * @author Domingo Lopez
+     */
     public void reset(){
         this.BMP = 0;
         this.OxBlood = 0;

@@ -48,6 +48,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Fragment ConnectionActivity. Núcleo de la miniapliación de reloj. Gestiona los eventos recibidos desde la app móvil y recibe datos de los sensores
+ * @author Domingo Lopez
+ */
 public class ConnectionActivity extends FragmentActivity implements
         DataClient.OnDataChangedListener,
         AmbientModeSupport.AmbientCallbackProvider,
@@ -103,7 +107,11 @@ public class ConnectionActivity extends FragmentActivity implements
 
         }
 
-        private void findViews() {
+    /**
+     * Método que encuentra los elementos de la vista
+     * @author Domingo Lopez
+     */
+    private void findViews() {
             this.tv_status_watch = findViewById(R.id.tv_status_watch);
             this.btn_connected_watch = findViewById(R.id.btn_connected_watch);
 
@@ -157,14 +165,22 @@ public class ConnectionActivity extends FragmentActivity implements
     }
 
 
-
-        public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
+    /**
+     * Método que se lanza al detectar un cambio de Capabilities en el reloj
+     * @author Domingo Lopez
+     * @param capabilityInfo
+     */
+    public void onCapabilityChanged(CapabilityInfo capabilityInfo) {
 
             mAndroidPhoneNodeWithApp = pickBestNodeId(capabilityInfo.getNodes());
             verifyNodeAndUpdateUI();
-        }
+    }
 
-        private void checkIfPhoneHasApp() {
+    /**
+     * Método que checkea si el móvil tiene instalada la app vinculada
+     * @author Domingo Lopez
+     */
+    private void checkIfPhoneHasApp() {
 
             Task<CapabilityInfo> capabilityInfoTask = Wearable.getCapabilityClient(this)
             .getCapability(Constants.CAPABILITY_PHONE_APP, CapabilityClient.FILTER_ALL);
@@ -175,12 +191,12 @@ public class ConnectionActivity extends FragmentActivity implements
                 public void onComplete(Task<CapabilityInfo> task) {
 
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "Capability request succeeded.");
+                        Log.d(TAG, "Solicitud de capability satisfactoria");
                         CapabilityInfo capabilityInfo = task.getResult();
                         mAndroidPhoneNodeWithApp = pickBestNodeId(capabilityInfo.getNodes());
 
                     } else {
-                        Log.d(TAG, "Capability request failed to return any results.");
+                        Log.d(TAG, "Solicitud de capability ha fallado");
                     }
 
                     verifyNodeAndUpdateUI();
@@ -188,7 +204,11 @@ public class ConnectionActivity extends FragmentActivity implements
             });
         }
 
-        private void verifyNodeAndUpdateUI() {
+    /**
+     * Comprueba si se ha vinculado el reloj con la app, y en caso afirmativo cambia la interfaz de usuario para mostrar distintos mensajes
+     * @author Domingo Lopez
+     */
+    private void verifyNodeAndUpdateUI() {
 
             if (mAndroidPhoneNodeWithApp != null) {
                 this.conectado = true;
@@ -208,8 +228,12 @@ public class ConnectionActivity extends FragmentActivity implements
         }
 
 
-
-    //Cogemos solo el primer nodo no nulo que encontremos (Solo debería haber un teléfono para un reloj)
+    /**
+     * Método que selecciona el primer nodo no nulo encontrado. Solo debería haber un teléfono por Reloj
+     * @author Domingo Lopez
+     * @param nodes
+     * @return Node
+     */
         private Node pickBestNodeId(Set<Node> nodes) {
             Log.d(TAG, "pickBestNodeId(): " + nodes);
 
@@ -225,7 +249,11 @@ public class ConnectionActivity extends FragmentActivity implements
             return new MyAmbientCallback();
         }
 
-        private void initWatchSensors() {
+    /**
+     * Método que iniciar los sensores del reloj.
+     * @author Domingo Lopez
+     */
+    private void initWatchSensors() {
 
             this.sensorManager = ((SensorManager)getSystemService(SENSOR_SERVICE));
             List<Sensor> deviceSensors = this.sensorManager.getSensorList(Sensor.TYPE_ALL);
@@ -254,7 +282,7 @@ public class ConnectionActivity extends FragmentActivity implements
 
     /**
      * Método que se dispara cada vez que cambia algún sensor. Se notifica el tipo de sensor y las lecturas vienen en event.values
-     * TODO: IMPORTANTE: Tengo que revisar este método y hacer otro aparte para no repetir código.
+     * @author Domingo Lopez
      * @param event
      */
     @Override
@@ -302,14 +330,22 @@ public class ConnectionActivity extends FragmentActivity implements
     }
 
 
-
-
-    //Cuando cambia la precisión de los sensor
+    /**
+     * Método que se dispara cuando cambia la precisión del reloj
+     * @author Domingo Lopez
+     * @param sensor
+     * @param accuracy
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         Log.d(TAG, "onAccuracyChanged - accuracy: " + accuracy);
     }
 
+    /**
+     * Método que se dispara cada vez que hay cambios en el DataClient
+     * @author Domingo Lopez
+     * @param dataEventBuffer
+     */
     @Override
     public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
         //Método que vamos a usar para escuchar cuando se inicia y se termina la monitorización
@@ -350,6 +386,11 @@ public class ConnectionActivity extends FragmentActivity implements
         }
     }
 
+    /**
+     * Entramos en Modo Ambiente, sin que se ponga en pausa la aplicación.
+     * Supone un gasto más de recursos, pero tenemos constancia explícita de si el reloj está o no mandando datos
+     * @author Domingo Lopez
+     */
     private class MyAmbientCallback extends AmbientModeSupport.AmbientCallback {
             /** Prepares the UI for ambient mode. */
             @Override

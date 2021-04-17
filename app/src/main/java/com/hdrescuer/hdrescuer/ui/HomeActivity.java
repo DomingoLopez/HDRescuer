@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity {
      * Inflate the menu; this adds items to the action bar if it is present.
      * @author Domingo Lopez
      * @param menu
-     * @return
+     * @return boolean
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,7 +73,7 @@ public class HomeActivity extends AppCompatActivity {
     /**
      * Inicia barra de navegación para soporte
      * @author Domingo Lopez
-     * @return
+     * @return boolean
      */
     @Override
     public boolean onSupportNavigateUp() {

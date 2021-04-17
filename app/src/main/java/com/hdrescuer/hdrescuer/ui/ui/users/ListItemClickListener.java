@@ -6,6 +6,11 @@ package com.hdrescuer.hdrescuer.ui.ui.users;
  */
 public interface ListItemClickListener {
 
+    /**
+     * Método que actúa cuando se pulsa un usuario de la lista
+     * @author Domingo Lopez
+     * @param position
+     */
     void onListItemClick(int position);
 
 

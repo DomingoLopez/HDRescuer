@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * Clase UserDetailsActivity, que contiene la lógica para mostrar los detalles del usuario
+ *  @author Domingo Lopez
  */
 public class UserDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -128,6 +129,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    /**
+     * Método que inicializa los listeners de click
+     *  @author Domingo Lopez
+     */
     private void events() {
 
         this.btn_back.setOnClickListener(this);
@@ -135,6 +140,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         this.btn_edit_data.setOnClickListener(this);
     }
 
+    /**
+     * Método que inicializa los elementos de la vista
+     *  @author Domingo Lopez
+     */
     private void findViews() {
 
         this.username = findViewById(R.id.tvUserNameToolbarMonitoring);

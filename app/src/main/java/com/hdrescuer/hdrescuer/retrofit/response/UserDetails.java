@@ -86,12 +86,31 @@ public class UserDetails implements Serializable
     private final static long serialVersionUID = 9212788480303221900L;
 
     /**
-     * No args constructor for use in serialization
+     * Constructor sin parámetros
+     * @author Domingo Lopez
      *
      */
     public UserDetails() {
     }
 
+    /**
+     * Cosntructor con parámetros
+     * @author Domingo Lopez
+     * @param id
+     * @param username
+     * @param lastname
+     * @param email
+     * @param password
+     * @param gender
+     * @param age
+     * @param height
+     * @param weight
+     * @param phone
+     * @param phone2
+     * @param city
+     * @param address
+     * @param cp
+     */
     public UserDetails(String id, String username, String lastname, String email, String password, String gender, Integer age, String height, Integer weight, Integer phone, Integer phone2, String city, String address, Integer cp) {
         super();
         this.id = id;

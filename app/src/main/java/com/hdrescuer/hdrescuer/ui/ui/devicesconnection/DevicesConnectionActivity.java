@@ -157,7 +157,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     boolean ehealthConnected = false;
 
 
-
+    /**
+     * Método onCreate de la Activity. Recibe un intent e incializa los viewModels, las vistas, eventos y carga los datos iniciales de los elementos de la vista
+     * @author Domingo Lopez
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -509,7 +513,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     /**
      * Método que devuelve el total de dispositivos conectados
      * @author Domingo Lopez
-     * @return
+     * @return int
      */
     int getTotalConnectedDevices(){
         int devices_counter = 0;

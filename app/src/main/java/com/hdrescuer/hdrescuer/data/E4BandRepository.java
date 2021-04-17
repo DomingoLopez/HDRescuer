@@ -22,7 +22,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * Repositorio de datos de la pulsera Empática. Implemetna la interfaz EmpaDataDelegate, del SDK de la empática
+ * @author Domingo Lopez
+ */
 public class E4BandRepository implements EmpaDataDelegate {
 
 
@@ -46,6 +49,10 @@ public class E4BandRepository implements EmpaDataDelegate {
     private float averageHr = 0;
 
 
+    /**
+     * Constructor vacío
+     * @author Domingo Lopez
+     */
     public E4BandRepository() {
         super();
 
@@ -123,8 +130,7 @@ public class E4BandRepository implements EmpaDataDelegate {
         tag = timestamp;
     }
 
-    //Es necesario poner este método para que no pegue fallo.
-    // Esto muestra lo mal que está mantenida la librería de la Empatica
+    //Es necesario poner este método para que no pegue fallo, según la documentación del SDK de la empática
     //@Override
     public void didUpdateOnWristStatus(int status) {
 
@@ -184,7 +190,10 @@ public class E4BandRepository implements EmpaDataDelegate {
     }
 
 
-
+    /**
+     * Método para resetear los valores del repositorio
+     * @author Domingo Lopez
+     */
     public void reset(){
         battery = 0.0f;
         currentAccX = 0;

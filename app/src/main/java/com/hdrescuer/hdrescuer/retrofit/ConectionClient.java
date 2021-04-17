@@ -6,6 +6,10 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Cliente de conexión retrofit genérico
+ * @author Domingo Lopez
+ */
 public class ConectionClient {
 
 
@@ -16,6 +20,10 @@ public class ConectionClient {
     //Instancia de Retrofit para establecer la conexión
     private Retrofit retrofit;
 
+    /**
+     * Constructor que inicializa la conexión con retrofit
+     * @author Domingo Lopez
+     */
     public ConectionClient() {
 
         /*HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -41,6 +49,11 @@ public class ConectionClient {
     }
 
 
+    /**
+     * Método que devuelve la instancia única del cliente
+     * @author Domingo Lopez
+     * @return ConectionClient
+     */
     public static ConectionClient getInstance(){
 
         if(instance == null){
@@ -50,6 +63,11 @@ public class ConectionClient {
         return instance;
     }
 
+    /**
+     * Método que obtiene el servicio de llamadas al servidor
+     * @author Domingo Lopez
+     * @return LoginApiService
+     */
     public LoginApiService getLoginApiService(){
         return this.loginApiService;
     }

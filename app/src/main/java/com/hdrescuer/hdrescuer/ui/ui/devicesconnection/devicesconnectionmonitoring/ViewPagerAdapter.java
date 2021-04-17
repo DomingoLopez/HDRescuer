@@ -26,6 +26,11 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     }
 
 
+    /**
+     * Método que "crea" un fragmento en función de la posición del ViewPager que se haya seleccionado
+     * @param position
+     * @return Fragment
+     */
     @NonNull
     @Override
     public Fragment createFragment(int position) {
@@ -40,6 +45,10 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         return new TabE4BandMonitoring();
     }
 
+    /**
+     * Método que devuelve el total de fragmentos del ViewPager
+     * @return int
+     */
     @Override
     public int getItemCount() {
         return 3;

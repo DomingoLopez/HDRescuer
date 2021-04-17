@@ -18,14 +18,16 @@ public class RequestLogin {
     private String password;
 
     /**
-     * No args constructor for use in serialization
+     * Constructor vacío
+     * @author Domingo Lopez
      * 
      */
     public RequestLogin() {
     }
 
     /**
-     * 
+     * Constructor con paráemtros
+     * @author Domingo Lopez
      * @param password
      * @param email
      */
@@ -34,6 +36,7 @@ public class RequestLogin {
         this.email = email;
         this.password = password;
     }
+
 
     public String getEmail() {
         return email;

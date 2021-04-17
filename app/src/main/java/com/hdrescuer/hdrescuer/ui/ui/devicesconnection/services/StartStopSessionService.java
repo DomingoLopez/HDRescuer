@@ -28,6 +28,10 @@ public class StartStopSessionService extends IntentService {
     ResultReceiver receiver;
     int resultCode;
 
+    /**
+     * Constructor vacío. Inicializa los atributos de instancia
+     * @author Domingo Lopez
+     */
     public StartStopSessionService() {
         super("StartStopSessionService");
         this.authConectionClientSessionsModule = AuthConectionClientSessionsModule.getInstance();
@@ -36,7 +40,11 @@ public class StartStopSessionService extends IntentService {
     }
 
 
-
+    /**
+     * Método que maneja los intents recibidos en el IntentService
+     * @author Domingo Lopez
+     * @param intent
+     */
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {

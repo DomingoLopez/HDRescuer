@@ -215,6 +215,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="88dp"
         android:text="@string/label_data_new_monitoring"
+        android:textColor="@color/blue_secondary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

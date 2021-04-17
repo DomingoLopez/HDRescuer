@@ -44,7 +44,8 @@ public class SampleRateFilterThread extends Thread{
     private Instant instant;
 
     /**
-     * Constructor de la clase, recibe los repositorios individuales y el Global Repository iniciado, así ocmo el id_de sesión
+     * Constructor de la clase, recibe los repositorios individuales y el Global Repository iniciado, así como el id_de sesión
+     * @author Domingo Lopez
      * @param ticWatchRepository
      * @param e4BandRepository
      * @param eHealthBoardRepository
@@ -114,6 +115,11 @@ public class SampleRateFilterThread extends Thread{
                restIntent.putExtra("e4_gsr",this.e4BandRepository.getCurrentGsr().toString());
                restIntent.putExtra("e4_ibi",this.e4BandRepository.getCurrentIbi().toString());
                restIntent.putExtra("e4_temp",this.e4BandRepository.getCurrentTemp().toString());
+
+               restIntent.putExtra("ehb_bpm",this.eHealthBoardRepository.getBMP().toString());
+               restIntent.putExtra("ehb_o2",this.eHealthBoardRepository.getOxBlood().toString());
+               restIntent.putExtra("ehb_air",this.eHealthBoardRepository.getAirFlow().toString());
+
                restIntent.putExtra("timestamp",this.instant.toString());
                restIntent.putExtra("id",this.session_id);
 
