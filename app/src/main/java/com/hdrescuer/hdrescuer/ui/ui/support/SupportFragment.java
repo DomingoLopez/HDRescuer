@@ -16,12 +16,23 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.hdrescuer.hdrescuer.R;
 
+/**
+ * Clase SupportFragment que contiene la información de la aplicación, así como los créditos y atribuciones
+ *  @author Domingo Lopez
+ */
 public class SupportFragment extends Fragment implements View.OnClickListener {
 
     TextView Freepik;
     TextView Flaticons;
     TextView Github;
 
+    /**
+     * OnCreateView del Fragmento de Información
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -32,7 +43,10 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         return root;
     }
 
-
+    /**
+     * Localización de las vistas
+     * @param view
+     */
     void findViews(View view){
         this.Flaticons = view.findViewById(R.id.tvFlaticons);
         this.Freepik = view.findViewById(R.id.tvFreepik);
@@ -43,7 +57,10 @@ public class SupportFragment extends Fragment implements View.OnClickListener {
         this.Github.setOnClickListener(this);
     }
 
-
+    /**
+     * Gestion de eventos de click
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         Uri uri;

@@ -15,6 +15,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Clase que hereda de IntentService, encargada de recibir un Intent y procesarlo. En este caso es usada para el inicio y parada de la sesión del usuario, haciendo llamadas al servidor
+ * @author Domingo Lopez
+ */
 public class StartStopSessionService extends IntentService {
 
     private static final String ACTION_SEND = "ACTION_SEND";
@@ -24,6 +28,10 @@ public class StartStopSessionService extends IntentService {
     ResultReceiver receiver;
     int resultCode;
 
+    /**
+     * Constructor vacío. Inicializa los atributos de instancia
+     * @author Domingo Lopez
+     */
     public StartStopSessionService() {
         super("StartStopSessionService");
         this.authConectionClientSessionsModule = AuthConectionClientSessionsModule.getInstance();
@@ -32,7 +40,11 @@ public class StartStopSessionService extends IntentService {
     }
 
 
-
+    /**
+     * Método que maneja los intents recibidos en el IntentService
+     * @author Domingo Lopez
+     * @param intent
+     */
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
@@ -73,7 +85,10 @@ public class StartStopSessionService extends IntentService {
         }
     }
 
-
+    /**
+     * Inicio de la sesión. Llamada al servidor con los parámetros introducidos
+     * @param session
+     */
     public void initSessionCall(Session session){
         Call<String> call = authApiService.initSession(session);
         try{
@@ -97,6 +112,12 @@ public class StartStopSessionService extends IntentService {
     }
 
 
+    /**
+     * Finalización de la sesión. Llamada al servidor para parar la sesión con los parámetros introducidos
+     * @author Domingo Lopez
+     * @param id_session
+     * @param timestamp_fin
+     */
     public void stopSessionCall(String id_session, String timestamp_fin){
 
         JsonObject obj = new JsonObject();

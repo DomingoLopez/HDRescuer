@@ -5,6 +5,10 @@ import java.io.Serializable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Clase session serializable. Representa los datos de una sesión en el modelo de datos del servidor
+ * @author Domingo López
+ */
 public class Session implements Serializable
 {
 
@@ -32,14 +36,16 @@ public class Session implements Serializable
     private final static long serialVersionUID = 1292988452008497775L;
 
     /**
-     * No args constructor for use in serialization
+     * Constructor vacío
+     * @author Domingo Lopez
      * 
      */
     public Session() {
     }
 
     /**
-     * 
+     * Constructor con parámetros
+     * @author Domingo Lopez
      * @param timestampFin
      * @param e4band
      * @param ticwatch

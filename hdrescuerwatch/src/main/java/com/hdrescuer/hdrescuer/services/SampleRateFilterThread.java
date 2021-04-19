@@ -16,6 +16,11 @@ import com.hdrescuer.hdrescuer.data.DataRepository;
 import java.time.Clock;
 import java.time.Instant;
 
+/**
+ * Servicio encargado de leer los datos del repositorio DataRepository y colocarlos en los DataMaps del DataClient
+ * para su sincronización con la app del Móvil
+ * @author Domingo Lopez
+ */
 public class SampleRateFilterThread extends Thread{
 
     private DataRepository dataRepository;
@@ -81,7 +86,10 @@ public class SampleRateFilterThread extends Thread{
     }
 
 
-
+    /**
+     * Método run. Duerme 200 ms ó según el SAMPLE_RATE indicado y pone los datos de los datamaps
+     * @author Domingo Lopez
+     */
     @Override
     public void run(){
 
@@ -101,7 +109,10 @@ public class SampleRateFilterThread extends Thread{
 
     }
 
-    private int i = 0;
+    /**
+     * Método que escribe en los datamaps los valors de los sensores recibidos
+     * @author Domingo Lopez
+     */
     private void sendData(){
                 //ACCELEROMETER
                 this.putDataMapRequestACC.getDataMap().putFloat(ACCX_KEY,this.dataRepository.getAccx());
@@ -113,9 +124,7 @@ public class SampleRateFilterThread extends Thread{
                 putDataTask.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
-                        //Log.i("INFOTASK", "PUESTO VALOR ACC EN DATACLIENT");
-                        i++;
-                        Log.d("INFOWATCH", " "+i);
+
                     }
                 });
 
@@ -130,7 +139,7 @@ public class SampleRateFilterThread extends Thread{
                 putDataTask1.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
-                        //Log.i("INFOTASK", "PUESTO VALOR ACC EN DATACLIENT");
+
                     }
                 });
 
@@ -144,7 +153,7 @@ public class SampleRateFilterThread extends Thread{
                 putDataTask2.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
-                        //Log.i("INFOTASK", "PUESTO VALOR ACC EN DATACLIENT");
+;
                     }
                 });
 
@@ -156,7 +165,7 @@ public class SampleRateFilterThread extends Thread{
                 putDataTask3.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
-                        //Log.i("INFOTASK", "PUESTO VALOR ACC EN DATACLIENT");
+
                     }
                 });
 
@@ -168,7 +177,7 @@ public class SampleRateFilterThread extends Thread{
                 putDataTask4.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
-                        //Log.i("INFOTASK", "PUESTO VALOR ACC EN DATACLIENT");
+
                     }
                 });
 
@@ -180,7 +189,7 @@ public class SampleRateFilterThread extends Thread{
                 putDataTask5.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
-                        //Log.i("INFOTASK", "PUESTO VALOR ACC EN DATACLIENT");
+
                     }
                 });
 
@@ -192,7 +201,7 @@ public class SampleRateFilterThread extends Thread{
                 putDataTask6.addOnCompleteListener(new OnCompleteListener<DataItem>() {
                     @Override
                     public void onComplete(@NonNull Task<DataItem> task) {
-                        //Log.i("INFOTASK", "PUESTO VALOR ACC EN DATACLIENT");
+
                     }
                 });
 

@@ -80,6 +80,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Clase DevicesConnectionActivity. Es el núcleo de la aplicación. Es responsable de buscar los dispositivos e implementar distintas librerías para la interacción con ellos
+ * @author Domingo Lopez
+ */
 public class DevicesConnectionActivity extends AppCompatActivity implements
         View.OnClickListener, EmpaStatusDelegate,
         CapabilityClient.OnCapabilityChangedListener,
@@ -89,7 +93,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     E4BandRepository e4BandRepository;
     TicWatchRepository ticWatchRepository;
     EHealthBoardRepository eHealthBoardRepository;
-
 
     //ViewModel
     GlobalMonitoringViewModel globalMonitoringViewModel;
@@ -154,7 +157,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     boolean ehealthConnected = false;
 
 
-
+    /**
+     * Método onCreate de la Activity. Recibe un intent e incializa los viewModels, las vistas, eventos y carga los datos iniciales de los elementos de la vista
+     * @author Domingo Lopez
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,24 +187,19 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         events();
         loadUserData();
 
-        //Iniciamos servicios de descubrimiento para los dispositivos
-        //La empática va en esta misma Actividad. Los demás en principio en servicios a parte
 
-        //Pensar en mover esto a ONRESUME
-        /**
-         *Búsqueda de la Banda Empática
-         */
         initEmpaticaDeviceManager();
 
     }
 
+    /**
+     * En el onResume, iniciamos el dataClient para interacción con el Watch, y buscamos todos los dispositivos con WearOs que tengan nuestra app instalada
+     * @author Domingo Lopez
+     */
     @Override
     protected void onResume() {
         super.onResume();
 
-        /**
-         *Búsqueda de los Wearables con App instalada cercanos
-         */
         Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_WEAR_APP);
         this.dataClient = Wearable.getDataClient(this);
         Wearable.getDataClient(this).addListener(this);
@@ -208,6 +210,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Busca la placa de salud y se intenta conectar por bluetooth
+     * @author Domingo Lopez
+     * @return boolean
+     */
     private boolean conectareHealthBoardBT(){
             try{
                 if(this.bluetoothAdapter.isEnabled()){
@@ -275,7 +282,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
-
+    /**
+     * Inicializa todos los viewmodels de los que haremos uso
+     * @author Domingo Lopez
+     */
     private void initViewModels() {
 
         //iniciamos Repositorios temporales
@@ -296,13 +306,16 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Busca los elementos de la vista de interfaz y los inicializa
+     * @author Domingo Lopez
+     */
     private void findViews() {
 
         this.tvUsernameMonitoring = findViewById(R.id.tvUserNameToolbarMonitoring);
         this.btn_back = findViewById(R.id.btn_back_new_monitoring);
         this.tvDateMonitoring = findViewById(R.id.tv_date_monitoring);
         this.btnStartMonitoring = findViewById(R.id.btn_start_monitoring);
-
 
         //Botones para la conexión de los dispositivos
 
@@ -318,12 +331,19 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.btnEHealthBoardConnect.setOnClickListener(this);
     }
 
+    /**
+     * Inicializa los eventos de click
+     * @author Domingo Lopez
+     */
     private void events() {
         this.btn_back.setOnClickListener(this);
         this.btnStartMonitoring.setOnClickListener(this);
     }
 
-
+    /**
+     * Carga los datos iniciales de la vista
+     * @author Domingo Lopez
+     */
     private void loadUserData() {
 
         //Iniciamos las views a los valores iniciales por defecto
@@ -346,16 +366,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
     /**
-     * Método para comprobar si los dispositivos están conectados. Si no lo están, iniciamos los servicios de conexión.
-     * Una vez establecida la conexión para cada dispositivo que queramos (Al menos debe haber un dispositivo conectado)
-     * al pulsar en el Botón de Start Monitoring iniciaremos el activity con tabs correspondiente y los servicios en
-     * background y en distintas hebras que recibirán los datos.
-     *
-     * La idea es actualizar un Viewmodel con los datos y en cada cambio de los datos hacer la petición http correspondiente
-     * para mandarlos, estableciendo un sistema de etiquetas para diferenciar los distintos dispositivos.
+     * Método para comprobar si se tienen permisos de Bluetooth. Si no se tienen lanza un dialog que avisa al usuario para que los active
+     * @author Domingo Lopez
      */
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -365,7 +378,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     //Permisos concedidos
                     initEmpaticaDeviceManager();
                 } else {
-                    // Permission denied, boo!
+                    // Permission denied
                     final boolean needRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION);
                     new AlertDialog.Builder(this)
                             .setTitle("Permisos requeridos")
@@ -374,10 +387,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                                 public void onClick(DialogInterface dialog, int which) {
                                     // try again
                                     if (needRationale) {
-                                        // the "never ask again" flash is not set, try again with permission request
                                         initEmpaticaDeviceManager();
                                     } else {
-                                        // the "never ask again" flag is set so the permission requests is disabled, try open app settings to enable the permission
                                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                                         intent.setData(uri);
@@ -387,7 +398,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                             })
                             .setNegativeButton("Salir ", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // without permission exit is the only way
+                                    //Si no tenemos permisos salimos a la actividad anterior
                                     finish();
                                 }
                             })
@@ -398,9 +409,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
-
-
-
+    /**
+     * Método que inicia el dispositivo Empatica Band. Inicia la empatica con el APIKEY que tenemos guardado en Constants
+     * @author Domingo Lopez
+     */
     private void initEmpaticaDeviceManager() {
         // Android 6 (API level 23) now require ACCESS_COARSE_LOCATION permission to use BLE
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -430,7 +442,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
-
+    /**
+     * Gestor de eventos de click para los elementos de la vista
+     * @author Domingo Lopez
+     * @param v
+     */
     @Override
     public void onClick(View v) {
 
@@ -494,7 +510,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
-
+    /**
+     * Método que devuelve el total de dispositivos conectados
+     * @author Domingo Lopez
+     * @return int
+     */
     int getTotalConnectedDevices(){
         int devices_counter = 0;
         if(this.e4Connected)
@@ -507,7 +527,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         return devices_counter;
     }
 
-
+    /**
+     * Método que llama al servicio encargado de iniciar la sesión de entrenamiento del usuario. Hace uso de un ResultReceiver para conocer el resultado de la operación contra el servidor
+     * @author Domingo Lopez
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     void initSession(){
 
@@ -525,7 +548,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.startService(intent);
     }
 
-    //ResultReceiver para llamar al servicio que empieza y acaba la sesión
     public ResultReceiver sessionResult = new ResultReceiver(new Handler()) {
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
@@ -609,6 +631,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         }
     };
 
+    /**
+     * Iniciamos la placa de salud
+     * @author Domingo Lopez
+     */
     void initEHeatlhBoard(){
         try{
             byte[] inicio = "S".getBytes();
@@ -618,6 +644,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Paramos la recepción de datos de la placa de salud
+     * @author Domingo Lopez
+     */
     void stopEHealthBoard(){
         try{
             if(this.myOutStrem != null) {
@@ -630,7 +660,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
-
+    /**
+     * Reseteamos los repositorios de los datos recibidos
+     * @author Domingo Lopez
+     */
     void resetRepositories(){
 
         this.ticWatchRepository.reset();
@@ -640,6 +673,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Para la emisión de datos del reloj Watch y de las hebras activas
+     * @author Domingo Lopez
+     */
     void stopWatchAndThreads(){
 
         String timeback1 = String.valueOf(System.currentTimeMillis());
@@ -658,7 +695,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
-
+    /**
+     * Método de la empática dirigido por evento que se llama cuando se recibe un cambio de estado de la pulsera
+     * @author Domingo Lopez
+     * @param status
+     */
     @Override
     public void didUpdateStatus(EmpaStatus status) {
         // Update the UI
@@ -687,10 +728,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                         .show();
             }
 
-            //deviceManager.startScanning();
 
-
-            // The device manager has established a connection
+            // Si se establece la conexión
         } else if (status == EmpaStatus.CONNECTED) {
             Log.i("ESTADO:",status.toString());
 
@@ -704,9 +743,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 }
             });
 
-
-
-            // The device manager disconnected from a device
+            // Se desconecta el device manager
         } else if (status == EmpaStatus.DISCONNECTED) {
             Log.i("ESTADO:",status.toString());
             this.runOnUiThread(new Runnable() {
@@ -724,6 +761,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         }
     }
 
+
     @Override
     public void didEstablishConnection() {
 
@@ -734,21 +772,25 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Método que checkea si nuestro dispositivo se puede conectar con la pulsera empática
+     * @author Domingo Lopez
+     * @param bluetoothDevice
+     * @param deviceLabel
+     * @param rssi
+     * @param allowed
+     */
     @Override
     public void didDiscoverDevice(EmpaticaDevice bluetoothDevice, String deviceLabel, int rssi, boolean allowed) {
 
-        // Check if the discovered device can be used with your API key. If allowed is always false,
-        // the device is not linked with your API key. Please check your developer area at
-        // https://www.empatica.com/connect/developer.php
         if (allowed) {
-            // Stop scanning. The first allowed device will do.
+            // Paramos de escanear
             deviceManager.stopScanning();
             try {
-                // Connect to the device
+                // Nos conectamos a la empatica
                 deviceManager.connectDevice(bluetoothDevice);
             } catch (ConnectionNotAllowedException e) {
-                // This should happen only if you try to connect when allowed == false.
-                Toast.makeText(DevicesConnectionActivity.this, "Sorry, you can't connect to this device", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DevicesConnectionActivity.this, "No puedes conectarte con la pulsera Empática", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -776,14 +818,21 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Método que se lanza tras pedir los permisos Bluetooth
+     * @author Domingo Lopez
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // The user chose not to enable Bluetooth
         if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
-            // You should deal with this
+            finish();
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
+        initEmpaticaDeviceManager();
     }
 
 
@@ -801,6 +850,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Al destruir la aplicación borramos el rastro que hayamos podido dejar para no crear fugas de memoria
+     * @author Domingo Lopez
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -828,19 +881,26 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Método lanzado cada vez se cambia las "capabilities" que tienen los nodos/dispositivos Wear cercanos mientras estamos escaneando por ellos
+     * @author Domingo Lopez
+     * @param capabilityInfo
+     */
     @Override
     public void onCapabilityChanged(@NonNull CapabilityInfo capabilityInfo) {
 
         this.wearNodesWithApp = capabilityInfo.getNodes();
 
-        // Because we have an updated list of devices with/without our app, we need to also update
-        // our list of active Wear devices.
         findAllWearDevices();
 
         verifyNodeAndWaitForMonitoring();
     }
 
 
+    /**
+     * Método que busca dispositivos con nuestra app instalada
+     * @author Domingo Lopez
+     */
     private void findWearDevicesWithApp() {
 
         Task<CapabilityInfo> capabilityInfoTask;
@@ -871,6 +931,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Método que busca dispositivos WearOS sin importar si tienen o no nuestra app instalada
+     * @author Domingo Lopez
+     */
     private void findAllWearDevices() {
 
         Task<List<Node>> NodeListTask = Wearable.getNodeClient(this).getConnectedNodes();
@@ -897,6 +961,12 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Una vez escaneados los dispositivos WearOS, si tienen nuestra app nos podremos conectar.
+     * Este método checkea si hemos detectado dispositivos y si tienen nuestra app instalada. Si es correcto,
+     * setea la vista y anota el dispositivo como conectado.
+     * @author Domingo Lopez
+     */
     private void verifyNodeAndWaitForMonitoring() {
 
         if ((this.wearNodesWithApp == null) || (this.allConnectedNodes == null)) {
@@ -924,6 +994,12 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Método que es llamado cada vez que lee en el DATAMAP de la api de Google, haciendo uso de DataClient. El objetivo
+     * es sincronizar los datos entre el reloj y la app
+     * @author Domingo Lopez
+     * @param dataEventBuffer
+     */
     @Override
     public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
 
@@ -963,6 +1039,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Método lanzado al pulsar el botón de ir hacia atras.
+     * Limpiar basura para evitar fugas de memoria
+     * @author Domingo Lopez
+     */
     @Override
     public void onBackPressed() {
         if(this.ehealthConnected)

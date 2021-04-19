@@ -29,9 +29,11 @@ import com.hdrescuer.hdrescuer.common.UserActionDialog;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+/**
+ * Clase UserDetailsActivity, que contiene la lógica para mostrar los detalles del usuario
+ *  @author Domingo Lopez
+ */
 public class UserDetailsActivity extends AppCompatActivity implements View.OnClickListener {
-
-
 
     //Servicio de Login y ConectionClient
     AuthConectionClientUsersModule authConectionClientUsersModule;
@@ -71,12 +73,16 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     TextView tvtotal;
 
 
-
     UserDetails user;
     private DateFormat dateFormat;
 
     boolean alreadyCreated = false;
 
+    /**
+     * Creación de la Actividad, recibiendo un Intent con el id del usuario a renderizar. Carga los datos del usuario desde el servidor
+     * @author Domingo Lopez
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +129,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    /**
+     * Método que inicializa los listeners de click
+     *  @author Domingo Lopez
+     */
     private void events() {
 
         this.btn_back.setOnClickListener(this);
@@ -130,6 +140,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         this.btn_edit_data.setOnClickListener(this);
     }
 
+    /**
+     * Método que inicializa los elementos de la vista
+     *  @author Domingo Lopez
+     */
     private void findViews() {
 
         this.username = findViewById(R.id.tvUserNameToolbarMonitoring);
@@ -168,7 +182,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-
+    /**
+     * Método de carga de los datos del servidor. Se suscribe al viewmodel de los detalles del usuario para ver si hay cambios y actualizarlos
+     * @author Domingo Lopez
+     */
     private void loadUserData() {
 
         this.userDetailsViewModel.getUser().observe(this, new Observer<UserDetails>() {
@@ -271,11 +288,20 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    /**
+     * Método para refrescar los datos del usuario
+     * @author Domingo Lopez
+     */
     void refreshUserDetails(){
         this.userDetailsViewModel.refreshUserDetails();
     }
 
 
+    /**
+     * Gestión de eventos en la vista
+     * @author Domingo Lopez
+     * @param v
+     */
     @Override
     public void onClick(View v) {
 

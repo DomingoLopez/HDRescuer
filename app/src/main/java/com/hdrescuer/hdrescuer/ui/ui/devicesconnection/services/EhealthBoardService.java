@@ -11,7 +11,10 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-
+/**
+ * Servicio/Thread encargado de recibir los datos de la placa de salud/arduino, procesarlos y escribirlos en el repositorio asociado a la placa
+ * @author Domingo Lopez
+ */
 public class EhealthBoardService extends Thread {
 
     EHealthBoardRepository eHealthBoardRepository;
@@ -24,6 +27,13 @@ public class EhealthBoardService extends Thread {
     //Array temporal para manejar los bytes que se queden sin procesar
     byte[] tmp = null;
 
+    /**
+     * Constructor con parámetros
+     * @author Domingo Lopez
+     * @param eHealthBoardRepository
+     * @param inputStream
+     * @param outputStream
+     */
     public EhealthBoardService(EHealthBoardRepository eHealthBoardRepository, InputStream inputStream, OutputStream outputStream){
 
         this.eHealthBoardRepository = eHealthBoardRepository;
@@ -31,6 +41,10 @@ public class EhealthBoardService extends Thread {
         this.outputStream = outputStream;
     }
 
+    /**
+     * Método run de la clase. Contiene la lógica de tratamiento de los datos recibidos.
+     * @author Domingo Lopez
+     */
     @Override
     public void run() {
 
@@ -104,6 +118,11 @@ public class EhealthBoardService extends Thread {
     }
 
 
+    /**
+     * Método para parsear los datos recibidos en bytes y pasarlos a Strings reconocibles
+     * @author Domingo Lopez
+     * @param cadena
+     */
     void parseData(String cadena){
 
         if(cadena.contains("#")){ //Damos el dato como bueno

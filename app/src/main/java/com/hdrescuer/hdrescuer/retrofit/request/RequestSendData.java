@@ -4,6 +4,10 @@ import java.io.Serializable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Clase RequesSendData serializable. Representa el envío de datos de un paquete de datos hacia el servidor
+ * @author Domingo López
+ */
 public class RequestSendData implements Serializable
 {
 
@@ -73,41 +77,56 @@ public class RequestSendData implements Serializable
     @SerializedName("e4_temp")
     @Expose
     private String e4Temp;
+    @SerializedName("ehb_bpm")
+    @Expose
+    private String ehb_bpm;
+    @SerializedName("ehb_o2")
+    @Expose
+    private String ehb_o2;
+    @SerializedName("ehb_air")
+    @Expose
+    private String ehb_air;
     private final static long serialVersionUID = 4226884065588354866L;
 
     /**
-     * No args constructor for use in serialization
+     * Constructor vacío
+     * @author Domingo Lopez
      * 
      */
     public RequestSendData() {
     }
 
+
     /**
-     * 
-     * @param ticStep
-     * @param ticGirx
-     * @param ticGiry
-     * @param ticAccly
-     * @param ticAcclz
-     * @param e4Ibi
-     * @param e4Bvp
-     * @param ticGirz
+     * Cosntructor con parámetros
+     * @author Domingo Lopez
      * @param userId
      * @param timeStamp
-     * @param ticHrppgraw
-     * @param e4Accy
-     * @param e4Accx
-     * @param ticAccx
-     * @param ticAccz
-     * @param ticAccy
-     * @param ticAcclx
-     * @param e4Hr
      * @param ticHrppg
+     * @param ticHrppgraw
+     * @param ticStep
+     * @param ticAccx
+     * @param ticAccy
+     * @param ticAccz
+     * @param ticAcclx
+     * @param ticAccly
+     * @param ticAcclz
+     * @param ticGirx
+     * @param ticGiry
+     * @param ticGirz
+     * @param e4Accx
+     * @param e4Accy
      * @param e4Accz
-     * @param e4Temp
+     * @param e4Bvp
+     * @param e4Hr
      * @param e4Gsr
+     * @param e4Ibi
+     * @param e4Temp
+     * @param ehb_bmp
+     * @param ehb_o2
+     * @param ehb_air
      */
-    public RequestSendData(String userId, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp) {
+    public RequestSendData(String userId, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp, String ehb_bmp, String ehb_o2, String ehb_air) {
         super();
         this.id = userId;
         this.timeStamp = timeStamp;
@@ -131,6 +150,9 @@ public class RequestSendData implements Serializable
         this.e4Gsr = e4Gsr;
         this.e4Ibi = e4Ibi;
         this.e4Temp = e4Temp;
+        this.ehb_bpm = ehb_bmp;
+        this.ehb_o2 = ehb_o2;
+        this.ehb_air = ehb_air;
     }
 
     public String getUserId() {
@@ -309,4 +331,27 @@ public class RequestSendData implements Serializable
         this.e4Temp = e4Temp;
     }
 
+    public String getEhb_bpm() {
+        return ehb_bpm;
+    }
+
+    public void setEhb_bpm(String ehb_bpm) {
+        this.ehb_bpm = ehb_bpm;
+    }
+
+    public String getEhb_o2() {
+        return ehb_o2;
+    }
+
+    public void setEhb_o2(String ehb_o2) {
+        this.ehb_o2 = ehb_o2;
+    }
+
+    public String getEhb_air() {
+        return ehb_air;
+    }
+
+    public void setEhb_air(String ehb_air) {
+        this.ehb_air = ehb_air;
+    }
 }

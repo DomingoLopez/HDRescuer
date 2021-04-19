@@ -38,7 +38,11 @@ import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSession
 
 import java.time.Clock;
 
-
+/**
+ * Fragmento que contiene a los Fragments TabE4BandMonitoring, TabOximeterMonitoring, TabWatchMonitoring.
+ * Hace uso del ViewPager y su adapter
+ * @author Domingo Lopez
+ */
 public class DevicesMonitoringFragment extends Fragment implements View.OnClickListener {
 
     TabLayout tabLayout;
@@ -48,11 +52,20 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     ResultReceiver receiver;
 
 
-
+    /**
+     * Constructor vacío
+     * @author Domingo Lopez
+     */
     public DevicesMonitoringFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Constructor con parámetros
+     * @author Domingo Lopez
+     * @param session_id
+     * @param receiver
+     */
     public DevicesMonitoringFragment(String session_id, ResultReceiver receiver){
         this.session_id = session_id;
         this.receiver = receiver;
@@ -71,8 +84,6 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
         // Inflate the layout for this fragment
          View view = inflater.inflate(R.layout.fragment_devices_monitoring, container, false);
 
@@ -82,7 +93,12 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
         return view;
     }
 
-
+    /**
+     * Método onViewCreated. Cuando se crea la vista utiliza un TabLayoutMediator para elegir entre los distintos fragmentos de monitorización
+     * @author Domingo Lopez
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -112,6 +128,11 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
 
     }
 
+    /**
+     * Método que inicia las vistas
+     * @author Domingo Lopez
+     * @param view
+     */
     private void findViews(View view) {
         this.tabLayout = view.findViewById(R.id.tabLayout);
         this.viewPager = view.findViewById(R.id.view_pager_monitoring);
@@ -134,7 +155,10 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
 
     }
 
-
+    /**
+     * Método que solicita la parada de la sesión mandando un Intent al IntentService StartStopSessionService
+     * @author Domingo Lopez
+     */
     private void stopSession() {
         //Paramos las hebras que pudiera haber activas
         SampleRateFilterThread.STATUS = "INACTIVO";

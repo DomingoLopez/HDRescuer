@@ -1,5 +1,9 @@
 package com.hdrescuer.hdrescuer.common;
 
+/**
+ * Clase Constants con atributos comunes
+ * @author Domingo Lopez
+ */
 public class Constants {
     //CAPABILITIES TO DETECT EACH OTHER (PHONE AND WATCH)
     //Si se cambia debe cambiarse también en /res/values/wear.xml

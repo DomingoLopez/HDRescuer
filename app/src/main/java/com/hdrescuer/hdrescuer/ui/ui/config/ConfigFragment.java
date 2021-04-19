@@ -17,6 +17,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 
+/**
+ * Fragmento de configuración. Donde se puede elegir la tasa de muestreo de los datos
+ * @author Domingo Lopez
+ */
 public class ConfigFragment extends Fragment {
 
     RadioButton sr_150;
@@ -39,7 +43,11 @@ public class ConfigFragment extends Fragment {
     }
 
 
-
+    /**
+     * Método que inicia la vista y las tasa de muestreo
+     * @author Domingo Lopez
+     * @param root
+     */
     private void findViews(View root) {
 
 
@@ -81,6 +89,10 @@ public class ConfigFragment extends Fragment {
 
     }
 
+    /**
+     * Método que setea la vista en funcion del valor que tengamos para la SAMPLE RATE en Constants
+     * @author Domingo Lopez
+     */
     private void setFormValues() {
 
         switch (Constants.SAMPLE_RATE){
