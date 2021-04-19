@@ -43,7 +43,8 @@
         android:textColorLink="@color/blue_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtName" />
+        app:layout_constraintTop_toBottomOf="@+id/txtName"
+        android:nextFocusDown="@+id/numAge"/>
 
     <EditText
         android:id="@+id/numHeight"
@@ -59,7 +60,8 @@
         android:textColorHint="@color/blue_secondary"
         android:textColorLink="@color/blue_secondary"
         app:layout_constraintStart_toEndOf="@+id/numWeight"
-        app:layout_constraintTop_toBottomOf="@+id/txtlastName" />
+        app:layout_constraintTop_toBottomOf="@+id/txtlastName"
+        android:nextFocusDown="@+id/txtEmail"/>
 
     <EditText
         android:id="@+id/numWeight"
@@ -74,7 +76,8 @@
         android:textColorHint="@color/blue_secondary"
         android:textColorLink="@color/blue_secondary"
         app:layout_constraintStart_toEndOf="@+id/numAge"
-        app:layout_constraintTop_toTopOf="@+id/numHeight" />
+        app:layout_constraintTop_toTopOf="@+id/numHeight"
+        android:nextFocusDown="@+id/numHeight"/>
 
     <EditText
         android:id="@+id/numAge"
@@ -88,7 +91,8 @@
         android:textColorHint="@color/blue_secondary"
         android:textColorLink="@color/blue_secondary"
         app:layout_constraintStart_toStartOf="@+id/txtlastName"
-        app:layout_constraintTop_toTopOf="@+id/numWeight" />
+        app:layout_constraintTop_toTopOf="@+id/numWeight"
+        android:nextFocusDown="@+id/numWeight"/>
 
     <EditText
         android:id="@+id/txtEmail"
@@ -107,7 +111,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rgGender" />
+        app:layout_constraintTop_toBottomOf="@+id/rgGender"
+        android:nextFocusDown="@+id/txtPassword"/>
 
     <EditText
         android:id="@+id/txtAddress"
@@ -126,7 +131,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/numPhone2" />
+        app:layout_constraintTop_toBottomOf="@+id/numPhone2"
+        android:nextFocusDown="@+id/txtCity"/>
 
     <EditText
         android:id="@+id/txtPassword"
@@ -145,7 +151,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail"
+        android:nextFocusDown="@+id/numPhone"/>
 
     <EditText
         android:id="@+id/numPhone"
@@ -164,7 +171,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPassword"
+        android:nextFocusDown="@+id/numPhone2"/>
 
     <EditText
         android:id="@+id/numPhone2"
@@ -183,7 +191,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/numPhone" />
+        app:layout_constraintTop_toBottomOf="@+id/numPhone"
+        android:nextFocusDown="@+id/txtAddress"/>
 
     <EditText
         android:id="@+id/txtCity"
@@ -198,7 +207,8 @@
         android:textColorHint="@color/blue_secondary"
         android:textColorLink="@color/blue_secondary"
         app:layout_constraintStart_toStartOf="@+id/txtAddress"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/txtAddress"
+        android:nextFocusDown="@+id/numcp"/>
 
     <EditText
         android:id="@+id/numcp"

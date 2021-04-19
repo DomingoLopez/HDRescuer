@@ -115,8 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onResponse(Call<ResponseAuth> call, Response<ResponseAuth> response) {
 
-
-
                     if(response.isSuccessful()) { //Código 200...299
 
                         Toast.makeText(MainActivity.this, "Sesión iniciada correctamente", Toast.LENGTH_LONG).show();
@@ -140,9 +138,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }else{
                         Toast.makeText(MainActivity.this, "Algo salió mal. Revise sus datos de acceso", Toast.LENGTH_LONG).show();
-                        Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                        /*Intent i = new Intent(MainActivity.this, HomeActivity.class);
                         startActivity(i);
-                        finish();
+                        finish();*/
                     }
 
                 }

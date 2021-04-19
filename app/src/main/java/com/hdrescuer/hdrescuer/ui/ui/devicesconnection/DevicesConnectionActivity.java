@@ -378,7 +378,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     //Permisos concedidos
                     initEmpaticaDeviceManager();
                 } else {
-                    // Permission denied, boo!
+                    // Permission denied
                     final boolean needRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION);
                     new AlertDialog.Builder(this)
                             .setTitle("Permisos requeridos")
@@ -398,7 +398,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                             })
                             .setNegativeButton("Salir ", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // without permission exit is the only way
+                                    //Si no tenemos permisos salimos a la actividad anterior
                                     finish();
                                 }
                             })
@@ -828,11 +828,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_ENABLE_BT && resultCode == Activity.RESULT_CANCELED) {
-            //TODO revisar
             finish();
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
+        initEmpaticaDeviceManager();
     }
 
 

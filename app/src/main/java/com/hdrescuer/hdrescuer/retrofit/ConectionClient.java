@@ -26,15 +26,6 @@ public class ConectionClient {
      */
     public ConectionClient() {
 
-        /*HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        // set your desired log level
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        // add your other interceptors …
-
-        // add logging as last interceptor
-        httpClient.addInterceptor(logging);  // <-- this is the important line!*/
 
 
         //creamos instancia de Retrofit con su baseUrl y le decimos que vamos a usar un conversor a JSON que es el GSON
