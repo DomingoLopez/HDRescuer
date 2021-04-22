@@ -4,15 +4,13 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientSessionsModule;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.request.Session;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -24,7 +22,7 @@ public class StartStopSessionService extends IntentService {
     private static final String ACTION_SEND = "ACTION_SEND";
 
     AuthApiService authApiService;
-    AuthConectionClientSessionsModule authConectionClientSessionsModule;
+    AuthConectionClient authConectionClient;
     ResultReceiver receiver;
     int resultCode;
 
@@ -34,8 +32,8 @@ public class StartStopSessionService extends IntentService {
      */
     public StartStopSessionService() {
         super("StartStopSessionService");
-        this.authConectionClientSessionsModule = AuthConectionClientSessionsModule.getInstance();
-        this.authApiService = this.authConectionClientSessionsModule.getAuthApiService();
+        this.authConectionClient = AuthConectionClient.getInstance();
+        this.authApiService = this.authConectionClient.getAuthApiService();
         this.resultCode = 9999;
     }
 

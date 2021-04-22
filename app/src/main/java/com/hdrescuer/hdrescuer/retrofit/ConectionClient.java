@@ -30,7 +30,7 @@ public class ConectionClient {
 
         //creamos instancia de Retrofit con su baseUrl y le decimos que vamos a usar un conversor a JSON que es el GSON
         this.retrofit = new Retrofit.Builder()
-                            .baseUrl(Constants.DATA_RESCUER_USERS_MODULE_URL)
+                            .baseUrl(Constants.DATA_RESCUER_API_GATEWAY)
                             .addConverterFactory(GsonConverterFactory.create())
                             //.client(httpClient.build())
                             .build();

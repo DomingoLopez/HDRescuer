@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientDataModule;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestSendData;
 
 import retrofit2.Call;
@@ -23,7 +22,7 @@ public class RestSampleRateService extends IntentService {
     private static final String ACTION_SEND = "ACTION_SEND";
 
     AuthApiService authApiService;
-    AuthConectionClientDataModule authConectionClientDataModule;
+    AuthConectionClient authConnectionClient;
 
     /**
      * Constructor vacío
@@ -31,8 +30,8 @@ public class RestSampleRateService extends IntentService {
      */
     public RestSampleRateService() {
         super("RestSampleRateService");
-        this.authConectionClientDataModule = AuthConectionClientDataModule.getInstance();
-        this.authApiService = this.authConectionClientDataModule.getAuthApiService();
+        this.authConnectionClient = AuthConectionClient.getInstance();
+        this.authApiService = this.authConnectionClient.getAuthApiService();
     }
 
 

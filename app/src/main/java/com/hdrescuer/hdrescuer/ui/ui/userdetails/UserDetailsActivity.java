@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,7 +19,7 @@ import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
@@ -36,7 +35,7 @@ import java.text.SimpleDateFormat;
 public class UserDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Servicio de Login y ConectionClient
-    AuthConectionClientUsersModule authConectionClientUsersModule;
+    AuthConectionClient authConectionClient;
     AuthApiService authApiService;
     //ViewModel
     UserDetailsViewModel userDetailsViewModel;

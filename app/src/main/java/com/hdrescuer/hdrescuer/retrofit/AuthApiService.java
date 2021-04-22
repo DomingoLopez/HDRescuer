@@ -45,7 +45,7 @@ public interface AuthApiService {
      * @param userDetails
      * @return Call
      */
-    @POST("api/newuser")
+    @POST("api/users/newuser")
     Call<User> setNewUser(@Body UserDetails userDetails);
 
     /**
@@ -54,7 +54,7 @@ public interface AuthApiService {
      * @param userInfo
      * @return Call
      */
-    @POST("api/updateuser")
+    @POST("api/users/updateuser")
     Call<String> updateUser(@Body UserInfo userInfo);
 
     /**
@@ -72,7 +72,7 @@ public interface AuthApiService {
      * @param session
      * @return Call
      */
-    @POST("api/sessiondata/user/init")
+    @POST("api/sessions/user/init")
     Call<String> initSession(@Body Session session);
 
     /**
@@ -81,7 +81,7 @@ public interface AuthApiService {
      * @param jsonObject
      * @return Call
      */
-    @POST("api/sessiondata/stop")
+    @POST("api/sessions/stop")
     Call<String> stopSession(@Body JsonObject jsonObject);
 
 

@@ -6,12 +6,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientApiComposerModule;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +24,7 @@ import retrofit2.Response;
 public class UserListRepository {
 
     AuthApiService authApiService;
-    AuthApiService authApiServiceUser;
-    AuthConectionClientApiComposerModule authConectionClientApiComposerModule;
-    AuthConectionClientUsersModule authConectionClientUsersModule;
+    AuthConectionClient authConectionClient;
     MutableLiveData<List<User>> users;
 
     /**
@@ -36,10 +32,8 @@ public class UserListRepository {
      * @author Domingo Lopez
      */
     UserListRepository(){
-        this.authConectionClientApiComposerModule = AuthConectionClientApiComposerModule.getInstance();
-        this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
-        this.authApiService = this.authConectionClientApiComposerModule.getAuthApiService();
-        this.authApiServiceUser = this.authConectionClientUsersModule.getAuthApiService();
+        this.authConectionClient = AuthConectionClient.getInstance();
+        this.authApiService = this.authConectionClient.getAuthApiService();
         users = getAllUsers();
     }
 
@@ -90,7 +84,7 @@ public class UserListRepository {
      * @param user
      */
     public void setNewUser(UserDetails user){
-        Call<User> call = authApiServiceUser.setNewUser(user);
+        Call<User> call = authApiService.setNewUser(user);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
