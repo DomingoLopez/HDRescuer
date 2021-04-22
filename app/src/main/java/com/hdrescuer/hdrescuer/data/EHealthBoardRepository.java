@@ -1,12 +1,5 @@
 package com.hdrescuer.hdrescuer.data;
 
-import com.empatica.empalink.delegate.EmpaDataDelegate;
-
-import java.util.TimeZone;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 /**
  * Repositorio para la eHealthBoard
  * @author Domingo Lopez
@@ -14,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 public class EHealthBoardRepository {
 
 
-    private Integer BMP;
+    private Integer BPM;
     private Integer OxBlood;
     private Integer airFlow;
 
@@ -25,17 +18,17 @@ public class EHealthBoardRepository {
     public EHealthBoardRepository() {
         super();
 
-       this.BMP = 0;
+       this.BPM = 0;
        this.OxBlood = 0;
        this.airFlow = 0;
     }
 
-    public Integer getBMP() {
-        return BMP;
+    public Integer getBPM() {
+        return BPM;
     }
 
-    public void setBMP(Integer BMP) {
-        this.BMP = BMP;
+    public void setBPM(Integer BPM) {
+        this.BPM = BPM;
     }
 
     public Integer getOxBlood() {
@@ -56,7 +49,7 @@ public class EHealthBoardRepository {
      * @author Domingo Lopez
      */
     public void reset(){
-        this.BMP = 0;
+        this.BPM = 0;
         this.OxBlood = 0;
         this.airFlow = 0;
     }

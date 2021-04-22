@@ -1,14 +1,9 @@
 package com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services;
 
-import android.content.Intent;
-import android.util.Log;
-
-import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -135,7 +130,7 @@ public class EhealthBoardService extends Thread {
                 //Formato-> tipoDato:valor
 
                 if(partes[0].equals("pulse"))
-                    this.eHealthBoardRepository.setBMP(Integer.parseInt(partes[1]));
+                    this.eHealthBoardRepository.setBPM(Integer.parseInt(partes[1]));
                 else if(partes[0].equals("oxigensaturation"))
                     this.eHealthBoardRepository.setOxBlood(Integer.parseInt(partes[1]));
                 else if(partes[0].equals("airflow")){

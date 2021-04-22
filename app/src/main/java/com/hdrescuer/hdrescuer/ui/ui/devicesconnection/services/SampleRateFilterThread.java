@@ -2,10 +2,8 @@ package com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services;
 
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
-import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
@@ -14,15 +12,8 @@ import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.TicWatchRepository;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Clase/Servicio que hereda de Thread. Su objetivo es el de realizar mediciones de los datos almacenados localmente en la App, a fin de mandarlos al servidor
@@ -116,7 +107,7 @@ public class SampleRateFilterThread extends Thread{
                restIntent.putExtra("e4_ibi",this.e4BandRepository.getCurrentIbi().toString());
                restIntent.putExtra("e4_temp",this.e4BandRepository.getCurrentTemp().toString());
 
-               restIntent.putExtra("ehb_bpm",this.eHealthBoardRepository.getBMP().toString());
+               restIntent.putExtra("ehb_bpm",this.eHealthBoardRepository.getBPM().toString());
                restIntent.putExtra("ehb_o2",this.eHealthBoardRepository.getOxBlood().toString());
                restIntent.putExtra("ehb_air",this.eHealthBoardRepository.getAirFlow().toString());
 
@@ -179,7 +170,7 @@ public class SampleRateFilterThread extends Thread{
      * @author Domingo Lopez
      */
     private void updateBoardData(){
-        this.globalMonitoringViewModel.setOxi_bpm(this.eHealthBoardRepository.getBMP());
+        this.globalMonitoringViewModel.setOxi_bpm(this.eHealthBoardRepository.getBPM());
         this.globalMonitoringViewModel.setOxi_o2(this.eHealthBoardRepository.getOxBlood());
         this.globalMonitoringViewModel.setOxi_air(this.eHealthBoardRepository.getAirFlow());
     }
