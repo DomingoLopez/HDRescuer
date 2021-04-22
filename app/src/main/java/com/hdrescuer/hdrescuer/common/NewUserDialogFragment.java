@@ -7,23 +7,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
 
@@ -55,7 +51,7 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
     UserDetails userDetails;
 
     //Servicio de api
-    AuthConectionClientUsersModule authConectionClientUsersModule;
+    AuthConectionClient authConectionClient;
     AuthApiService authApiService;
 
     /**
@@ -66,8 +62,8 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
     public NewUserDialogFragment(UserActionDialog type, UserDetails userDetails){
         this.type = type;
         this.userDetails = userDetails;
-        this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
-        this.authApiService = this.authConectionClientUsersModule.getAuthApiService();
+        this.authConectionClient = AuthConectionClient.getInstance();
+        this.authApiService = this.authConectionClient.getAuthApiService();
     }
 
     @Override

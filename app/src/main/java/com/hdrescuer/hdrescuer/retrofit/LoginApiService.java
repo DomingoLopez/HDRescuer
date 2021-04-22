@@ -21,7 +21,7 @@ public interface LoginApiService {
      * @param requestLogin
      * @return Call
      */
-    @POST("authm/login")
+    @POST("api/auth/login")
     Call<ResponseAuth> doLogin(@Body RequestLogin requestLogin);
 
 

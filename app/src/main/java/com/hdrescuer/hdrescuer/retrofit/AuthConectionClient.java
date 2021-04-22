@@ -7,27 +7,25 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AuthConectionClientDataModule {
+public class AuthConectionClient {
 
 
 
-    private static AuthConectionClientDataModule instance = null;
+    private static AuthConectionClient instance = null;
 
     private AuthApiService authApiService;
 
     private Retrofit retrofit;
 
-    public AuthConectionClientDataModule() {
+    public AuthConectionClient() {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        // set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        // add your other interceptors …
 
-        // add logging as last interceptor
-        httpClient.addInterceptor(logging);  // <-- this is the important line!
+        // añadimos interceptor de logging
+        httpClient.addInterceptor(logging);
 
         //Incluímos en la cabecera de la petición el TOKEN que autoriza al usuario
         OkHttpClient.Builder ok = new OkHttpClient.Builder();
@@ -36,7 +34,7 @@ public class AuthConectionClientDataModule {
 
 
         this.retrofit = new Retrofit.Builder()
-                            .baseUrl(Constants.DATA_RESCUER_DATA_MODULE_URL)
+                            .baseUrl(Constants.DATA_RESCUER_API_GATEWAY)
                             .addConverterFactory(GsonConverterFactory.create())
                             .client(cliente) //adjunta a todas las peticiones que hagan uso del AuthConnectionClient el token
                             .client(httpClient.build())
@@ -47,10 +45,10 @@ public class AuthConectionClientDataModule {
     }
 
 
-    public static AuthConectionClientDataModule getInstance(){
+    public static AuthConectionClient getInstance(){
 
         if(instance == null){
-            instance = new AuthConectionClientDataModule();
+            instance = new AuthConectionClient();
         }
 
         return instance;

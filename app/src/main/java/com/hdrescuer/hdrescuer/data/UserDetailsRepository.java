@@ -1,20 +1,15 @@
 package com.hdrescuer.hdrescuer.data;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientApiComposerModule;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
-import com.hdrescuer.hdrescuer.retrofit.response.User;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
 
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,9 +22,7 @@ import retrofit2.Response;
 public class UserDetailsRepository {
 
     AuthApiService authApiService;
-    AuthApiService authApiServiceUser;
-    AuthConectionClientApiComposerModule authConectionClientApiComposerModule;
-    AuthConectionClientUsersModule authConectionClientUsersModule;
+    AuthConectionClient authConectionClient;
     MutableLiveData<UserDetails> user;
 
     /**
@@ -38,10 +31,8 @@ public class UserDetailsRepository {
      * @param id
      */
     UserDetailsRepository(String id){
-        this.authConectionClientApiComposerModule = AuthConectionClientApiComposerModule.getInstance();
-        this.authConectionClientUsersModule = AuthConectionClientUsersModule.getInstance();
-        this.authApiService = this.authConectionClientApiComposerModule.getAuthApiService();
-        this.authApiServiceUser = this.authConectionClientUsersModule.getAuthApiService();
+        this.authConectionClient = AuthConectionClient.getInstance();
+        this.authApiService = this.authConectionClient.getAuthApiService();
         this.user = this.getUser(id);
     }
 
@@ -90,7 +81,7 @@ public class UserDetailsRepository {
      * @param user_devuelto
      */
     public void updateUser(UserInfo user_devuelto){
-        Call<String> call = authApiServiceUser.updateUser(user_devuelto);
+        Call<String> call = authApiService.updateUser(user_devuelto);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
