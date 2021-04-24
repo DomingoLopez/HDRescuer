@@ -1,25 +1,28 @@
 package com.hdrescuer.hdrescuer.db.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.time.Instant;
 
-@Entity(tableName = "SESSION")
+@Entity(tableName = "SESSION", primaryKeys = {"id_session_local"})
 public class SessionEntity {
 
-    @PrimaryKey(autoGenerate = true)
+    @NonNull
     public int id_session_local;
+
     public String user_id;
-    public Instant timestamp_ini;
-    public Instant timestamp_fin;
+    public String timestamp_ini;
+    public String timestamp_fin;
     public int total_time;
     public boolean e4band;
     public boolean ticwatch;
     public boolean ehealthboard;
 
 
-    public SessionEntity(String user_id, Instant timestamp_ini, Instant timestamp_fin, int total_time, boolean e4band, boolean ticwatch, boolean ehealthboard) {
+    public SessionEntity(int id_session_local, String user_id, String timestamp_ini, String timestamp_fin, int total_time, boolean e4band, boolean ticwatch, boolean ehealthboard) {
+        this.id_session_local = id_session_local;
         this.user_id = user_id;
         this.timestamp_ini = timestamp_ini;
         this.timestamp_fin = timestamp_fin;
@@ -45,19 +48,19 @@ public class SessionEntity {
         this.user_id = user_id;
     }
 
-    public Instant getTimestamp_ini() {
+    public String getTimestamp_ini() {
         return timestamp_ini;
     }
 
-    public void setTimestamp_ini(Instant timestamp_ini) {
+    public void setTimestamp_ini(String timestamp_ini) {
         this.timestamp_ini = timestamp_ini;
     }
 
-    public Instant getTimestamp_fin() {
+    public String getTimestamp_fin() {
         return timestamp_fin;
     }
 
-    public void setTimestamp_fin(Instant timestamp_fin) {
+    public void setTimestamp_fin(String timestamp_fin) {
         this.timestamp_fin = timestamp_fin;
     }
 

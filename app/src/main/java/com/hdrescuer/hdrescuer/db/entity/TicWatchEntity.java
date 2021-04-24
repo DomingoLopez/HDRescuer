@@ -1,14 +1,18 @@
 package com.hdrescuer.hdrescuer.db.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
 import java.time.Instant;
 
-@Entity(tableName = "TICWATCH")
+@Entity(tableName = "TICWATCH", primaryKeys = {"id_session_local","timestamp"})
 public class TicWatchEntity {
 
+    @NonNull
     public int id_session_local;
-    public Instant timestamp;
+    @NonNull
+    public String timestamp;
+
     public int tic_accx;
     public int tic_accy;
     public int tic_accz;
@@ -23,7 +27,7 @@ public class TicWatchEntity {
     public int tic_step;
 
 
-    public TicWatchEntity(int id_session_local, Instant timestamp, int tic_accx, int tic_accy, int tic_accz, int tic_acclx, int tic_accly, int tic_acclz, int tic_girx, int tic_giry, int tic_girz, float tic_hrppg, float tic_hrppgraw, int tic_step) {
+    public TicWatchEntity(int id_session_local, String timestamp, int tic_accx, int tic_accy, int tic_accz, int tic_acclx, int tic_accly, int tic_acclz, int tic_girx, int tic_giry, int tic_girz, float tic_hrppg, float tic_hrppgraw, int tic_step) {
         this.id_session_local = id_session_local;
         this.timestamp = timestamp;
         this.tic_accx = tic_accx;
@@ -48,11 +52,11 @@ public class TicWatchEntity {
         this.id_session_local = id_session_local;
     }
 
-    public Instant getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Instant timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 

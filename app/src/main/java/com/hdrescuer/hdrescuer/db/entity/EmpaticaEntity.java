@@ -1,15 +1,18 @@
 package com.hdrescuer.hdrescuer.db.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
 import java.time.Instant;
 
-@Entity(tableName = "EMPATICA")
+@Entity(tableName = "EMPATICA", primaryKeys = {"id_session_local","timestamp"})
 public class EmpaticaEntity {
 
-
+    @NonNull
     public int id_session_local;
-    public Instant timestamp;
+    @NonNull
+    public String timestamp;
+
     public int e4_accx;
     public int e4_accy;
     public int e4_accz;
@@ -20,9 +23,9 @@ public class EmpaticaEntity {
     public float e4_temp;
 
 
-    public EmpaticaEntity(int id_session_local, Instant timeStamp, int e4_accx, int e4_accy, int e4_accz, float e4_bvp, int e4_hr, float e4_gsr, float e4_ibi, float e4_temp) {
+    public EmpaticaEntity(int id_session_local, String timestamp, int e4_accx, int e4_accy, int e4_accz, float e4_bvp, int e4_hr, float e4_gsr, float e4_ibi, float e4_temp) {
         this.id_session_local = id_session_local;
-        this.timestamp = timeStamp;
+        this.timestamp = timestamp;
         this.e4_accx = e4_accx;
         this.e4_accy = e4_accy;
         this.e4_accz = e4_accz;
@@ -42,11 +45,11 @@ public class EmpaticaEntity {
         this.id_session_local = id_session_local;
     }
 
-    public Instant getTimeStamp() {
+    public String getTimeStamp() {
         return timestamp;
     }
 
-    public void setTimeStamp(Instant timeStamp) {
+    public void setTimeStamp(String timeStamp) {
         this.timestamp = timeStamp;
     }
 

@@ -1,19 +1,23 @@
 package com.hdrescuer.hdrescuer.db.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
 import java.time.Instant;
 
-@Entity(tableName = "HEALTHBOARD")
+@Entity(tableName = "HEALTHBOARD", primaryKeys = {"id_session_local","timestamp"})
 public class HealthBoardEntity {
 
+    @NonNull
     public int id_session_local;
-    public Instant timestamp;
+    @NonNull
+    public String timestamp;
+
     public int ehb_bpm;
     public int ehb_ox_blood;
     public int ehb_air_flow;
 
-    public HealthBoardEntity(int id_session_local, Instant timestamp, int ehb_bpm, int ehb_ox_blood, int ehb_air_flow) {
+    public HealthBoardEntity(int id_session_local, String timestamp, int ehb_bpm, int ehb_ox_blood, int ehb_air_flow) {
         this.id_session_local = id_session_local;
         this.timestamp = timestamp;
         this.ehb_bpm = ehb_bpm;
@@ -29,11 +33,11 @@ public class HealthBoardEntity {
         this.id_session_local = id_session_local;
     }
 
-    public Instant getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Instant timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
