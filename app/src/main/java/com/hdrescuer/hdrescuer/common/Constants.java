@@ -1,5 +1,8 @@
 package com.hdrescuer.hdrescuer.common;
 
+import java.time.Duration;
+import java.time.Instant;
+
 /**
  * Clase de variables y métodos comunes entre las distintas clases. Cosas que puedan ser usadas por más de una instancia
  * @author Domingo Lopez
@@ -48,7 +51,23 @@ public class Constants {
 
         return chain;
 
+    }
 
+    /**
+     * Método que devuelve el total de segundos entre dos instantes de tiempo pasados como Strings
+     * @param timestamp_ini
+     * @param timestamp_fin
+     * @return
+     */
+    public static long getTotalSecs(String timestamp_ini, String timestamp_fin){
+
+        Instant timestampini = Instant.parse(timestamp_ini);
+        Instant timestampfin = Instant.parse(timestamp_fin);
+
+        Duration res = Duration.between(timestampini,timestampfin);
+        long seconds = res.getSeconds();
+
+        return seconds;
     }
 
 }

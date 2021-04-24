@@ -1,26 +1,13 @@
-package com.hdrescuer.hdrescuer.data;
+package com.hdrescuer.hdrescuer.data.dbrepositories;
 
 import android.app.Application;
-import android.util.Log;
+import android.os.AsyncTask;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+import com.hdrescuer.hdrescuer.db.DataRecoveryDataBase;
+import com.hdrescuer.hdrescuer.db.dao.TicWatchDao;
+import com.hdrescuer.hdrescuer.db.entity.TicWatchEntity;
 
-import com.empatica.empalink.delegate.EmpaDataDelegate;
-import com.google.android.gms.wearable.DataClient;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
-
-import java.util.TimeZone;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 /**
  * Repositorio de datos para el reloj Tic Watch
@@ -28,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TicWatchRepository {
 
-
+    private TicWatchDao ticWatchDao;
 
     private Integer accx;
     private Integer accy;
@@ -44,19 +31,20 @@ public class TicWatchRepository {
     private Integer step;
     private int stepCounter;
 
-
-
     private float averageHr = 0;
 
     /**
      * Constructor vacío
      * @author Domingo Lopez
      */
-    public TicWatchRepository() {
-        super();
+    public TicWatchRepository(Application application) {
+
+        DataRecoveryDataBase db = DataRecoveryDataBase.getDataBase(application);
+        ticWatchDao = db.getTicWatchDao();
+
+
 
         this.stepCounter = 0;
-
         this.accx = 0;
         this.accy = 0;
         this.accz = 0;
@@ -209,4 +197,47 @@ public class TicWatchRepository {
         this.hrppgraw = 0.0f;
         this.step = 0;
     }
+
+
+    //Operaciones DAO
+
+    public void deleteByIdSession(int id_session_local){ticWatchDao.deleteById(id_session_local);}
+
+    public void deleteAllSession(){ticWatchDao.deleteAll();}
+
+    public List<TicWatchEntity> getByIdSession(int id_session_local){return ticWatchDao.getTicWatchSessionById(id_session_local);}
+
+    public void insertTicWatchData(TicWatchEntity ticWatchEntity){
+        new TicWatchRepository.insertTicWatchAsyncTask(ticWatchDao).execute(ticWatchEntity);
+    }
+
+
+    private static class insertTicWatchAsyncTask extends AsyncTask<TicWatchEntity, Void, Void> {
+
+        private TicWatchDao ticWatchDaoAsyncTask;
+
+
+        insertTicWatchAsyncTask(TicWatchDao ticWatchDao){
+            ticWatchDaoAsyncTask = ticWatchDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(TicWatchEntity... ticWatchEntities) {
+            ticWatchDaoAsyncTask.insert(ticWatchEntities[0]);
+            return null;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

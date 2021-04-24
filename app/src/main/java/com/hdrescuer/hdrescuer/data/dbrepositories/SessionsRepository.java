@@ -10,12 +10,12 @@ import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 
 import java.util.List;
 
-public class DbLocalSessionsRepository {
+public class SessionsRepository {
 
     private SessionDao sessionDao;
 
 
-    public DbLocalSessionsRepository(Application application){
+    public SessionsRepository(Application application){
         DataRecoveryDataBase db = DataRecoveryDataBase.getDataBase(application);
         sessionDao = db.getSessionDao();
 

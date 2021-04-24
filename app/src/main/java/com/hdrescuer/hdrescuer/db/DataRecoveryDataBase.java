@@ -33,6 +33,7 @@ public abstract class DataRecoveryDataBase extends RoomDatabase {
                 if(INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             DataRecoveryDataBase.class,"DATARECOVERY")
+                            .allowMainThreadQueries()
                             .build();
                 }
             }

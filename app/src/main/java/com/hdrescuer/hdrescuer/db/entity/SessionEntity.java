@@ -15,13 +15,13 @@ public class SessionEntity {
     public String user_id;
     public String timestamp_ini;
     public String timestamp_fin;
-    public int total_time;
+    public long total_time;
     public boolean e4band;
     public boolean ticwatch;
     public boolean ehealthboard;
 
 
-    public SessionEntity(int id_session_local, String user_id, String timestamp_ini, String timestamp_fin, int total_time, boolean e4band, boolean ticwatch, boolean ehealthboard) {
+    public SessionEntity(int id_session_local, String user_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch, boolean ehealthboard) {
         this.id_session_local = id_session_local;
         this.user_id = user_id;
         this.timestamp_ini = timestamp_ini;
@@ -64,7 +64,7 @@ public class SessionEntity {
         this.timestamp_fin = timestamp_fin;
     }
 
-    public int getTotal_time() {
+    public long getTotal_time() {
         return total_time;
     }
 

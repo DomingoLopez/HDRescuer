@@ -7,10 +7,10 @@ import androidx.annotation.RequiresApi;
 
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
-import com.hdrescuer.hdrescuer.data.E4BandRepository;
-import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.E4BandRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
-import com.hdrescuer.hdrescuer.data.TicWatchRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.TicWatchRepository;
 
 import java.time.Clock;
 import java.time.Instant;

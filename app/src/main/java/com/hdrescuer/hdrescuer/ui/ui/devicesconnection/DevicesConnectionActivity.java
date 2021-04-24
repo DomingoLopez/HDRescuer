@@ -55,12 +55,14 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
-import com.hdrescuer.hdrescuer.data.E4BandRepository;
-import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.E4BandRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
-import com.hdrescuer.hdrescuer.data.TicWatchRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.TicWatchRepository;
+import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardService;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardThread;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSessionService;
 
@@ -70,6 +72,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.time.Clock;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -88,6 +91,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     E4BandRepository e4BandRepository;
     TicWatchRepository ticWatchRepository;
     EHealthBoardRepository eHealthBoardRepository;
+    SessionsRepository sessionsRepository;
+
+
 
     //ViewModel
     GlobalMonitoringViewModel globalMonitoringViewModel;
@@ -143,13 +149,19 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Hebra para el envío de datos al servidor
     private SampleRateFilterThread sampleRateThread;
     //Hebra/Servicio que recibirá los datos vía Bluetooth del eHealthBoard
-    private EhealthBoardService ehealthBoardService;
+    private EhealthBoardThread ehealthBoardThread;
 
 
     //Estado de los dispositivos
     boolean e4Connected = false;
     boolean ticwatchConnected = false;
     boolean ehealthConnected = false;
+
+    //TimeStamp
+    Instant instant;
+
+    //Identificador de sesión local actual
+    int id_session_local;
 
 
     /**
@@ -284,9 +296,12 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     private void initViewModels() {
 
         //iniciamos Repositorios temporales
-        this.e4BandRepository = new E4BandRepository();
-        this.ticWatchRepository = new TicWatchRepository();
-        this.eHealthBoardRepository = new EHealthBoardRepository();
+        this.e4BandRepository = new E4BandRepository(getApplication());
+        this.ticWatchRepository = new TicWatchRepository(getApplication());
+        this.eHealthBoardRepository = new EHealthBoardRepository(getApplication());
+        this.sessionsRepository = new SessionsRepository(getApplication());
+
+
 
         //ViewModelFactory para el repositorio Global
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
@@ -457,7 +472,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                         Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
                     }
                 });
-                EhealthBoardService.STATUS = "INACTIVO";
+                EhealthBoardThread.STATUS = "INACTIVO";
                 SampleRateFilterThread.STATUS = "INACTIVO";
                 finish();
 
@@ -533,9 +548,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             //1.1. Creamos un intent que pasaremos a nuestro StartStopSessionService para iniciar la sesión en el servidor y que devuelva el id_session de la nueva sesión
         Intent intent = new Intent(this.getApplicationContext(), StartStopSessionService.class);
         intent.setAction("START_SESSION");
-        String instant = Clock.systemUTC().instant().toString();
+        this.instant = Clock.systemUTC().instant();
         intent.putExtra("user_id",this.user_id);
-        intent.putExtra("timestamp_ini",instant);
+        intent.putExtra("timestamp_ini",this.instant.toString());
         intent.putExtra("e4band",this.e4Connected);
         intent.putExtra("ticwatch",this.ticwatchConnected);
         intent.putExtra("ehealthboard",this.ehealthConnected);
@@ -550,6 +565,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             //Broadcast /send the result code in intent service based on your logic(success/error) handle with switch
             switch (resultCode) {
                 case 1: //Case correcto. Sesión iniciada
+
+                    //Guardamos la sesión en la BD
+                    initDBLocalSession();
 
                     //Obtenemos el id de sesión recibido
                     String session_id = resultData.getString("result");
@@ -576,11 +594,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     /**INICIO DE LA EHEALTHBOARD**/
                     if(ehealthConnected){ //Si está conectada
                         initEHeatlhBoard(); //Solo hace el inicio para mandar una instrucción de inicio al arduino
-                        EhealthBoardService.STATUS = "ACTIVO";
-                        ehealthBoardService = new EhealthBoardService(eHealthBoardRepository, myInputStream, myOutStrem);
-                        ehealthBoardService.start();
+                        EhealthBoardThread.STATUS = "ACTIVO";
+                        ehealthBoardThread = new EhealthBoardThread(eHealthBoardRepository, myInputStream, myOutStrem);
+                        ehealthBoardThread.start();
                     }else{
-                        EhealthBoardService.STATUS ="INACTIVO";
+                        EhealthBoardThread.STATUS ="INACTIVO";
                     }
 
                     /**REINICIAMOS LOS REPOSITORIOS**/
@@ -604,8 +622,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     break;
 
                 case 2:
+                    //Obtenemos el timestamp fin del result
+                    String timestamp_fin = resultData.getString("result_time");
 
                     stopWatchAndThreads();
+                    stopDBLocalSession(timestamp_fin);
                     Toast.makeText(DevicesConnectionActivity.this, "Sesión guardada de forma satisfactoria", Toast.LENGTH_SHORT).show();
                     finish();
                     break;
@@ -624,6 +645,39 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
             }
         }
+
+
+
+        private void initDBLocalSession() {
+
+            //Obtengo el id máximo de sesión local
+            int max_id = sessionsRepository.getMaxSession();
+            //Log.i("MAXIMA SESION",""+max_id);
+            if(max_id >= 1){
+                id_session_local = max_id++;
+            }else{ //si no hay sesiones. La inicio a 1
+                id_session_local = 1;
+            }
+
+            //Inicio la sesión
+            sessionsRepository.insertSession(new SessionEntity(
+                    id_session_local,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected
+            ));
+
+
+
+
+        }
+
+        private void stopDBLocalSession(String timestamp_fin) {
+            //Hacemos update de la sesión
+            sessionsRepository.updateSession(new SessionEntity(
+                    id_session_local,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected
+            ));
+
+
+        }
+
     };
 
     /**
@@ -685,7 +739,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             }
         });
         SampleRateFilterThread.STATUS = "INACTIVO";
-        EhealthBoardService.STATUS = "INACTIVO";
+        EhealthBoardThread.STATUS = "INACTIVO";
 
     }
 
@@ -857,7 +911,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             deviceManager.disconnect();
         }
         SampleRateFilterThread.STATUS = "INACTIVO";
-        EhealthBoardService.STATUS = "INACTIVO";
+        EhealthBoardThread.STATUS = "INACTIVO";
 
         if(this.ehealthConnected)
             this.stopEHealthBoard();
