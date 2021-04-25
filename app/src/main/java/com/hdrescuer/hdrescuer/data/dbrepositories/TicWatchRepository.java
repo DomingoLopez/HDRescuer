@@ -2,9 +2,11 @@ package com.hdrescuer.hdrescuer.data.dbrepositories;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.hdrescuer.hdrescuer.db.DataRecoveryDataBase;
 import com.hdrescuer.hdrescuer.db.dao.TicWatchDao;
+import com.hdrescuer.hdrescuer.db.entity.EmpaticaEntity;
 import com.hdrescuer.hdrescuer.db.entity.TicWatchEntity;
 
 import java.util.List;
@@ -208,6 +210,7 @@ public class TicWatchRepository {
     public List<TicWatchEntity> getByIdSession(int id_session_local){return ticWatchDao.getTicWatchSessionById(id_session_local);}
 
     public void insertTicWatchData(TicWatchEntity ticWatchEntity){
+        Log.i("INSERT DATA","INSERT DATA");
         new TicWatchRepository.insertTicWatchAsyncTask(ticWatchDao).execute(ticWatchEntity);
     }
 
@@ -227,6 +230,20 @@ public class TicWatchRepository {
             ticWatchDaoAsyncTask.insert(ticWatchEntities[0]);
             return null;
         }
+    }
+
+
+    public TicWatchDao getTicWatchDao() {
+        return ticWatchDao;
+    }
+
+    public void saveDBLocalData(int id_session_local, String instant){
+
+        TicWatchEntity ticWatchEntity = new TicWatchEntity(
+                id_session_local,instant, this.accx, this.accy,this.accz, this.acclx, this.accly, this.acclz, this.girx, this.giry, this.girz, this.hrppg, this.hrppgraw, this.step
+        );
+
+        this.insertTicWatchData(ticWatchEntity);
     }
 
 

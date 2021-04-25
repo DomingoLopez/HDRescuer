@@ -235,4 +235,14 @@ public class E4BandRepository implements EmpaDataDelegate {
         }
     }
 
+
+    public void saveDBLocalData(int id_session_local, String instant){
+
+        EmpaticaEntity empaticaEntity = new EmpaticaEntity(
+                id_session_local,instant, this.currentAccX, this.currentAccY, this.currentAccZ, this.currentBvp, this.currentHr, this.currentGsr, this.currentIbi, this.currentTemp
+        );
+
+        this.insertEmpaticaData(empaticaEntity);
+    }
+
 }

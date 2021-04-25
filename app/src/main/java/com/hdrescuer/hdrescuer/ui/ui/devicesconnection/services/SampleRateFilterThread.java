@@ -2,6 +2,7 @@ package com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services;
 
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -11,6 +12,7 @@ import com.hdrescuer.hdrescuer.data.dbrepositories.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.dbrepositories.TicWatchRepository;
+import com.hdrescuer.hdrescuer.db.entity.TicWatchEntity;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -31,6 +33,7 @@ public class SampleRateFilterThread extends Thread{
     private static String ACTION_SEND = "ACTION_SEND";
 
     private String session_id;
+    private int id_session_local;
 //    private long instant = 0;
     private Instant instant;
 
@@ -46,9 +49,10 @@ public class SampleRateFilterThread extends Thread{
     public SampleRateFilterThread(TicWatchRepository ticWatchRepository,
                                   E4BandRepository e4BandRepository,
                                   EHealthBoardRepository eHealthBoardRepository,
-                                  GlobalMonitoringViewModel globalMonitoringViewModel, String session_id){
+                                  GlobalMonitoringViewModel globalMonitoringViewModel, String session_id, int id_session_local){
 
         this.session_id = session_id;
+        this.id_session_local = id_session_local;
         this.ticWatchRepository = ticWatchRepository;
         this.e4BandRepository = e4BandRepository;
         this.eHealthBoardRepository = eHealthBoardRepository;
@@ -70,6 +74,12 @@ public class SampleRateFilterThread extends Thread{
 
            while (STATUS.equals("ACTIVO")){
                Thread.sleep(Constants.SAMPLE_RATE);
+
+               Clock reloj = Clock.systemUTC();
+               this.instant = reloj.instant();
+               //Clock clock = Clock.systemUTC();
+               //this.instant = clock.millis(); //TimeStamp en Milisegundos. Podemos usar el instant() de arriba y tendría un formato 2021-03-23T17:40:12.356Z por ejemplo
+
                updateE4BandData();
                updateTicWatchData();
                updateBoardData();
@@ -80,10 +90,6 @@ public class SampleRateFilterThread extends Thread{
 
                //Est lo mejor es TODO: Hacer una clase serializable y pasar el objeto entero
                //Variables a pasar del Watch
-               Clock reloj = Clock.systemUTC();
-               this.instant = reloj.instant();
-               //Clock clock = Clock.systemUTC();
-               //this.instant = clock.millis(); //TimeStamp en Milisegundos. Podemos usar el instant() de arriba y tendría un formato 2021-03-23T17:40:12.356Z por ejemplo
 
                restIntent.putExtra("tic_hrppg",this.ticWatchRepository.getHrppg().toString());
                restIntent.putExtra("tic_hrppgraw",this.ticWatchRepository.getHrppgraw().toString());
@@ -120,7 +126,7 @@ public class SampleRateFilterThread extends Thread{
 
 
        }catch (Exception e){
-
+            Log.i("EXCEPTICON",""+e.toString());
        }
 
     }
@@ -140,6 +146,8 @@ public class SampleRateFilterThread extends Thread{
         this.globalMonitoringViewModel.setCurrentGsr(this.e4BandRepository.getCurrentGsr());
         this.globalMonitoringViewModel.setCurrentIbi(this.e4BandRepository.getCurrentIbi());
         this.globalMonitoringViewModel.setCurrentTemp(this.e4BandRepository.getCurrentTemp());
+
+
 
     }
 
@@ -161,6 +169,9 @@ public class SampleRateFilterThread extends Thread{
         this.globalMonitoringViewModel.setGirx(this.ticWatchRepository.getGirx());
         this.globalMonitoringViewModel.setGiry(this.ticWatchRepository.getGiry());
         this.globalMonitoringViewModel.setGirz(this.ticWatchRepository.getGirz());
+
+
+        ticWatchRepository.saveDBLocalData(id_session_local,instant.toString());
 
     }
 

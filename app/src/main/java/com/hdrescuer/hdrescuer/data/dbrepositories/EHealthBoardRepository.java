@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import com.hdrescuer.hdrescuer.db.DataRecoveryDataBase;
 import com.hdrescuer.hdrescuer.db.dao.HealthBoardDao;
 import com.hdrescuer.hdrescuer.db.entity.HealthBoardEntity;
+import com.hdrescuer.hdrescuer.db.entity.TicWatchEntity;
 
 import java.util.List;
 
@@ -97,6 +98,16 @@ public class EHealthBoardRepository {
             healthBoardDaoAsyncTask.insert(healthBoardEntities[0]);
             return null;
         }
+    }
+
+
+    public void saveDBLocalData(int id_session_local, String instant){
+
+        HealthBoardEntity healthBoardEntity = new HealthBoardEntity(
+                id_session_local,instant, this.BPM, this.OxBlood, this.airFlow
+        );
+
+        this.insertHealthBoardData(healthBoardEntity);
     }
 
 

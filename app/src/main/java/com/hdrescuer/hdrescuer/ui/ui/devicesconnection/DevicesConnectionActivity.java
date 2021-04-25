@@ -607,7 +607,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                     //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
                     SampleRateFilterThread.STATUS = "ACTIVO";
-                    sampleRateThread = new SampleRateFilterThread(ticWatchRepository, e4BandRepository, eHealthBoardRepository, globalMonitoringViewModel, session_id);
+                    sampleRateThread = new SampleRateFilterThread(ticWatchRepository, e4BandRepository, eHealthBoardRepository, globalMonitoringViewModel, session_id, id_session_local);
                     sampleRateThread.start();
 
 
@@ -654,7 +654,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             int max_id = sessionsRepository.getMaxSession();
             //Log.i("MAXIMA SESION",""+max_id);
             if(max_id >= 1){
-                id_session_local = max_id++;
+                id_session_local = max_id + 1;
             }else{ //si no hay sesiones. La inicio a 1
                 id_session_local = 1;
             }
@@ -833,20 +833,22 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     public void didDiscoverDevice(EmpaticaDevice bluetoothDevice, String deviceLabel, int rssi, boolean allowed) {
 
         if (allowed) {
+
             // Paramos de escanear
             deviceManager.stopScanning();
             try {
                 // Nos conectamos a la empatica
                 deviceManager.connectDevice(bluetoothDevice);
             } catch (ConnectionNotAllowedException e) {
-                Toast.makeText(DevicesConnectionActivity.this, "No puedes conectarte con la pulsera Empática", Toast.LENGTH_SHORT).show();
+                Log.i("ERROR","Connection:"+e.toString());
+                //Toast.makeText(DevicesConnectionActivity.this, "No puedes conectarte con la pulsera Empática", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     @Override
     public void didFailedScanning(int errorCode) {
-
+        Log.i("ENTRO FAILED SCANNING","");
     }
 
     @Override
