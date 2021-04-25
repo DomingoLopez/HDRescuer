@@ -61,6 +61,9 @@ import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.TicWatchRepository;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.ui.HomeActivity;
+import com.hdrescuer.hdrescuer.ui.MainActivity;
+import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardThread;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
@@ -628,6 +631,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     stopWatchAndThreads();
                     stopDBLocalSession(timestamp_fin);
                     Toast.makeText(DevicesConnectionActivity.this, "Sesión guardada de forma satisfactoria", Toast.LENGTH_SHORT).show();
+
+                    Intent i = new Intent(DevicesConnectionActivity.this, SessionResultActivity.class);
+                    i.putExtra("id_session_local",id_session_local);
+                    startActivity(i);
+                    //Destruimos el de conexiones para que no se pueda volver a el.
                     finish();
                     break;
 

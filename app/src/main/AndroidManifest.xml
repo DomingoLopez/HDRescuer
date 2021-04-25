@@ -26,6 +26,7 @@
             android:exported="false" />
 
         <activity android:name=".ui.ui.devicesconnection.DevicesConnectionActivity" />
+        <activity android:name=".ui.ui.charts.SessionResultActivity" />
         <activity android:name=".ui.ui.userdetails.UserDetailsActivity" />
         <activity
             android:name=".ui.HomeActivity"
