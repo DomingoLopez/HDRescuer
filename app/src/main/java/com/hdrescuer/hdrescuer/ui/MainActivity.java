@@ -16,6 +16,7 @@ import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestLogin;
 import com.hdrescuer.hdrescuer.retrofit.response.ResponseAuth;
+import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         //Para no tener que registrarme cada vez
-        Intent i = new Intent(MainActivity.this, HomeActivity.class);
+        Intent i = new Intent(MainActivity.this, SessionResultActivity.class);
         startActivity(i);
         finish();
         //this.goToLogin();
