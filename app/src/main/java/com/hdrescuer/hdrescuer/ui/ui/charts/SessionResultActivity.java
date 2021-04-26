@@ -13,6 +13,7 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -23,6 +24,8 @@ import com.hdrescuer.hdrescuer.data.dbrepositories.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.TicWatchRepository;
+import com.hdrescuer.hdrescuer.db.entity.EmpaticaEntity;
+import com.hdrescuer.hdrescuer.db.entity.HealthBoardEntity;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.db.entity.TicWatchEntity;
 
@@ -36,11 +39,15 @@ public class SessionResultActivity extends AppCompatActivity {
 
 
     //Repositorios que contienen la conexión con los DAO. Llegados a este punto podemos crear unos nuevos o bien separar los dao o usar un repositorio Common para las consultas
-
     private E4BandRepository e4BandRepository;
     private EHealthBoardRepository eHealthBoardRepository;
     private TicWatchRepository ticWatchRepository;
     private SessionsRepository sessionsRepository;
+
+    //Lista de entidades que vamos a obtener
+    List<TicWatchEntity> ticWatchEntities = null;
+    List<EmpaticaEntity> empaticaEntities = null;
+    List<HealthBoardEntity> healthBoardEntities = null;
 
     //Lista de gráficos que va a tener la pantalla
     ArrayList<ChartItem> list;
@@ -72,16 +79,20 @@ public class SessionResultActivity extends AppCompatActivity {
             this.sessionsRepository = new SessionsRepository(getApplication());
             SessionEntity session = this.sessionsRepository.getByIdSession(id_session_local);
 
-            this.ticWatchRepository = new TicWatchRepository(getApplication());
-            List<TicWatchEntity> ticWatchEntities = this.ticWatchRepository.getByIdSession(id_session_local);
 
-           /* if(session.e4band) {
+
+            if(session.e4band) {
                 this.e4BandRepository = new E4BandRepository(getApplication());
                 //generateE4BandData();
             }
 
             if(session.ticwatch) {
-                generateTicWatchData(id_session_local);
+                ArrayList<LineData> lineDataArray = generateTicWatchData(id_session_local);
+                //Añadimos a la lista el Acc con gravedad
+                list.add(new TicWatchChartItem(lineDataArray, getApplicationContext()));
+
+                ChartDataAdapter cda = new ChartDataAdapter(getApplicationContext(), list);
+                listView.setAdapter(cda);
             }
 
             if(session.ehealthboard) {
@@ -91,60 +102,9 @@ public class SessionResultActivity extends AppCompatActivity {
 
 
 
-            generateResults();*/
-
-            ArrayList<Entry> dataset = new ArrayList<>();
-            for(int i = 0; i< ticWatchEntities.size(); i++){
-                dataset.add(new Entry(i, ticWatchEntities.get(i).tic_accx));
-            }
-
-            LineDataSet set1 = new LineDataSet(dataset, "AccX");
-            set1.setLineWidth(2.5f);
-            set1.setCircleRadius(4.5f);
-            set1.setHighLightColor(Color.rgb(244, 117, 117));
-            set1.setDrawValues(false);
-
-            ArrayList<Entry> dataset1 = new ArrayList<>();
-            for(int i = 0; i< ticWatchEntities.size(); i++){
-                dataset1.add(new Entry(i, ticWatchEntities.get(i).tic_accy));
-            }
-
-            LineDataSet set2 = new LineDataSet(dataset1, "AccY");
-            set2.setLineWidth(2.5f);
-            set2.setCircleRadius(4.5f);
-            set2.setHighLightColor(Color.rgb(244, 117, 117));
-            set2.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
-            set2.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);
-            set2.setDrawValues(false);
-
-            ArrayList<Entry> dataset2 = new ArrayList<>();
-            for(int i = 0; i< ticWatchEntities.size(); i++){
-                dataset2.add(new Entry(i, ticWatchEntities.get(i).tic_hrppg));
-            }
-
-            LineDataSet set3 = new LineDataSet(dataset2, "Heart Rate Tic Watch");
-            set3.setLineWidth(2.5f);
-            set3.setCircleRadius(4.5f);
-            set3.setHighLightColor(Color.rgb(244, 117, 117));
-            set3.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
-            set3.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);
-            set3.setDrawValues(false);
-
-            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-            dataSets.add(set1);
-            dataSets.add(set2);
-            //dataSets.add(set3);
-            LineData data = new LineData(dataSets);
 
 
 
-            list.add(new TicWatchChartItem(data, getApplicationContext()));
-            list.add(new TicWatchChartItem(data, getApplicationContext()));
-            list.add(new TicWatchChartItem(data, getApplicationContext()));
-            list.add(new TicWatchChartItem(data, getApplicationContext()));
-
-            ChartDataAdapter cda = new ChartDataAdapter(getApplicationContext(), list);
-            listView.setAdapter(cda);
 
         }
 
@@ -182,16 +142,199 @@ public class SessionResultActivity extends AppCompatActivity {
 
 
 
+    ArrayList<LineData> generateTicWatchData(int id_session_local){
+
+        this.ticWatchRepository = new TicWatchRepository(getApplication());
+        this.ticWatchEntities = this.ticWatchRepository.getByIdSession(id_session_local);
+
+        /*Acelerómetro con gravedad*/
+        LineData acc = generateAccData();
+        LineData accl = generateAcclData();
+        LineData gir = generateGirData();
+        //LineData hr = generateHRData();
+        ArrayList<LineData> arr = new ArrayList<>();
+        arr.add(acc);
+        arr.add(accl);
+        arr.add(gir);
 
 
-    void generateTicWatchData(int id_session_local){
-
+        return arr;
 
 
     }
 
 
-    void generateResults(){
+
+
+    private LineData generateAccData() {
+        //AccX
+        ArrayList<Entry> datasetAccX = new ArrayList<>();
+        for(int i = 0; i< ticWatchEntities.size(); i++){
+            datasetAccX.add(new Entry(i, ticWatchEntities.get(i).tic_accx));
+        }
+        LineDataSet set1 = new LineDataSet(datasetAccX, "AccX");
+        set1.setLineWidth(2.5f);
+        set1.setCircleRadius(4.5f);
+        set1.setColor(Color.rgb(255, 0, 0));
+        set1.setHighLightColor(Color.rgb(255, 0, 0));
+        set1.setDrawValues(true);
+
+        //AccY
+        ArrayList<Entry> datasetAccY = new ArrayList<>();
+        for(int i = 0; i< ticWatchEntities.size(); i++){
+            datasetAccY.add(new Entry(i, ticWatchEntities.get(i).tic_accy));
+        }
+
+        LineDataSet set2 = new LineDataSet(datasetAccY, "AccY");
+        set2.setLineWidth(2.5f);
+        set2.setCircleRadius(4.5f);
+        set2.setHighLightColor(Color.rgb(0, 0, 255));
+        set2.setColor(Color.rgb(0, 0, 255));
+            /*set2.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+            set2.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);*/
+        set2.setDrawValues(true);
+
+        //AccZ
+        ArrayList<Entry> datasetAccZ = new ArrayList<>();
+        for(int i = 0; i< ticWatchEntities.size(); i++){
+            datasetAccZ.add(new Entry(i, ticWatchEntities.get(i).tic_accz));
+        }
+
+        LineDataSet set3 = new LineDataSet(datasetAccZ, "AccZ");
+        set3.setLineWidth(2.5f);
+        set3.setCircleRadius(4.5f);
+        set3.setHighLightColor(Color.rgb(0, 255, 0));
+        set2.setColor(Color.rgb(0, 255, 0));
+           /* set3.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+            set3.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);*/
+        set3.setDrawValues(true);
+
+        ArrayList<ILineDataSet> dataSetsAcc = new ArrayList<>();
+        dataSetsAcc.add(set1);
+        dataSetsAcc.add(set2);
+        dataSetsAcc.add(set3);
+        LineData data = new LineData(dataSetsAcc);
+
+       return data;
+
+    }
+
+    private LineData generateAcclData() {
+
+        /*Acelerómetro linear*/
+        //AcclX
+        ArrayList<Entry> datasetAcclX = new ArrayList<>();
+        for(int i = 0; i< ticWatchEntities.size(); i++){
+            datasetAcclX.add(new Entry(i, ticWatchEntities.get(i).tic_acclx));
+        }
+        LineDataSet set1 = new LineDataSet(datasetAcclX, "AcclX");
+        set1.setLineWidth(2.5f);
+        set1.setCircleRadius(4.5f);
+        set1.setColor(Color.rgb(255, 0, 0));
+        set1.setHighLightColor(Color.rgb(255, 0, 0));
+        set1.setDrawValues(true);
+
+        //AcclY
+        ArrayList<Entry> datasetAccYl = new ArrayList<>();
+        for(int i = 0; i< ticWatchEntities.size(); i++){
+            datasetAccYl.add(new Entry(i, ticWatchEntities.get(i).tic_accly));
+        }
+
+        LineDataSet set2 = new LineDataSet(datasetAccYl, "AcclY");
+        set2.setLineWidth(2.5f);
+        set2.setCircleRadius(4.5f);
+        set2.setHighLightColor(Color.rgb(0, 0, 255));
+        set2.setColor(Color.rgb(0, 0, 255));
+            /*set2.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+            set2.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);*/
+        set2.setDrawValues(true);
+
+        //AccZ
+        ArrayList<Entry> datasetAcclZ = new ArrayList<>();
+        for(int i = 0; i< ticWatchEntities.size(); i++){
+            datasetAcclZ.add(new Entry(i, ticWatchEntities.get(i).tic_acclz));
+        }
+
+        LineDataSet set3 = new LineDataSet(datasetAcclZ, "AcclZ");
+        set3.setLineWidth(2.5f);
+        set3.setCircleRadius(4.5f);
+        set3.setHighLightColor(Color.rgb(0, 255, 0));
+        set2.setColor(Color.rgb(0, 255, 0));
+           /* set3.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+            set3.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);*/
+        set3.setDrawValues(true);
+
+
+        ArrayList<ILineDataSet> dataSetsAccl = new ArrayList<>();
+        dataSetsAccl.add(set1);
+        dataSetsAccl.add(set2);
+        dataSetsAccl.add(set3);
+        LineData data = new LineData(dataSetsAccl);
+
+        return data;
+
+
+    }
+
+    private LineData generateGirData() {
+
+        /*Giroscopio */
+        //GirX
+        ArrayList<Entry> datasetGirX = new ArrayList<>();
+        for(int i = 0; i< ticWatchEntities.size(); i++){
+            datasetGirX.add(new Entry(i, ticWatchEntities.get(i).tic_girx));
+        }
+        LineDataSet set1 = new LineDataSet(datasetGirX, "GirX");
+        set1.setLineWidth(2.5f);
+        set1.setCircleRadius(4.5f);
+        set1.setColor(Color.rgb(255, 0, 0));
+        set1.setHighLightColor(Color.rgb(255, 0, 0));
+        set1.setDrawValues(true);
+
+        //GirY
+        ArrayList<Entry> datasetGirY = new ArrayList<>();
+        for(int i = 0; i< ticWatchEntities.size(); i++){
+            datasetGirY.add(new Entry(i, ticWatchEntities.get(i).tic_giry));
+        }
+
+        LineDataSet set2 = new LineDataSet(datasetGirY, "GirY");
+        set2.setLineWidth(2.5f);
+        set2.setCircleRadius(4.5f);
+        set2.setHighLightColor(Color.rgb(0, 0, 255));
+        set2.setColor(Color.rgb(0, 0, 255));
+            /*set2.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+            set2.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);*/
+        set2.setDrawValues(true);
+
+        //GirZ
+        ArrayList<Entry> datasetGirZ = new ArrayList<>();
+        for(int i = 0; i< ticWatchEntities.size(); i++){
+            datasetGirZ.add(new Entry(i, ticWatchEntities.get(i).tic_girz));
+        }
+
+        LineDataSet set3 = new LineDataSet(datasetGirZ, "AcclZ");
+        set3.setLineWidth(2.5f);
+        set3.setCircleRadius(4.5f);
+        set3.setHighLightColor(Color.rgb(0, 255, 0));
+        set2.setColor(Color.rgb(0, 255, 0));
+           /* set3.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+            set3.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);*/
+        set3.setDrawValues(true);
+
+
+        ArrayList<ILineDataSet> dataSetsGir = new ArrayList<>();
+        dataSetsGir.add(set1);
+        dataSetsGir.add(set2);
+        dataSetsGir.add(set3);
+        LineData data = new LineData(dataSetsGir);
+
+        return data;
+
+    }
+
+
+    void generateResults(ArrayList<LineData> lineDataArray){
+
 
     }
 

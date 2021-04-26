@@ -1,10 +1,14 @@
 package com.hdrescuer.hdrescuer.ui.ui.charts;
 
 
+
 import android.content.Context;
 import android.view.View;
 
 import com.github.mikephil.charting.data.ChartData;
+import com.github.mikephil.charting.data.LineData;
+
+import java.util.ArrayList;
 
 /**
  * Base class of the Chart ListView items
@@ -18,10 +22,15 @@ public abstract class ChartItem {
     static final int TYPE_LINECHART = 1;
     static final int TYPE_PIECHART = 2;
 
-    ChartData<?> mChartData;
+    ChartData<?> mChartDataAcc;
+    ChartData<?> mChartDataAccl;
+    ChartData<?> mChartDataGir;
 
-    ChartItem(ChartData<?> cd) {
-        this.mChartData = cd;
+    ChartItem(ArrayList<LineData> cd) {
+        this.mChartDataAcc = cd.get(0);
+        this.mChartDataAccl = cd.get(1);
+        this.mChartDataGir = cd.get(2);
+
     }
 
     public abstract int getItemType();

@@ -82,6 +82,7 @@
     <string name="label_icon_freepik">Freepik</string>
     <string name="label_icon_Flaticon">Flaticon</string>
     <string name="label_result_session">Resultados de la sesión</string>
+    <string name="label_results_for_ticwatch">Resultados para TicWatch</string>
 
 
 </resources>
