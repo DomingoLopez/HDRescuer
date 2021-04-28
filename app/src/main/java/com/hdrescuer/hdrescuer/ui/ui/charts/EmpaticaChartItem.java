@@ -10,18 +10,17 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.LineData;
 import com.hdrescuer.hdrescuer.R;
 
 import java.util.ArrayList;
 
 
-public class TicWatchChartItem extends ChartItem {
+public class EmpaticaChartItem extends ChartItem {
 
     int steps;
 
-    public TicWatchChartItem(ArrayList<LineData> cd, int steps, Context c) {
+    public EmpaticaChartItem(ArrayList<LineData> cd, Context c) {
         super(cd);
 
         this.steps = steps;
@@ -44,12 +43,11 @@ public class TicWatchChartItem extends ChartItem {
             holder = new ViewHolder();
 
             convertView = LayoutInflater.from(c).inflate(
-                    R.layout.ticwatch_item_linechart, null);
-            holder.chartAcc = convertView.findViewById(R.id.chartAcc_tic);
-            holder.chartAccl = convertView.findViewById(R.id.chartAccl_tic);
-            holder.chartGir = convertView.findViewById(R.id.chartGir_tic);
-            holder.chartHr = convertView.findViewById(R.id.chartHr_tic);
-            holder.steps = convertView.findViewById(R.id.tvPasosSesionTic);
+                    R.layout.empatica_item_linechart, null);
+            holder.chartAcc = convertView.findViewById(R.id.chartAcc_emp);
+            holder.chartBvp = convertView.findViewById(R.id.chartBvp_emp);
+            holder.chartHr = convertView.findViewById(R.id.chartHr_emp);
+
 
             convertView.setTag(holder);
 
@@ -57,8 +55,6 @@ public class TicWatchChartItem extends ChartItem {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        /**Pasos*/
-        holder.steps.setText(Integer.toString(this.steps));
 
         /** Estilos ACC**/
         holder.chartAcc.getDescription().setEnabled(false);
@@ -73,8 +69,8 @@ public class TicWatchChartItem extends ChartItem {
         YAxis leftAxis = holder.chartAcc.getAxisLeft();
 
         leftAxis.setLabelCount(5, false);
-        leftAxis.setAxisMinimum(-50f); // this replaces setStartAtZero(true)
-        leftAxis.setAxisMaximum(50f);
+        leftAxis.setAxisMinimum(-100f); // this replaces setStartAtZero(true)
+        leftAxis.setAxisMaximum(100f);
 
         YAxis rightAxis = holder.chartAcc.getAxisRight();
         rightAxis.setDrawLabels(false);
@@ -89,100 +85,72 @@ public class TicWatchChartItem extends ChartItem {
         holder.chartAcc.animateX(750);
 
 
-        /** Estilos ACCl**/
-        holder.chartAccl.getDescription().setEnabled(false);
-        holder.chartAccl.setDrawGridBackground(false);
+        /** Estilos Bvp**/
+        holder.chartBvp.getDescription().setEnabled(false);
+        holder.chartBvp.setDrawGridBackground(false);
 
-        XAxis xAxisAccl = holder.chartAccl.getXAxis();
+        XAxis xAxisAccl = holder.chartBvp.getXAxis();
         xAxisAccl.setPosition(XAxisPosition.BOTTOM);
 
         xAxisAccl.setDrawGridLines(false);
         xAxisAccl.setDrawAxisLine(true);
 
-        YAxis leftAxisAccl = holder.chartAccl.getAxisLeft();
+        YAxis leftAxisAccl = holder.chartBvp.getAxisLeft();
 
         leftAxisAccl.setLabelCount(5, false);
         leftAxisAccl.setAxisMinimum(-50f); // this replaces setStartAtZero(true)
         leftAxisAccl.setAxisMaximum(50f);
 
-        YAxis rightAxisAccl = holder.chartAccl.getAxisRight();
+        YAxis rightAxisAccl = holder.chartBvp.getAxisRight();
         rightAxisAccl.setDrawLabels(false);
         rightAxisAccl.setDrawAxisLine(false);
         rightAxisAccl.setDrawGridLines(false);
 
         // set data
-        holder.chartAccl.setData((LineData) lineDataArrayList.get(1));
+        holder.chartBvp.setData((LineData) lineDataArrayList.get(1));
 
         // do not forget to refresh the chart
         // holder.chart.invalidate();
-        holder.chartAccl.animateX(750);
+        holder.chartBvp.animateX(750);
 
-
-        /** Estilos GIR**/
-        holder.chartGir.getDescription().setEnabled(false);
-        holder.chartGir.setDrawGridBackground(false);
-
-        XAxis xAxisGir = holder.chartGir.getXAxis();
-        xAxisGir.setPosition(XAxisPosition.BOTTOM);
-
-        xAxisGir.setDrawGridLines(false);
-        xAxisGir.setDrawAxisLine(true);
-
-        YAxis leftAxisGir = holder.chartGir.getAxisLeft();
-
-        leftAxisGir.setLabelCount(5, false);
-        leftAxisGir.setAxisMinimum(-50f); // this replaces setStartAtZero(true)
-        leftAxisGir.setAxisMaximum(50f);
-
-        YAxis rightAxisGir = holder.chartGir.getAxisRight();
-        rightAxisGir.setDrawLabels(false);
-        rightAxisGir.setDrawAxisLine(false);
-        rightAxisGir.setDrawGridLines(false);
-
-        // set data
-        holder.chartGir.setData((LineData) lineDataArrayList.get(2));
-
-        // do not forget to refresh the chart
-        // holder.chart.invalidate();
-        holder.chartGir.animateX(750);
 
         /** Estilos HR**/
         holder.chartHr.getDescription().setEnabled(false);
         holder.chartHr.setDrawGridBackground(false);
 
-        XAxis xAxisHr = holder.chartHr.getXAxis();
-        xAxisHr.setPosition(XAxisPosition.BOTTOM);
+        XAxis xAxisGir = holder.chartHr.getXAxis();
+        xAxisGir.setPosition(XAxisPosition.BOTTOM);
 
-        xAxisHr.setDrawGridLines(false);
-        xAxisHr.setDrawAxisLine(true);
+        xAxisGir.setDrawGridLines(false);
+        xAxisGir.setDrawAxisLine(true);
 
-        YAxis leftAxisHr = holder.chartHr.getAxisLeft();
+        YAxis leftAxisGir = holder.chartHr.getAxisLeft();
 
-        leftAxisHr.setLabelCount(5, false);
-        leftAxisHr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-        leftAxisHr.setAxisMaximum(250f);
+        leftAxisGir.setLabelCount(5, false);
+        leftAxisGir.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        leftAxisGir.setAxisMaximum(250f);
 
-        YAxis rightAxisHr = holder.chartHr.getAxisRight();
-        rightAxisHr.setDrawLabels(false);
-        rightAxisHr.setDrawAxisLine(false);
-        rightAxisHr.setDrawGridLines(false);
+        YAxis rightAxisGir = holder.chartHr.getAxisRight();
+        rightAxisGir.setDrawLabels(false);
+        rightAxisGir.setDrawAxisLine(false);
+        rightAxisGir.setDrawGridLines(false);
 
         // set data
-        holder.chartHr.setData((LineData) lineDataArrayList.get(3));
+        holder.chartHr.setData((LineData) lineDataArrayList.get(2));
 
         // do not forget to refresh the chart
         // holder.chart.invalidate();
         holder.chartHr.animateX(750);
+
+
 
         return convertView;
     }
 
     private static class ViewHolder {
         LineChart chartAcc;
-        LineChart chartAccl;
-        LineChart chartGir;
+        LineChart chartBvp;
         LineChart chartHr;
 
-        TextView steps;
     }
 }

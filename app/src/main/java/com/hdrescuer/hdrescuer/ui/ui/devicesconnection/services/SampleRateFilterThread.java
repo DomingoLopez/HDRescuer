@@ -136,17 +136,20 @@ public class SampleRateFilterThread extends Thread{
      * @author Domingo Lopez
      */
     private void updateE4BandData(){
-        this.globalMonitoringViewModel.setBattery(this.e4BandRepository.getBattery());
-        this.globalMonitoringViewModel.setTag(this.e4BandRepository.getTag());
-        this.globalMonitoringViewModel.setCurrentAccX(this.e4BandRepository.getCurrentAccX());
-        this.globalMonitoringViewModel.setCurrentAccY(this.e4BandRepository.getCurrentAccY());
-        this.globalMonitoringViewModel.setCurrentAccZ(this.e4BandRepository.getCurrentAccZ());
-        this.globalMonitoringViewModel.setCurrentBvp(this.e4BandRepository.getCurrentBvp());
-        this.globalMonitoringViewModel.setCurrentHr(this.e4BandRepository.getCurrentHr());
-        this.globalMonitoringViewModel.setCurrentGsr(this.e4BandRepository.getCurrentGsr());
-        this.globalMonitoringViewModel.setCurrentIbi(this.e4BandRepository.getCurrentIbi());
-        this.globalMonitoringViewModel.setCurrentTemp(this.e4BandRepository.getCurrentTemp());
+        if(this.e4BandRepository.isConnected()) {
+            this.globalMonitoringViewModel.setBattery(this.e4BandRepository.getBattery());
+            this.globalMonitoringViewModel.setTag(this.e4BandRepository.getTag());
+            this.globalMonitoringViewModel.setCurrentAccX(this.e4BandRepository.getCurrentAccX());
+            this.globalMonitoringViewModel.setCurrentAccY(this.e4BandRepository.getCurrentAccY());
+            this.globalMonitoringViewModel.setCurrentAccZ(this.e4BandRepository.getCurrentAccZ());
+            this.globalMonitoringViewModel.setCurrentBvp(this.e4BandRepository.getCurrentBvp());
+            this.globalMonitoringViewModel.setCurrentHr(this.e4BandRepository.getCurrentHr());
+            this.globalMonitoringViewModel.setCurrentGsr(this.e4BandRepository.getCurrentGsr());
+            this.globalMonitoringViewModel.setCurrentIbi(this.e4BandRepository.getCurrentIbi());
+            this.globalMonitoringViewModel.setCurrentTemp(this.e4BandRepository.getCurrentTemp());
 
+            e4BandRepository.saveDBLocalData(id_session_local,instant.toString());
+        }
 
 
     }
@@ -157,21 +160,24 @@ public class SampleRateFilterThread extends Thread{
      */
     private void updateTicWatchData(){
 
-        this.globalMonitoringViewModel.setHrppg(this.ticWatchRepository.getHrppg());
-        this.globalMonitoringViewModel.setHrppgraw(this.ticWatchRepository.getHrppgraw());
-        this.globalMonitoringViewModel.setStep(this.ticWatchRepository.getStep());
-        this.globalMonitoringViewModel.setAccx(this.ticWatchRepository.getAccx());
-        this.globalMonitoringViewModel.setAccy(this.ticWatchRepository.getAccy());
-        this.globalMonitoringViewModel.setAccz(this.ticWatchRepository.getAccz());
-        this.globalMonitoringViewModel.setAcclx(this.ticWatchRepository.getAcclx());
-        this.globalMonitoringViewModel.setAccly(this.ticWatchRepository.getAccly());
-        this.globalMonitoringViewModel.setAcclz(this.ticWatchRepository.getAcclz());
-        this.globalMonitoringViewModel.setGirx(this.ticWatchRepository.getGirx());
-        this.globalMonitoringViewModel.setGiry(this.ticWatchRepository.getGiry());
-        this.globalMonitoringViewModel.setGirz(this.ticWatchRepository.getGirz());
+        if(this.ticWatchRepository.isConnected()) {
+
+            this.globalMonitoringViewModel.setHrppg(this.ticWatchRepository.getHrppg());
+            this.globalMonitoringViewModel.setHrppgraw(this.ticWatchRepository.getHrppgraw());
+            this.globalMonitoringViewModel.setStep(this.ticWatchRepository.getStep());
+            this.globalMonitoringViewModel.setAccx(this.ticWatchRepository.getAccx());
+            this.globalMonitoringViewModel.setAccy(this.ticWatchRepository.getAccy());
+            this.globalMonitoringViewModel.setAccz(this.ticWatchRepository.getAccz());
+            this.globalMonitoringViewModel.setAcclx(this.ticWatchRepository.getAcclx());
+            this.globalMonitoringViewModel.setAccly(this.ticWatchRepository.getAccly());
+            this.globalMonitoringViewModel.setAcclz(this.ticWatchRepository.getAcclz());
+            this.globalMonitoringViewModel.setGirx(this.ticWatchRepository.getGirx());
+            this.globalMonitoringViewModel.setGiry(this.ticWatchRepository.getGiry());
+            this.globalMonitoringViewModel.setGirz(this.ticWatchRepository.getGirz());
 
 
-        ticWatchRepository.saveDBLocalData(id_session_local,instant.toString());
+            ticWatchRepository.saveDBLocalData(id_session_local, instant.toString());
+        }
 
     }
 
@@ -181,9 +187,12 @@ public class SampleRateFilterThread extends Thread{
      * @author Domingo Lopez
      */
     private void updateBoardData(){
-        this.globalMonitoringViewModel.setOxi_bpm(this.eHealthBoardRepository.getBPM());
-        this.globalMonitoringViewModel.setOxi_o2(this.eHealthBoardRepository.getOxBlood());
-        this.globalMonitoringViewModel.setOxi_air(this.eHealthBoardRepository.getAirFlow());
+
+        if(this.eHealthBoardRepository.isConnected()) {
+            this.globalMonitoringViewModel.setOxi_bpm(this.eHealthBoardRepository.getBPM());
+            this.globalMonitoringViewModel.setOxi_o2(this.eHealthBoardRepository.getOxBlood());
+            this.globalMonitoringViewModel.setOxi_air(this.eHealthBoardRepository.getAirFlow());
+        }
     }
 
 

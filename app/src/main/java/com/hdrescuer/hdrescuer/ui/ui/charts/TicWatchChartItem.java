@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -18,10 +19,12 @@ import java.util.ArrayList;
 
 public class TicWatchChartItem extends ChartItem {
 
+    int steps;
 
-    public TicWatchChartItem(ArrayList<LineData> cd, Context c) {
+    public TicWatchChartItem(ArrayList<LineData> cd, int steps, Context c) {
         super(cd);
 
+        this.steps = steps;
 
     }
 
@@ -42,9 +45,11 @@ public class TicWatchChartItem extends ChartItem {
 
             convertView = LayoutInflater.from(c).inflate(
                     R.layout.ticwatch_item_linechart, null);
-            holder.chartAcc = convertView.findViewById(R.id.chartAcc);
-            holder.chartAccl = convertView.findViewById(R.id.chartAccl);
-            holder.chartGir = convertView.findViewById(R.id.chartGir);
+            holder.chartAcc = convertView.findViewById(R.id.chartAcc_tic);
+            holder.chartAccl = convertView.findViewById(R.id.chartAccl_tic);
+            holder.chartGir = convertView.findViewById(R.id.chartGir_tic);
+            holder.chartHr = convertView.findViewById(R.id.chartHr_tic);
+            holder.steps = convertView.findViewById(R.id.tvPasosSesionTic);
 
             convertView.setTag(holder);
 
@@ -52,7 +57,10 @@ public class TicWatchChartItem extends ChartItem {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        // apply styling ACC
+        /**Pasos*/
+        holder.steps.setText(Integer.toString(this.steps));
+
+        /** Estilos ACC**/
         holder.chartAcc.getDescription().setEnabled(false);
         holder.chartAcc.setDrawGridBackground(false);
 
@@ -69,20 +77,19 @@ public class TicWatchChartItem extends ChartItem {
         leftAxis.setAxisMaximum(50f);
 
         YAxis rightAxis = holder.chartAcc.getAxisRight();
-
-        rightAxis.setLabelCount(5, false);
+        rightAxis.setDrawLabels(false);
+        rightAxis.setDrawAxisLine(false);
         rightAxis.setDrawGridLines(false);
-        rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         // set data
-        holder.chartAcc.setData((LineData) mChartDataAcc);
+        holder.chartAcc.setData((LineData) lineDataArrayList.get(0));
 
         // do not forget to refresh the chart
         // holder.chart.invalidate();
         holder.chartAcc.animateX(750);
 
 
-        //apply style ACCL
+        /** Estilos ACCl**/
         holder.chartAccl.getDescription().setEnabled(false);
         holder.chartAccl.setDrawGridBackground(false);
 
@@ -99,20 +106,19 @@ public class TicWatchChartItem extends ChartItem {
         leftAxisAccl.setAxisMaximum(50f);
 
         YAxis rightAxisAccl = holder.chartAccl.getAxisRight();
-
-        rightAxisAccl.setLabelCount(5, false);
+        rightAxisAccl.setDrawLabels(false);
+        rightAxisAccl.setDrawAxisLine(false);
         rightAxisAccl.setDrawGridLines(false);
-        rightAxisAccl.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         // set data
-        holder.chartAccl.setData((LineData) mChartDataAccl);
+        holder.chartAccl.setData((LineData) lineDataArrayList.get(1));
 
         // do not forget to refresh the chart
         // holder.chart.invalidate();
         holder.chartAccl.animateX(750);
 
 
-        //apply style GIR
+        /** Estilos GIR**/
         holder.chartGir.getDescription().setEnabled(false);
         holder.chartGir.setDrawGridBackground(false);
 
@@ -129,17 +135,44 @@ public class TicWatchChartItem extends ChartItem {
         leftAxisGir.setAxisMaximum(50f);
 
         YAxis rightAxisGir = holder.chartGir.getAxisRight();
-
-        rightAxisGir.setLabelCount(5, false);
+        rightAxisGir.setDrawLabels(false);
+        rightAxisGir.setDrawAxisLine(false);
         rightAxisGir.setDrawGridLines(false);
-        rightAxisGir.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
         // set data
-        holder.chartGir.setData((LineData) mChartDataGir);
+        holder.chartGir.setData((LineData) lineDataArrayList.get(2));
 
         // do not forget to refresh the chart
         // holder.chart.invalidate();
         holder.chartGir.animateX(750);
+
+        /** Estilos HR**/
+        holder.chartHr.getDescription().setEnabled(false);
+        holder.chartHr.setDrawGridBackground(false);
+
+        XAxis xAxisHr = holder.chartHr.getXAxis();
+        xAxisHr.setPosition(XAxisPosition.BOTTOM);
+
+        xAxisHr.setDrawGridLines(false);
+        xAxisHr.setDrawAxisLine(true);
+
+        YAxis leftAxisHr = holder.chartHr.getAxisLeft();
+
+        leftAxisHr.setLabelCount(5, false);
+        leftAxisHr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        leftAxisHr.setAxisMaximum(250f);
+
+        YAxis rightAxisHr = holder.chartHr.getAxisRight();
+        rightAxisHr.setDrawLabels(false);
+        rightAxisHr.setDrawAxisLine(false);
+        rightAxisHr.setDrawGridLines(false);
+
+        // set data
+        holder.chartHr.setData((LineData) lineDataArrayList.get(3));
+
+        // do not forget to refresh the chart
+        // holder.chart.invalidate();
+        holder.chartHr.animateX(750);
 
         return convertView;
     }
@@ -148,5 +181,8 @@ public class TicWatchChartItem extends ChartItem {
         LineChart chartAcc;
         LineChart chartAccl;
         LineChart chartGir;
+        LineChart chartHr;
+
+        TextView steps;
     }
 }

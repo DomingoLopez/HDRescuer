@@ -537,6 +537,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         if (this.ehealthConnected)
             devices_counter++;
 
+        this.e4BandRepository.setConnected(e4Connected);
+        this.ticWatchRepository.setConnected(ticwatchConnected);
+        this.eHealthBoardRepository.setConnected(ehealthConnected);
+
         return devices_counter;
     }
 

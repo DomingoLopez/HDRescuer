@@ -87,10 +87,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         //Para no tener que registrarme cada vez
-        Intent i = new Intent(MainActivity.this, SessionResultActivity.class);
+        /*Intent i = new Intent(MainActivity.this, SessionResultActivity.class);
         startActivity(i);
-        finish();
-        //this.goToLogin();
+        finish();*/
+        this.goToLogin();
     }
 
 

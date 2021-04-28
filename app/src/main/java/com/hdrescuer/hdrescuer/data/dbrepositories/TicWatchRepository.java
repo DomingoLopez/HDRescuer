@@ -18,6 +18,7 @@ import java.util.List;
 public class TicWatchRepository {
 
     private TicWatchDao ticWatchDao;
+    private boolean connected = false;
 
     private Integer accx;
     private Integer accy;
@@ -209,6 +210,9 @@ public class TicWatchRepository {
 
     public List<TicWatchEntity> getByIdSession(int id_session_local){return ticWatchDao.getTicWatchSessionById(id_session_local);}
 
+    public int getTicWatchMaxStepById(int id_session_local){return ticWatchDao.getTicWatchMaxStepById(id_session_local);}
+
+
     public void insertTicWatchData(TicWatchEntity ticWatchEntity){
         Log.i("INSERT DATA","INSERT DATA");
         new TicWatchRepository.insertTicWatchAsyncTask(ticWatchDao).execute(ticWatchEntity);
@@ -248,8 +252,13 @@ public class TicWatchRepository {
 
 
 
+    public void setConnected(boolean connected){
+        this.connected =  connected;
+    }
 
-
+    public boolean isConnected(){
+        return this.connected;
+    }
 
 
 

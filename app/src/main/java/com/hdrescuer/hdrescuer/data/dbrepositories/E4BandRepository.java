@@ -22,6 +22,7 @@ public class E4BandRepository implements EmpaDataDelegate {
 
 
     private EmpaticaDao empaticaDao;
+    private boolean connected;
 
     private final static double timezoneOffset = TimeZone.getDefault().getRawOffset() / 1000d;
 
@@ -244,5 +245,14 @@ public class E4BandRepository implements EmpaDataDelegate {
 
         this.insertEmpaticaData(empaticaEntity);
     }
+
+    public void setConnected(boolean connected){
+        this.connected =  connected;
+    }
+
+    public boolean isConnected(){
+        return this.connected;
+    }
+
 
 }

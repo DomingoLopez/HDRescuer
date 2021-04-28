@@ -25,5 +25,9 @@ public interface TicWatchDao {
     @Query("SELECT * FROM TICWATCH WHERE id_session_local = :id_session_local")
     List<TicWatchEntity> getTicWatchSessionById(int id_session_local);
 
+    @Query("SELECT MAX(tic_step) FROM TICWATCH WHERE id_session_local = :id_session_local")
+    int getTicWatchMaxStepById(int id_session_local);
+
+
 
 }

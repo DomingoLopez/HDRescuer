@@ -22,15 +22,10 @@ public abstract class ChartItem {
     static final int TYPE_LINECHART = 1;
     static final int TYPE_PIECHART = 2;
 
-    ChartData<?> mChartDataAcc;
-    ChartData<?> mChartDataAccl;
-    ChartData<?> mChartDataGir;
+    ArrayList<LineData> lineDataArrayList;
 
     ChartItem(ArrayList<LineData> cd) {
-        this.mChartDataAcc = cd.get(0);
-        this.mChartDataAccl = cd.get(1);
-        this.mChartDataGir = cd.get(2);
-
+        this.lineDataArrayList = cd;
     }
 
     public abstract int getItemType();

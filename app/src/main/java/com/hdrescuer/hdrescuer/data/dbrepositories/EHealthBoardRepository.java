@@ -17,6 +17,7 @@ import java.util.List;
 public class EHealthBoardRepository {
 
     private HealthBoardDao healthBoardDao;
+    private boolean connected = false;
 
     private Integer BPM;
     private Integer OxBlood;
@@ -111,6 +112,14 @@ public class EHealthBoardRepository {
     }
 
 
+
+    public void setConnected(boolean connected){
+        this.connected =  connected;
+    }
+
+    public boolean isConnected(){
+        return this.connected;
+    }
 
 
 

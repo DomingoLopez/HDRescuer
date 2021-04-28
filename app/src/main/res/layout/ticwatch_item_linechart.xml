@@ -8,39 +8,91 @@
 
     <TextView
         android:id="@+id/tvTicWatchResults"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="330dp"
+        android:layout_height="23dp"
         android:text="@string/label_results_for_ticwatch"
         android:textColor="@color/blue_secondary"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/imageView20"
+        app:layout_constraintStart_toEndOf="@+id/imageView20"
+        app:layout_constraintTop_toTopOf="@+id/imageView20" />
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chartAcc"
+        android:id="@+id/chartAcc_tic"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView22" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartAccl_tic"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chartAcc_tic" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartGir_tic"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chartAccl_tic" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartHr_tic"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chartGir_tic" />
+
+    <ImageView
+        android:id="@+id/imageView20"
+        android:layout_width="69dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleX="1.3"
+        android:scaleY="1.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@mipmap/watch2" />
+
+    <ImageView
+        android:id="@+id/imageView22"
+        android:layout_width="46dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="8dp"
+        android:scaleX="1.4"
+        android:scaleY="1.4"
+        android:src="@mipmap/running_watch_foreground"
+        app:layout_constraintStart_toStartOf="@+id/tvTicWatchResults"
         app:layout_constraintTop_toBottomOf="@+id/tvTicWatchResults" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chartAccl"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartAcc" />
+    <TextView
+        android:id="@+id/tvPasosSesionTic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/blue_secondary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView22"
+        app:layout_constraintStart_toEndOf="@+id/imageView22"
+        app:layout_constraintTop_toTopOf="@+id/imageView22" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/chartGir"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartAccl" />
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="pasos"
+        android:textColor="@color/blue_secondary"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPasosSesionTic"
+        app:layout_constraintStart_toEndOf="@+id/tvPasosSesionTic"
+        app:layout_constraintTop_toTopOf="@+id/tvPasosSesionTic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
