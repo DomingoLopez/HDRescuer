@@ -673,7 +673,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
             //Inicio la sesión
             sessionsRepository.insertSession(new SessionEntity(
-                    id_session_local,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected
+                    id_session_local,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected,""
             ));
 
 
@@ -684,7 +684,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         private void stopDBLocalSession(String timestamp_fin) {
             //Hacemos update de la sesión
             sessionsRepository.updateSession(new SessionEntity(
-                    id_session_local,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected
+                    id_session_local,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,""
             ));
 
 

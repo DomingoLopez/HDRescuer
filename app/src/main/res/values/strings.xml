@@ -16,6 +16,7 @@
     <string name="menu_users">Usuarios</string>
     <string name="menu_support">Información</string>
     <string name="menu_config">Configuración</string>
+    <string name="menu_sessions">Sesiones locales</string>
     <string name="label_last_monitoring">Última sesión </string>
     <string name="label_edad">Edad:</string>
     <string name="label_altura">Altura:</string>
@@ -85,6 +86,7 @@
     <string name="label_results_for_ticwatch">Resultados para TicWatch</string>
     <string name="label_results_for_empatica">Resultados para Empatica Band</string>
     <string name="label_results_for_healthboard">Resultados para Health Board</string>
+    <string name="label_sessions_not_synchronized">Aquí aparecen las sesiones guardadas en el modo \'Sin Conexión\'. Es recomendable sincronizarlas con el servidor.</string>
 
 
 </resources>

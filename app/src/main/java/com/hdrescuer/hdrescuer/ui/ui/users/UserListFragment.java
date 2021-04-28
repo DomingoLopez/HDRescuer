@@ -22,7 +22,6 @@ import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
 import com.hdrescuer.hdrescuer.common.UserActionDialog;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.ui.ui.userdetails.UserDetailsActivity;
 
 import java.util.List;

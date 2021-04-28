@@ -90,7 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /*Intent i = new Intent(MainActivity.this, SessionResultActivity.class);
         startActivity(i);
         finish();*/
-        this.goToLogin();
+        Intent i = new Intent(MainActivity.this, HomeActivity.class);
+        startActivity(i);
+        finish();
+        //this.goToLogin();
     }
 
 

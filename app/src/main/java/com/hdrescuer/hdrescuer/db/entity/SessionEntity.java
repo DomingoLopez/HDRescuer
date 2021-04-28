@@ -19,9 +19,10 @@ public class SessionEntity {
     public boolean e4band;
     public boolean ticwatch;
     public boolean ehealthboard;
+    public String description;
 
 
-    public SessionEntity(int id_session_local, String user_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch, boolean ehealthboard) {
+    public SessionEntity(int id_session_local, String user_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch, boolean ehealthboard, String description) {
         this.id_session_local = id_session_local;
         this.user_id = user_id;
         this.timestamp_ini = timestamp_ini;
@@ -30,6 +31,7 @@ public class SessionEntity {
         this.e4band = e4band;
         this.ticwatch = ticwatch;
         this.ehealthboard = ehealthboard;
+        this.description = description;
     }
 
     public int getId_session_local() {
@@ -68,7 +70,7 @@ public class SessionEntity {
         return total_time;
     }
 
-    public void setTotal_time(int total_time) {
+    public void setTotal_time(long total_time) {
         this.total_time = total_time;
     }
 
@@ -94,5 +96,13 @@ public class SessionEntity {
 
     public void setEhealthboard(boolean ehealthboard) {
         this.ehealthboard = ehealthboard;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
