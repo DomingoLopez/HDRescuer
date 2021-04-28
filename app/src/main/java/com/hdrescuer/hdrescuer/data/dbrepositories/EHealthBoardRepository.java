@@ -32,8 +32,7 @@ public class EHealthBoardRepository {
         DataRecoveryDataBase db = DataRecoveryDataBase.getDataBase(application);
         healthBoardDao = db.getHealthBoardDao();
 
-
-        this.BPM = 0;
+       this.BPM = 0;
        this.OxBlood = 0;
        this.airFlow = 0;
     }
@@ -80,6 +79,13 @@ public class EHealthBoardRepository {
         healthBoardDao.deleteAll();}
 
     public List<HealthBoardEntity> getByIdSession(int id_session_local){return healthBoardDao.getHealthBoardSessionById(id_session_local);}
+
+
+    public int getHealthBoardMinBloodById(int id_session_local){return healthBoardDao.getHealthBoardMinBloodById(id_session_local);}
+
+    public int getHealthBoardMaxBloodById(int id_session_local){return healthBoardDao.getHealthBoardMaxBloodById(id_session_local);}
+
+    public int getHealthBoardAVBloodById(int id_session_local){return healthBoardDao.getHealthBoardAVBloodById(id_session_local);}
 
     public void insertHealthBoardData(HealthBoardEntity healthBoardEntity){
         new EHealthBoardRepository.insertHealthBoardAsyncTask(healthBoardDao).execute(healthBoardEntity);

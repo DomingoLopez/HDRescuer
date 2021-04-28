@@ -192,6 +192,8 @@ public class SampleRateFilterThread extends Thread{
             this.globalMonitoringViewModel.setOxi_bpm(this.eHealthBoardRepository.getBPM());
             this.globalMonitoringViewModel.setOxi_o2(this.eHealthBoardRepository.getOxBlood());
             this.globalMonitoringViewModel.setOxi_air(this.eHealthBoardRepository.getAirFlow());
+
+            eHealthBoardRepository.saveDBLocalData(id_session_local,instant.toString());
         }
     }
 

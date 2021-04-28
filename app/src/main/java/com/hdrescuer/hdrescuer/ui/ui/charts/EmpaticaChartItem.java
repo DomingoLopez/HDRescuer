@@ -18,12 +18,10 @@ import java.util.ArrayList;
 
 public class EmpaticaChartItem extends ChartItem {
 
-    int steps;
 
     public EmpaticaChartItem(ArrayList<LineData> cd, Context c) {
         super(cd);
 
-        this.steps = steps;
 
     }
 
@@ -36,11 +34,10 @@ public class EmpaticaChartItem extends ChartItem {
     @Override
     public View getView(int position, View convertView, Context c) {
 
-        ViewHolder holder;
+        ViewHolderEmpatica holder;
 
-        if (convertView == null) {
 
-            holder = new ViewHolder();
+            holder = new ViewHolderEmpatica();
 
             convertView = LayoutInflater.from(c).inflate(
                     R.layout.empatica_item_linechart, null);
@@ -51,9 +48,7 @@ public class EmpaticaChartItem extends ChartItem {
 
             convertView.setTag(holder);
 
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+
 
 
         /** Estilos ACC**/
@@ -147,7 +142,7 @@ public class EmpaticaChartItem extends ChartItem {
         return convertView;
     }
 
-    private static class ViewHolder {
+    private static class ViewHolderEmpatica {
         LineChart chartAcc;
         LineChart chartBvp;
         LineChart chartHr;

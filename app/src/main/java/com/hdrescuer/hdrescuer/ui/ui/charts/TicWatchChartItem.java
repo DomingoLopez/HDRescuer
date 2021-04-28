@@ -10,7 +10,6 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.LineData;
 import com.hdrescuer.hdrescuer.R;
 
@@ -37,11 +36,9 @@ public class TicWatchChartItem extends ChartItem {
     @Override
     public View getView(int position, View convertView, Context c) {
 
-        ViewHolder holder;
+        ViewHolderTicWatch holder;
 
-        if (convertView == null) {
-
-            holder = new ViewHolder();
+            holder = new ViewHolderTicWatch();
 
             convertView = LayoutInflater.from(c).inflate(
                     R.layout.ticwatch_item_linechart, null);
@@ -53,9 +50,7 @@ public class TicWatchChartItem extends ChartItem {
 
             convertView.setTag(holder);
 
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+
 
         /**Pasos*/
         holder.steps.setText(Integer.toString(this.steps));
@@ -177,7 +172,7 @@ public class TicWatchChartItem extends ChartItem {
         return convertView;
     }
 
-    private static class ViewHolder {
+    private static class ViewHolderTicWatch {
         LineChart chartAcc;
         LineChart chartAccl;
         LineChart chartGir;
