@@ -1,17 +1,23 @@
 package com.hdrescuer.hdrescuer.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
+import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 
 import androidx.core.view.MenuItemCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -19,6 +25,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.List;
 
 /**
  * Clase Home de la aplicación. Pantalla de inicio
@@ -32,6 +40,9 @@ public class HomeActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
     private ImageView sessions_not_registered;
+
+    //flag para no cargar las sesiones dos veces
+    public boolean alreadyChecked = false;
 
     /**
      * Inicia la actividad HomeActivity, cargando los fragmentos necesarios al inicio y el userListViewModel
@@ -67,7 +78,26 @@ public class HomeActivity extends AppCompatActivity {
         //ViewModel para el fragmento de los usuarios
         this.userListViewModel = new UserListViewModel(getApplication());
         //Viewmodel para el fragmento de las sesiones sin registrar
-        this.sessionsListViewModel = new SessionsListViewModel(getApplication());
+        this.sessionsListViewModel = new ViewModelProvider(this).get(SessionsListViewModel.class);
+
+        initializeCountBadge();
+
+
+
+        this.sessionsListViewModel.getSessions().observe(this, new Observer<List<SessionEntity>>() {
+            @Override
+            public void onChanged(List<SessionEntity> sessions) {
+                Log.i("ENTROOOO","SESIONES CAMBIAN"+sessions.size());
+                if(sessions.size() < 1){
+                    //Si no hay sesiones, no muestres el icono de que hay sesiones pendientes
+                    sessions_not_registered.setVisibility(View.INVISIBLE);
+                }else{
+                    sessions_not_registered.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        this.alreadyChecked = true;
+
 
     }
 
@@ -99,7 +129,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initializeCountBadge();
+
+        if(!alreadyChecked)
+            this.sessionsListViewModel.refreshSessions();
+        this.alreadyChecked = false;
 
     }
 

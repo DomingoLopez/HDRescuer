@@ -41,11 +41,11 @@ public class Constants {
      * @param secs
      * @return String
      */
-    public static String getHMS(int secs){
+    public static String getHMS(long secs){
 
-        int hours = secs / 3600;
-        int minutes = (secs % 3600) / 60;
-        int seconds = secs % 60;
+        long hours = secs / 3600;
+        long minutes = (secs % 3600) / 60;
+        long seconds = secs % 60;
 
         String chain = String.valueOf(hours)+"h : "+ String.valueOf(minutes) +"m : "+ String.valueOf(seconds)+"s";
 

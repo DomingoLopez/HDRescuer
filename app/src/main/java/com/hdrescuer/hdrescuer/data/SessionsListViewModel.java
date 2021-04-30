@@ -37,6 +37,9 @@ public class SessionsListViewModel extends AndroidViewModel {
     }
 
 
+    public void deleteSessions(){
+        this.sessionsListRepository.deleteSessions();
+    }
 
     public void refreshSessions(){
         this.sessionsListRepository.refreshSessions();

@@ -39,7 +39,7 @@ public class SessionsListRepository {
         if(sessions == null)
             sessions = new MutableLiveData<>();
 
-        List<SessionEntity> sesiones_locales = new ArrayList<>();
+        List<SessionEntity> sesiones_locales;
         sesiones_locales = this.sessionsRepository.getAllSession();
 
         sessions.setValue(sesiones_locales);
@@ -54,7 +54,13 @@ public class SessionsListRepository {
     }
 
 
+    public void deleteSessions(){
+        this.sessionsRepository.deleteAllSession();
+        List<SessionEntity> sesiones_locales;
+        sesiones_locales = this.sessionsRepository.getAllSession();
 
+        sessions.setValue(sesiones_locales);
+    }
 
 
     public void refreshSessions(){

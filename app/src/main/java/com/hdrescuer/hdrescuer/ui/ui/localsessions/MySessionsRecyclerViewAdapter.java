@@ -4,19 +4,26 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
+import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.retrofit.request.Session;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,7 +57,21 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
         if(mValues != null) {
             holder.mItem = mValues.get(position);
 
-            holder.user_name.setText("Aquí estamos");
+
+            holder.tvTimestampini.setText(dateFormat.format(Date.from(Instant.parse(holder.mItem.getTimestamp_ini()))));
+            holder.id_session_local.setText(Integer.toString(holder.mItem.getId_session_local()));
+            holder.duration.setText(Constants.getHMS(holder.mItem.getTotal_time()));
+
+            if(holder.mItem.getDescription().equals(""))
+                holder.description.setText("No hay descripción para esta sesión");
+            else
+                holder.description.setText(holder.mItem.getDescription());
+
+
+            String values[]= {"Orange","Apple","Pineapple"};
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MyApp.getContext(),R.layout.simple_list_item_1,values);
+            holder.autoCompleteTextView.setAdapter(adapter);
+
 
 
         }
@@ -86,12 +107,22 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
         public final View mView;
         public SessionEntity mItem;
 
-        public final TextView user_name;
+        public final TextView tvTimestampini;
+        public final TextView id_session_local;
+        public final TextView duration;
+        public final TextView description;
+        public final AutoCompleteTextView autoCompleteTextView;
+        public final Button btnUploadSession;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            user_name = (TextView) view.findViewById(R.id.tvPrueba);
+            tvTimestampini = view.findViewById(R.id.tvTimestampIni);
+            id_session_local = view.findViewById(R.id.tvSessionLocal);
+            duration = view.findViewById(R.id.tvDuration);
+            description = view.findViewById(R.id.tvDescription);
+            autoCompleteTextView = view.findViewById(R.id.tvAutoCompletablePatient);
+            btnUploadSession = view.findViewById(R.id.btnUploadSessionLocale);
 
 
             view.setOnClickListener(this);

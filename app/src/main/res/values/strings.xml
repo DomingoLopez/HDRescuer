@@ -87,6 +87,7 @@
     <string name="label_results_for_empatica">Resultados para Empatica Band</string>
     <string name="label_results_for_healthboard">Resultados para Health Board</string>
     <string name="label_sessions_not_synchronized">Aquí aparecen las sesiones guardadas en el modo \'Sin Conexión\'. Es recomendable sincronizarlas con el servidor.</string>
+    <string name="btn_synchronize_session">Sincronizar sesión</string>
 
 
 </resources>

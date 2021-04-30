@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
@@ -32,6 +34,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     MySessionsRecyclerViewAdapter adapter;
     List<SessionEntity> sessionList;
     SessionsListViewModel sessionsListViewModel;
+    FloatingActionButton button;
 
     boolean alreadyCreated = false;
 
@@ -59,7 +62,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
         }
 
 
-        this.sessionsListViewModel = new ViewModelProvider(getActivity()).get(SessionsListViewModel.class);
+        this.sessionsListViewModel = new ViewModelProvider(requireActivity()).get(SessionsListViewModel.class);
         alreadyCreated = true;
 
     }
@@ -94,15 +97,19 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     public void onResume() {
         super.onResume();
         if(!alreadyCreated){
-            refreshUserDetails();
+/*
+            refreshSessions();
+*/
         }
         alreadyCreated = false;
     }
 
 
-    private void refreshUserDetails() {
+/*
+    private void refreshSessions() {
         this.sessionsListViewModel.refreshSessions();
     }
+*/
 
 
     /**
@@ -111,7 +118,8 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
      * @param view
      */
     private void findViews(View view) {
-
+        this.button = view.findViewById(R.id.btn_delete_sessions);
+        this.button.setOnClickListener(this);
     }
 
 
@@ -121,10 +129,10 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
      */
     private void loadSessionsData() {
 
-        this.sessionsListViewModel.getSessions().observe(requireActivity(), new Observer<List<SessionEntity>>() {
+        this.sessionsListViewModel.getSessions().observe(getActivity(), new Observer<List<SessionEntity>>() {
             @Override
             public void onChanged(List<SessionEntity> sessions) {
-                Log.i("SESSIONS", sessions.toString());
+
                 sessionList = sessions;
                 adapter.setData(sessionList);
             }
@@ -150,7 +158,11 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     @Override
     public void onClick(View view) {
 
-
+        switch (view.getId()){
+            case R.id.btn_delete_sessions:
+                this.sessionsListViewModel.deleteSessions();
+                break;
+        }
 
 
     }
