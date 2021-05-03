@@ -1,26 +1,48 @@
 package com.hdrescuer.hdrescuer.ui.ui.localsessions;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.DataItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
+import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.retrofit.response.User;
+import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardThread;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSessionService;
+import com.hdrescuer.hdrescuer.ui.ui.localsessions.services.UploadSessionService;
 import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
 
+import java.time.Clock;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class LocalSessionsFragment extends Fragment implements ListItemClickListener, View.OnClickListener {
@@ -33,13 +55,17 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     RecyclerView recyclerView;
     MySessionsRecyclerViewAdapter adapter;
     List<SessionEntity> sessionList;
+    List<User> users;
     SessionsListViewModel sessionsListViewModel;
-    FloatingActionButton button;
+    UserListViewModel userListViewModel;
+
+    public Map<String, String> usuarios_predictivo = new HashMap<String,String>();
 
     boolean alreadyCreated = false;
 
 
     public LocalSessionsFragment() {
+
     }
 
 
@@ -62,7 +88,12 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
         }
 
 
+        //Obtenemos ViewModel de las sesiones
         this.sessionsListViewModel = new ViewModelProvider(requireActivity()).get(SessionsListViewModel.class);
+
+        //Obtenemos viewmodel de los usuarios descargados
+        this.userListViewModel = new ViewModelProvider(requireActivity()).get(UserListViewModel.class);
+
         alreadyCreated = true;
 
     }
@@ -78,9 +109,13 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
         this.recyclerView = view.findViewById(R.id.list_sessions);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+        this.users = this.userListViewModel.getUsers().getValue();
+        setUsersAElegir();
+
         this.adapter = new MySessionsRecyclerViewAdapter(
                 getActivity(),
                 this.sessionList,
+                this.users,
                 this
         );
         this.recyclerView.setAdapter(adapter);
@@ -90,6 +125,12 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
         loadSessionsData();
 
         return view;
+    }
+
+    void setUsersAElegir(){
+        for(int i = 0; i< this.users.size(); i++){
+            this.usuarios_predictivo.put(this.users.get(i).getLastname()+", "+this.users.get(i).getUsername(), this.users.get(i).getId());
+        }
     }
 
 
@@ -118,8 +159,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
      * @param view
      */
     private void findViews(View view) {
-        this.button = view.findViewById(R.id.btn_delete_sessions);
-        this.button.setOnClickListener(this);
+
     }
 
 
@@ -138,6 +178,10 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
             }
         });
 
+
+
+
+
     }
 
     /**
@@ -148,22 +192,67 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     @Override
     public void onListItemClick(int position) {
 
-        int id = this.sessionList.get(position).id_session_local;
-       /* Intent i = new Intent(MyApp.getContext(), UserDetailsActivity.class);
-        i.putExtra("id", id);
-        startActivity(i);*/
+
+    }
+
+    @Override
+    public void onListItemClickUser(int position, String user_elegido){
+
+        if(user_elegido == null || user_elegido == ""){
+            Toast.makeText(requireActivity(), "No ha seleccionado un paciente para la sesión", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //Si el usuario contiene algo, lo comparamos con el Map que tenemos
+        String user_id = this.usuarios_predictivo.get(user_elegido);
+        if(user_id != null){
+            int id_session_local = this.sessionList.get(position).id_session_local;
+
+            Intent intent = new Intent(this.getContext(), UploadSessionService.class);
+            intent.setAction("START_UPLOAD");
+            intent.putExtra("user_id",user_id);
+            intent.putExtra("id_session_local", id_session_local);
+            intent.putExtra("receiver",this.sessionResult);
+            requireActivity().startService(intent);
+
+        }else{
+            Toast.makeText(requireActivity(), "Debe escribir el nombre del paciente al que pertenece la sesión", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
-    @Override
-    public void onClick(View view) {
+    public ResultReceiver sessionResult = new ResultReceiver(new Handler()) {
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            //Broadcast /send the result code in intent service based on your logic(success/error) handle with switch
+            switch (resultCode) {
+                case 1: //Case correcto. Sesión subida
 
-        switch (view.getId()){
-            case R.id.btn_delete_sessions:
-                this.sessionsListViewModel.deleteSessions();
-                break;
+                    //Borramos la sesión de la BD y del viewModel
+
+
+                    break;
+
+                //Error al descargar a csv la sesión
+                case 400:
+
+                    break;
+
+                //Error al subir la sesión
+                case 401:
+
+                    break;
+
+            }
         }
+    };
 
+
+
+        @Override
+    public void onClick(View view) {
 
     }
 

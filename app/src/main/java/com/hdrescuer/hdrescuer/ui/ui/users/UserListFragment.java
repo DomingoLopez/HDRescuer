@@ -178,6 +178,11 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         startActivity(i);
     }
 
+    @Override
+    public void onListItemClickUser(int position, String user) {
+
+    }
+
     /**
      * Método para gestionar los eventos de click en los elementos del fragmento
      * @author Domingo Lopez
