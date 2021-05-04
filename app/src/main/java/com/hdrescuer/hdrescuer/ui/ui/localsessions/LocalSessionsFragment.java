@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
@@ -213,7 +214,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
             intent.putExtra("user_id",user_id);
             intent.putExtra("id_session_local", id_session_local);
             intent.putExtra("receiver",this.sessionResult);
-            requireActivity().startService(intent);
+            MyApp.getInstance().startService(intent);
 
         }else{
             Toast.makeText(requireActivity(), "Debe escribir el nombre del paciente al que pertenece la sesión", Toast.LENGTH_SHORT).show();
@@ -230,7 +231,6 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
             switch (resultCode) {
                 case 1: //Case correcto. Sesión subida
 
-                    //Borramos la sesión de la BD y del viewModel
 
 
                     break;
