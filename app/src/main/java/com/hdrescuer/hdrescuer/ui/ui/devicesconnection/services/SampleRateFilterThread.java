@@ -92,7 +92,6 @@ public class SampleRateFilterThread extends Thread{
                //Variables a pasar del Watch
 
                restIntent.putExtra("tic_hrppg",this.ticWatchRepository.getHrppg().toString());
-               restIntent.putExtra("tic_hrppgraw",this.ticWatchRepository.getHrppgraw().toString());
                restIntent.putExtra("tic_step",this.ticWatchRepository.getStep().toString());
                restIntent.putExtra("tic_accx",this.ticWatchRepository.getAccx().toString());
                restIntent.putExtra("tic_accy",this.ticWatchRepository.getAccy().toString());
@@ -163,7 +162,6 @@ public class SampleRateFilterThread extends Thread{
         if(this.ticWatchRepository.isConnected()) {
 
             this.globalMonitoringViewModel.setHrppg(this.ticWatchRepository.getHrppg());
-            this.globalMonitoringViewModel.setHrppgraw(this.ticWatchRepository.getHrppgraw());
             this.globalMonitoringViewModel.setStep(this.ticWatchRepository.getStep());
             this.globalMonitoringViewModel.setAccx(this.ticWatchRepository.getAccx());
             this.globalMonitoringViewModel.setAccy(this.ticWatchRepository.getAccy());

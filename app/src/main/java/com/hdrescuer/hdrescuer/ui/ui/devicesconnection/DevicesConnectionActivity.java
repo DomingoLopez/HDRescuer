@@ -1089,9 +1089,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 }else if(item.getUri().getPath().compareTo("/HRPPG") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setHrppg(dataMap.getFloat("HRPPG"));
-                }else if(item.getUri().getPath().compareTo("/HRPPGRAW") == 0) {
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    this.ticWatchRepository.setHrppgraw(dataMap.getFloat("HRPPGRAW"));
                 }else if(item.getUri().getPath().compareTo("/STEP") == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                     this.ticWatchRepository.setStep(dataMap.getInt("STEP"));

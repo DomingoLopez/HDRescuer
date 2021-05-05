@@ -231,7 +231,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
             switch (resultCode) {
                 case 1: //Case correcto. Sesión subida
 
-
+                    Toast.makeText(requireActivity(), "Datos enviados", Toast.LENGTH_SHORT).show();
 
                     break;
 
@@ -242,6 +242,12 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
 
                 //Error al subir la sesión
                 case 401:
+
+                    break;
+
+
+                //Error al subir los csv
+                case 402:
 
                     break;
 

@@ -30,7 +30,6 @@ public class TicWatchRepository {
     private Integer giry;
     private Integer girz;
     private Float hrppg;
-    private Float hrppgraw;
     private Integer step;
     private int stepCounter;
 
@@ -58,7 +57,6 @@ public class TicWatchRepository {
         this.giry = 0;
         this.girz = 0;
         this.hrppg = 0.0f;
-        this.hrppgraw = 0.0f;
         this.step = 0;
 
 
@@ -110,10 +108,6 @@ public class TicWatchRepository {
 
     public Float getHrppg() {
         return hrppg;
-    }
-
-    public Float getHrppgraw() {
-        return hrppgraw;
     }
 
 
@@ -169,9 +163,6 @@ public class TicWatchRepository {
         this.hrppg = hrppg;
     }
 
-    public void setHrppgraw(Float hrppgraw) {
-        this.hrppgraw = hrppgraw;
-    }
 
 
     public void setStep(Integer step) {
@@ -197,7 +188,6 @@ public class TicWatchRepository {
         this.giry = 0;
         this.girz = 0;
         this.hrppg = 0.0f;
-        this.hrppgraw = 0.0f;
         this.step = 0;
     }
 
@@ -244,7 +234,7 @@ public class TicWatchRepository {
     public void saveDBLocalData(int id_session_local, String instant){
 
         TicWatchEntity ticWatchEntity = new TicWatchEntity(
-                id_session_local,instant, this.accx, this.accy,this.accz, this.acclx, this.accly, this.acclz, this.girx, this.giry, this.girz, this.hrppg, this.hrppgraw, this.step
+                id_session_local,instant, this.accx, this.accy,this.accz, this.acclx, this.accly, this.acclz, this.girx, this.giry, this.girz, this.hrppg, this.step
         );
 
         this.insertTicWatchData(ticWatchEntity);

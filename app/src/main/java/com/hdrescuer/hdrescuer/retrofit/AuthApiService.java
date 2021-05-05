@@ -9,10 +9,14 @@ import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 /**
@@ -63,7 +67,7 @@ public interface AuthApiService {
      * @param userData
      * @return Call
      */
-    @POST("api/datarecovery")
+    @POST("api/datarecovery/data")
     Call<String> setUserData(@Body RequestSendData userData);
 
     /**
@@ -83,6 +87,36 @@ public interface AuthApiService {
      */
     @POST("api/sessions/stop")
     Call<String> stopSession(@Body JsonObject jsonObject);
+
+
+    //Métodos para gestionar las sesiones guardadas en modo no conexión
+
+    /**
+     * Método que crea una sesión ya creada localmente en el servidor
+     * @author Domingo Lopez
+     * @param session
+     * @return Call
+     */
+    @POST("api/sessions/createfromlocal")
+    Call<String> createSessionFromLocal(@Body Session session);
+
+
+    @Multipart
+    @POST("api/datarecovery/empaticafile")
+    Call<String> uploadEmpaticaCSV(
+            @Part("description") RequestBody description,
+            @Part MultipartBody.Part csv
+    );
+
+
+    @Multipart
+    @POST("api/datarecovery/ticwatchfile")
+    Call<String> uploadTicWatchCSV(
+            @Part("description") RequestBody description,
+            @Part MultipartBody.Part csv
+    );
+
+
 
 
 

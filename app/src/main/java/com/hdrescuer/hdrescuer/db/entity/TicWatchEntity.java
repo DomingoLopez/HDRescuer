@@ -23,11 +23,10 @@ public class TicWatchEntity {
     public int tic_giry;
     public int tic_girz;
     public float tic_hrppg;
-    public float tic_hrppgraw;
     public int tic_step;
 
 
-    public TicWatchEntity(int id_session_local, String timestamp, int tic_accx, int tic_accy, int tic_accz, int tic_acclx, int tic_accly, int tic_acclz, int tic_girx, int tic_giry, int tic_girz, float tic_hrppg, float tic_hrppgraw, int tic_step) {
+    public TicWatchEntity(int id_session_local, String timestamp, int tic_accx, int tic_accy, int tic_accz, int tic_acclx, int tic_accly, int tic_acclz, int tic_girx, int tic_giry, int tic_girz, float tic_hrppg, int tic_step) {
         this.id_session_local = id_session_local;
         this.timestamp = timestamp;
         this.tic_accx = tic_accx;
@@ -40,7 +39,6 @@ public class TicWatchEntity {
         this.tic_giry = tic_giry;
         this.tic_girz = tic_girz;
         this.tic_hrppg = tic_hrppg;
-        this.tic_hrppgraw = tic_hrppgraw;
         this.tic_step = tic_step;
     }
 
@@ -138,14 +136,6 @@ public class TicWatchEntity {
 
     public void setTic_hrppg(float tic_hrppg) {
         this.tic_hrppg = tic_hrppg;
-    }
-
-    public float getTic_hrppgraw() {
-        return tic_hrppgraw;
-    }
-
-    public void setTic_hrppgraw(float tic_hrppgraw) {
-        this.tic_hrppgraw = tic_hrppgraw;
     }
 
     public int getTic_step() {

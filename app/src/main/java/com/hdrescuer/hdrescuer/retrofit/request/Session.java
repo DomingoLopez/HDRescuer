@@ -23,7 +23,7 @@ public class Session implements Serializable
     private String timestampFin;
     @SerializedName("total_time")
     @Expose
-    private Integer totalTime;
+    private long totalTime;
     @SerializedName("e4band")
     @Expose
     private Boolean e4band;
@@ -54,7 +54,7 @@ public class Session implements Serializable
      * @param ehealthboard
      * @param userId
      */
-    public Session(String userId, String timestampIni, String timestampFin, Integer totalTime, Boolean e4band, Boolean ticwatch, Boolean ehealthboard) {
+    public Session(String userId, String timestampIni, String timestampFin, long totalTime, Boolean e4band, Boolean ticwatch, Boolean ehealthboard) {
         super();
         this.userId = userId;
         this.timestampIni = timestampIni;
@@ -89,7 +89,7 @@ public class Session implements Serializable
         this.timestampFin = timestampFin;
     }
 
-    public Integer getTotalTime() {
+    public long getTotalTime() {
         return totalTime;
     }
 

@@ -24,7 +24,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
 
     //Atributos de los sensores del TicWatch
     private MutableLiveData<Float> hrppg;
-    private MutableLiveData<Float> hrppgraw;
     private MutableLiveData<Integer> step;
     private MutableLiveData<Integer> accx;
     private MutableLiveData<Integer> accy;
@@ -74,7 +73,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
 
         //Iniciamos las mutablelivedata para el reloj
         this.hrppg = new MutableLiveData<>();
-        this.hrppgraw = new MutableLiveData<>();
         this.step = new MutableLiveData<>();
         this.accx = new MutableLiveData<>();
         this.accy = new MutableLiveData<>();
@@ -101,10 +99,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     //GETTERS DEL TICWATCH
     public MutableLiveData<Float> getHrppg() {
         return hrppg;
-    }
-
-    public MutableLiveData<Float> getHrppgraw() {
-        return hrppgraw;
     }
 
     public MutableLiveData<Integer> getStep() {
@@ -205,10 +199,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     //METODOS SETTER DEL TICWATCH
     public void setHrppg(Float hrppg) {
         this.hrppg.postValue(hrppg);
-    }
-
-    public void setHrppgraw(Float hrppgraw) {
-        this.hrppgraw.postValue(hrppgraw);
     }
 
     public void setStep(Integer step){ this.step.postValue(step);}
