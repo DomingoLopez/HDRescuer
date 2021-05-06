@@ -28,16 +28,6 @@
         app:layout_constraintStart_toEndOf="@+id/label_steps"
         app:layout_constraintTop_toTopOf="@+id/label_steps" />
 
-    <TextView
-        android:id="@+id/tvhrppgraw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="- -"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/label_tvhrppgraw"
-        app:layout_constraintTop_toTopOf="@+id/label_tvhrppgraw" />
-
 
     <TextView
         android:id="@+id/label_steps"
@@ -60,18 +50,6 @@
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/tvlabelHRwatch"
         app:layout_constraintTop_toTopOf="@+id/tvlabelHRwatch" />
-
-    <TextView
-        android:id="@+id/label_tvhrppgraw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tvhrppgraw"
-        android:textColor="@color/blue_secondary"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView15"
-        app:layout_constraintStart_toEndOf="@+id/imageView15"
-        app:layout_constraintTop_toTopOf="@+id/imageView15" />
 
     <TextView
         android:id="@+id/textView3"
@@ -331,24 +309,13 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView13" />
 
     <ImageView
-        android:id="@+id/imageView15"
-        android:layout_width="56dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="16dp"
-        android:src="@mipmap/ibi_e4_foreground"
-        app:layout_constraintEnd_toStartOf="@+id/tvlabelHRwatch"
-        app:layout_constraintStart_toStartOf="@+id/imageView14"
-        app:layout_constraintTop_toBottomOf="@+id/imageView14" />
-
-    <ImageView
         android:id="@+id/imageView16"
         android:layout_width="56dp"
         android:layout_height="49dp"
         android:layout_marginTop="16dp"
         android:src="@mipmap/running_watch_foreground"
-        app:layout_constraintEnd_toStartOf="@+id/label_tvhrppgraw"
-        app:layout_constraintStart_toStartOf="@+id/imageView15"
-        app:layout_constraintTop_toBottomOf="@+id/imageView15" />
+        app:layout_constraintStart_toStartOf="@+id/imageView14"
+        app:layout_constraintTop_toBottomOf="@+id/imageView14" />
 
     <!--    <TextView-->
 <!--        android:id="@+id/tvAcclz"-->

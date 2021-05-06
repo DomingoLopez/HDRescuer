@@ -129,6 +129,7 @@ public class StartStopSessionService extends IntentService {
 
             Bundle bundle =  new Bundle();
             bundle.putString("result", session_id);
+            bundle.putString("result_time", timestamp_fin);
             this.receiver.send(2, bundle);
 
         }catch (Exception e ){

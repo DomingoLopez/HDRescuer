@@ -13,5 +13,7 @@ public interface ListItemClickListener {
      */
     void onListItemClick(int position);
 
+    void onListItemClickUser(int position, String user);
+
 
 }

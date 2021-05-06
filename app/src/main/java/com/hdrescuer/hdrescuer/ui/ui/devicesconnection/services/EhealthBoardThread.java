@@ -1,21 +1,16 @@
 package com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services;
 
-import android.content.Intent;
-import android.util.Log;
-
-import com.hdrescuer.hdrescuer.common.MyApp;
-import com.hdrescuer.hdrescuer.data.EHealthBoardRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.EHealthBoardRepository;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
  * Servicio/Thread encargado de recibir los datos de la placa de salud/arduino, procesarlos y escribirlos en el repositorio asociado a la placa
  * @author Domingo Lopez
  */
-public class EhealthBoardService extends Thread {
+public class EhealthBoardThread extends Thread {
 
     EHealthBoardRepository eHealthBoardRepository;
     InputStream inputStream;
@@ -34,7 +29,7 @@ public class EhealthBoardService extends Thread {
      * @param inputStream
      * @param outputStream
      */
-    public EhealthBoardService(EHealthBoardRepository eHealthBoardRepository, InputStream inputStream, OutputStream outputStream){
+    public EhealthBoardThread(EHealthBoardRepository eHealthBoardRepository, InputStream inputStream, OutputStream outputStream){
 
         this.eHealthBoardRepository = eHealthBoardRepository;
         this.inputStream = inputStream;
@@ -48,7 +43,7 @@ public class EhealthBoardService extends Thread {
     @Override
     public void run() {
 
-        while(EhealthBoardService.STATUS.equals("ACTIVO")){
+        while(EhealthBoardThread.STATUS.equals("ACTIVO")){
 
             try{
                 //Espera de cortesía para que se cargue algo el buffer
@@ -135,7 +130,7 @@ public class EhealthBoardService extends Thread {
                 //Formato-> tipoDato:valor
 
                 if(partes[0].equals("pulse"))
-                    this.eHealthBoardRepository.setBMP(Integer.parseInt(partes[1]));
+                    this.eHealthBoardRepository.setBPM(Integer.parseInt(partes[1]));
                 else if(partes[0].equals("oxigensaturation"))
                     this.eHealthBoardRepository.setOxBlood(Integer.parseInt(partes[1]));
                 else if(partes[0].equals("airflow")){

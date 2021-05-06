@@ -1,21 +1,13 @@
-package com.hdrescuer.hdrescuer.data;
+package com.hdrescuer.hdrescuer.data.dbrepositories;
 
 import android.app.Application;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+import android.os.AsyncTask;
 
 import com.empatica.empalink.delegate.EmpaDataDelegate;
-import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
+import com.hdrescuer.hdrescuer.db.DataRecoveryDataBase;
+import com.hdrescuer.hdrescuer.db.dao.EmpaticaDao;
+import com.hdrescuer.hdrescuer.db.entity.EmpaticaEntity;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.Executors;
@@ -28,6 +20,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class E4BandRepository implements EmpaDataDelegate {
 
+
+    private EmpaticaDao empaticaDao;
+    private boolean connected;
 
     private final static double timezoneOffset = TimeZone.getDefault().getRawOffset() / 1000d;
 
@@ -53,8 +48,10 @@ public class E4BandRepository implements EmpaDataDelegate {
      * Constructor vacío
      * @author Domingo Lopez
      */
-    public E4BandRepository() {
-        super();
+    public E4BandRepository(Application application) {
+
+        DataRecoveryDataBase db = DataRecoveryDataBase.getDataBase(application);
+        empaticaDao = db.getEmpaticaDao();
 
         battery = 0.0f;
         currentAccX = 0;
@@ -206,5 +203,56 @@ public class E4BandRepository implements EmpaDataDelegate {
         currentTemp = 0.0f;
         tag = 0.0;
     }
+
+
+
+    //Operaciones DAO
+
+    public void deleteByIdSession(int id_session_local){empaticaDao.deleteById(id_session_local);}
+
+    public void deleteAllSession(){empaticaDao.deleteAll();}
+
+    public List<EmpaticaEntity> getByIdSession(int id_session_local){return empaticaDao.getEmpaSessionById(id_session_local);}
+
+    public void insertEmpaticaData(EmpaticaEntity empaticaEntity){
+        new E4BandRepository.insertEmpaticaAsyncTask(empaticaDao).execute(empaticaEntity);
+    }
+
+
+    private static class insertEmpaticaAsyncTask extends AsyncTask<EmpaticaEntity, Void, Void> {
+
+        private EmpaticaDao empaticaDaoAsyncTask;
+
+
+        insertEmpaticaAsyncTask(EmpaticaDao empaticaDao){
+            empaticaDaoAsyncTask = empaticaDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(EmpaticaEntity... empaticaEntities) {
+            empaticaDaoAsyncTask.insert(empaticaEntities[0]);
+            return null;
+        }
+    }
+
+
+    public void saveDBLocalData(int id_session_local, String instant){
+
+        EmpaticaEntity empaticaEntity = new EmpaticaEntity(
+                id_session_local,instant, this.currentAccX, this.currentAccY, this.currentAccZ, this.currentBvp, this.currentHr, this.currentGsr, this.currentIbi, this.currentTemp
+        );
+
+        this.insertEmpaticaData(empaticaEntity);
+    }
+
+    public void setConnected(boolean connected){
+        this.connected =  connected;
+    }
+
+    public boolean isConnected(){
+        return this.connected;
+    }
+
 
 }

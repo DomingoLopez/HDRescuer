@@ -6,33 +6,18 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Handler;
 import android.os.ResultReceiver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wearable.DataClient;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hdrescuer.hdrescuer.R;
-import com.hdrescuer.hdrescuer.data.E4BandRepository;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardService;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardThread;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSessionService;
 
@@ -162,7 +147,7 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     private void stopSession() {
         //Paramos las hebras que pudiera haber activas
         SampleRateFilterThread.STATUS = "INACTIVO";
-        EhealthBoardService.STATUS = "INACTIVO";
+        EhealthBoardThread.STATUS = "INACTIVO";
 
         Intent intent = new Intent(this.getActivity(), StartStopSessionService.class);
         intent.setAction("STOP_SESSION");

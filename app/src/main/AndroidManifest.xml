@@ -22,10 +22,14 @@
             android:name=".ui.ui.devicesconnection.services.StartStopSessionService"
             android:exported="false"></service>
         <service
+            android:name=".ui.ui.localsessions.services.UploadSessionService"
+            android:exported="false"></service>
+        <service
             android:name=".ui.ui.devicesconnection.services.RestSampleRateService"
             android:exported="false" />
 
         <activity android:name=".ui.ui.devicesconnection.DevicesConnectionActivity" />
+        <activity android:name=".ui.ui.charts.SessionResultActivity" />
         <activity android:name=".ui.ui.userdetails.UserDetailsActivity" />
         <activity
             android:name=".ui.HomeActivity"
