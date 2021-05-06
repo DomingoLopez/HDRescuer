@@ -62,6 +62,14 @@ public class SessionsListRepository {
         sessions.setValue(sesiones_locales);
     }
 
+    public void deleteSessionByID(int id_session_local){
+        this.sessionsRepository.deleteByIdSession(id_session_local);
+        List<SessionEntity> sesiones_locales;
+        sesiones_locales = this.sessionsRepository.getAllSession();
+
+        sessions.setValue(sesiones_locales);
+    }
+
 
     public void refreshSessions(){
         this.sessions = getAllSessions();

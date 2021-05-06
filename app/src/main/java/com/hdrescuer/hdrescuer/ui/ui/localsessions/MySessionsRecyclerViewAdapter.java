@@ -166,8 +166,11 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
             if(v.getId() == btnUploadSession.getId()){
 
                 String user_elegido = autoCompleteTextView.getText().toString();
+                autoCompleteTextView.clearFocus();
+                autoCompleteTextView.setText("");
 
-                    listenerRef.get().onListItemClickUser(getAdapterPosition(), user_elegido);
+
+                listenerRef.get().onListItemClickUser(getAdapterPosition(), user_elegido);
 
             }
 

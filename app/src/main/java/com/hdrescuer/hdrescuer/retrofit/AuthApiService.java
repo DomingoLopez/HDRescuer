@@ -116,6 +116,13 @@ public interface AuthApiService {
             @Part MultipartBody.Part csv
     );
 
+    @Multipart
+    @POST("api/datarecovery/healthboardfile")
+    Call<String> uploadHealthBoardCSV(
+            @Part("description") RequestBody description,
+            @Part MultipartBody.Part csv
+    );
+
 
 
 
