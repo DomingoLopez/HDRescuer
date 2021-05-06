@@ -91,5 +91,7 @@
     <string name="tv_description_app_login">Recopilación de datos fisiológicos de pacientes</string>
     <string name="btn_login_no_conection">Acceder Modo Sin Conexión</string>
 
+    <string name="dialog_confirm">Confirmar</string>
+    <string name="dialog_dismiss">Cancelar</string>
 
 </resources>

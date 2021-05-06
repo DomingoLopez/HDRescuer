@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
@@ -25,11 +26,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.Settings;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +59,8 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.Node;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
+import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
+import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
 import com.hdrescuer.hdrescuer.data.dbrepositories.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
@@ -166,6 +172,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Identificador de sesión local actual
     int id_session_local;
 
+    //Identificador de sesión remota
+    String session_id;
+
+    //Descripción de la sesión (Para el modo no conexión)
+    String session_description;
 
     /**
      * Método onCreate de la Activity. Recibe un intent e incializa los viewModels, las vistas, eventos y carga los datos iniciales de los elementos de la vista
@@ -470,19 +481,44 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         switch (v.getId()){
             case R.id.btn_back_new_monitoring:
-                String timeback = String.valueOf(System.currentTimeMillis());
-                this.putDataMapRequestStop.getDataMap().putString(MONITORINGSTOP_KEY, timeback);
-                this.putDataReqStop = this.putDataMapRequestStop.asPutDataRequest();
-                Task <DataItem> putDataTask1 = this.dataClient.putDataItem(this.putDataReqStop);
-                putDataTask1.addOnCompleteListener(new OnCompleteListener<DataItem>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataItem> task) {
-                        Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
+
+                //Hay una sesión en marcha. Paramos los dispositivos
+                if(SampleRateFilterThread.STATUS.equals("ACTIVO")){
+                    //Paramos las hebras que pudiera haber activas
+                    SampleRateFilterThread.STATUS = "INACTIVO";
+                    EhealthBoardThread.STATUS = "INACTIVO";
+
+                    Intent intent = new Intent(this, StartStopSessionService.class);
+
+                    if(Constants.CONNECTION_MODE=="STREAMING"){
+                        intent.setAction("STOP_SESSION");
+                    }else{
+                        intent.setAction("STOP_OFFLINE_MODE");
                     }
-                });
-                EhealthBoardThread.STATUS = "INACTIVO";
-                SampleRateFilterThread.STATUS = "INACTIVO";
-                finish();
+                    String instant = Clock.systemUTC().instant().toString();
+                    intent.putExtra("id_session",session_id);
+                    intent.putExtra("timestamp_fin",instant);
+                    intent.putExtra("receiver",sessionResult);
+
+                   this.startService(intent);
+                }else{
+                    String timeback = String.valueOf(System.currentTimeMillis());
+                    this.putDataMapRequestStop.getDataMap().putString(MONITORINGSTOP_KEY, timeback);
+                    this.putDataReqStop = this.putDataMapRequestStop.asPutDataRequest();
+                    Task <DataItem> putDataTask1 = this.dataClient.putDataItem(this.putDataReqStop);
+                    putDataTask1.addOnCompleteListener(new OnCompleteListener<DataItem>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataItem> task) {
+                            Log.i("INFOTASK", "PUESTO VALOR STOP MONITORING EN DATACLIENT");
+                        }
+                    });
+                    EhealthBoardThread.STATUS = "INACTIVO";
+                    SampleRateFilterThread.STATUS = "INACTIVO";
+                    finish();
+                }
+
+
+
 
                 break;
 
@@ -494,7 +530,29 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     Toast.makeText(this, "No hay dispositivos conectados, debe conectar alguno antes de empezar la sesión", Toast.LENGTH_SHORT).show();
                 }else{
                     //Método que inicia la sesión.
-                    initSession();
+
+                    if(Constants.CONNECTION_MODE == "OFFLINE"){
+
+                        SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
+                            @Override
+                            public void onPositiveButtonClick(String description) {
+                              session_description = description;
+                              initSession();
+                            }
+
+                            @Override
+                            public void onPositiveButtonClick(){}
+
+                            @Override
+                            public void onNegativeButtonClick(){}
+                        },"SET_DESCRIPTION");
+
+                        dialogFragment.show(getSupportFragmentManager(),null);
+
+                    }else{
+                        initSession();
+                    }
+
                 }
 
 
@@ -587,11 +645,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     initDBLocalSession();
 
                     //Obtenemos el id de sesión recibido
-                    String session_id;
+
                     if(Constants.CONNECTION_MODE=="STREAMING")
-                       session_id = resultData.getString("result");
+                      session_id = resultData.getString("result");
                     else
-                        session_id = null;
+                      session_id = null;
 
                     if(bluetoothAdapter != null)
                         bluetoothAdapter.cancelDiscovery();
@@ -645,16 +703,42 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 case 2:
                     //Obtenemos el timestamp fin del result
                     String timestamp_fin = resultData.getString("result_time");
-
                     stopWatchAndThreads();
-                    stopDBLocalSession(timestamp_fin);
-                    Toast.makeText(DevicesConnectionActivity.this, "Sesión guardada de forma satisfactoria", Toast.LENGTH_SHORT).show();
 
-                    Intent i = new Intent(DevicesConnectionActivity.this, SessionResultActivity.class);
-                    i.putExtra("id_session_local",id_session_local);
-                    startActivity(i);
-                    //Destruimos el de conexiones para que no se pueda volver a el.
-                    finish();
+                    SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
+                        @Override
+                        public void onPositiveButtonClick(String description) {
+
+                        }
+
+                        @Override
+                        public void onPositiveButtonClick(){
+                            stopDBLocalSession(timestamp_fin);
+                            Toast.makeText(DevicesConnectionActivity.this, "Sesión guardada de forma satisfactoria", Toast.LENGTH_SHORT).show();
+
+                            Intent i = new Intent(DevicesConnectionActivity.this, SessionResultActivity.class);
+                            i.putExtra("id_session_local",id_session_local);
+                            startActivity(i);
+                            //Destruimos el de conexiones para que no se pueda volver a el.
+                            finish();
+                        }
+
+                        @Override
+                        public void onNegativeButtonClick(){
+
+
+                            deleteCurrentSession(id_session_local);
+                            deleteCurrentSessionFromServer(session_id);
+
+                            Toast.makeText(DevicesConnectionActivity.this, "No se ha registrado la sesión", Toast.LENGTH_SHORT).show();
+                            finish();
+
+                        }
+                    },"CONFIRM_SAVE");
+
+                    dialogFragment.show(getSupportFragmentManager(),null);
+
+
 
                     break;
 
@@ -680,6 +764,16 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             }
         }
 
+        private void deleteCurrentSession(int id_session_local){
+            sessionsRepository.deleteByIdSession(id_session_local);
+            e4BandRepository.deleteByIdSession(id_session_local);
+            ticWatchRepository.deleteByIdSession(id_session_local);
+            eHealthBoardRepository.deleteByIdSession(id_session_local);
+        }
+
+        private void deleteCurrentSessionFromServer(String session_id){
+
+        }
 
 
         private void initDBLocalSession() {
@@ -695,7 +789,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
             //Inicio la sesión
             sessionsRepository.insertSession(new SessionEntity(
-                    id_session_local,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected,""
+                    id_session_local,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected, session_description
             ));
 
 
@@ -706,7 +800,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         private void stopDBLocalSession(String timestamp_fin) {
             //Hacemos update de la sesión
             sessionsRepository.updateSession(new SessionEntity(
-                    id_session_local,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,""
+                    id_session_local,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,session_description
             ));
 
 
@@ -963,6 +1057,14 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         stopWatchAndThreads();
 
+        //Si estamos en Streaming, borramos la sesión local almacenada
+        if(Constants.CONNECTION_MODE=="STREAMING"){
+            this.sessionsRepository.deleteByIdSession(this.id_session_local);
+            this.e4BandRepository.deleteByIdSession(this.id_session_local);
+            this.ticWatchRepository.deleteByIdSession(this.id_session_local);
+            this.eHealthBoardRepository.deleteByIdSession(this.id_session_local);
+        }
+
 
     }
 
@@ -1138,6 +1240,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 e.printStackTrace();
             }
         }
+
         finish();
     }
 }

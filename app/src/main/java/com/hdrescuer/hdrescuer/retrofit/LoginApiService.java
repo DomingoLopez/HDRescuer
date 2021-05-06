@@ -1,6 +1,7 @@
 package com.hdrescuer.hdrescuer.retrofit;
 
 import com.hdrescuer.hdrescuer.retrofit.request.RequestLogin;
+import com.hdrescuer.hdrescuer.retrofit.request.RequestServerUp;
 import com.hdrescuer.hdrescuer.retrofit.response.ResponseAuth;
 
 import retrofit2.Call;
@@ -23,6 +24,9 @@ public interface LoginApiService {
      */
     @POST("api/auth/login")
     Call<ResponseAuth> doLogin(@Body RequestLogin requestLogin);
+
+    @POST("api/auth/logintest")
+    Call<String> doServerTest(@Body RequestServerUp requestServerUp);
 
 
 }
