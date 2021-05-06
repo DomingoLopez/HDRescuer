@@ -34,6 +34,9 @@ public class Constants {
     //SAMPLE RATE
     public static int SAMPLE_RATE = 200;
 
+    //VARIABLE QUE DEFINE SI ESTAMOS EN MODO NO CONEXIÓN
+    public static String CONNECTION_MODE = "";
+
 
     /**
      * Método que calcula las horas, minutos y segundos de un entero de segundos

@@ -84,42 +84,9 @@ public class SampleRateFilterThread extends Thread{
                updateTicWatchData();
                updateBoardData();
 
-               //Creamos el intent para pasarlo al IntentService
-               Intent restIntent = new Intent(MyApp.getContext(), RestSampleRateService.class);
-               restIntent.setAction(ACTION_SEND);
-
-               //Est lo mejor es TODO: Hacer una clase serializable y pasar el objeto entero
-               //Variables a pasar del Watch
-
-               restIntent.putExtra("tic_hrppg",this.ticWatchRepository.getHrppg().toString());
-               restIntent.putExtra("tic_step",this.ticWatchRepository.getStep().toString());
-               restIntent.putExtra("tic_accx",this.ticWatchRepository.getAccx().toString());
-               restIntent.putExtra("tic_accy",this.ticWatchRepository.getAccy().toString());
-               restIntent.putExtra("tic_accz",this.ticWatchRepository.getAccz().toString());
-               restIntent.putExtra("tic_acclx",this.ticWatchRepository.getAcclx().toString());
-               restIntent.putExtra("tic_accly",this.ticWatchRepository.getAccly().toString());
-               restIntent.putExtra("tic_acclz",this.ticWatchRepository.getAcclz().toString());
-               restIntent.putExtra("tic_girx",this.ticWatchRepository.getGirx().toString());
-               restIntent.putExtra("tic_giry",this.ticWatchRepository.getGiry().toString());
-               restIntent.putExtra("tic_girz",this.ticWatchRepository.getGirz().toString());
-
-               restIntent.putExtra("e4_accx",this.e4BandRepository.getCurrentAccX().toString());
-               restIntent.putExtra("e4_accy",this.e4BandRepository.getCurrentAccY().toString());
-               restIntent.putExtra("e4_accz",this.e4BandRepository.getCurrentAccZ().toString());
-               restIntent.putExtra("e4_bvp",this.e4BandRepository.getCurrentBvp().toString());
-               restIntent.putExtra("e4_hr",this.e4BandRepository.getCurrentHr().toString());
-               restIntent.putExtra("e4_gsr",this.e4BandRepository.getCurrentGsr().toString());
-               restIntent.putExtra("e4_ibi",this.e4BandRepository.getCurrentIbi().toString());
-               restIntent.putExtra("e4_temp",this.e4BandRepository.getCurrentTemp().toString());
-
-               restIntent.putExtra("ehb_bpm",this.eHealthBoardRepository.getBPM().toString());
-               restIntent.putExtra("ehb_o2",this.eHealthBoardRepository.getOxBlood().toString());
-               restIntent.putExtra("ehb_air",this.eHealthBoardRepository.getAirFlow().toString());
-
-               restIntent.putExtra("timestamp",this.instant.toString());
-               restIntent.putExtra("id",this.session_id);
-
-               MyApp.getContext().startService(restIntent);
+               if(Constants.CONNECTION_MODE=="STREAMING"){
+                   uploadDataToServer();
+               }
 
            }
 
@@ -129,6 +96,49 @@ public class SampleRateFilterThread extends Thread{
        }
 
     }
+
+    private void uploadDataToServer(){
+
+        Intent restIntent = new Intent(MyApp.getContext(), RestSampleRateService.class);
+        restIntent.setAction(ACTION_SEND);
+
+        //Est lo mejor es TODO: Hacer una clase serializable y pasar el objeto entero
+        //Variables a pasar del Watch
+
+        restIntent.putExtra("tic_hrppg",this.ticWatchRepository.getHrppg().toString());
+        restIntent.putExtra("tic_step",this.ticWatchRepository.getStep().toString());
+        restIntent.putExtra("tic_accx",this.ticWatchRepository.getAccx().toString());
+        restIntent.putExtra("tic_accy",this.ticWatchRepository.getAccy().toString());
+        restIntent.putExtra("tic_accz",this.ticWatchRepository.getAccz().toString());
+        restIntent.putExtra("tic_acclx",this.ticWatchRepository.getAcclx().toString());
+        restIntent.putExtra("tic_accly",this.ticWatchRepository.getAccly().toString());
+        restIntent.putExtra("tic_acclz",this.ticWatchRepository.getAcclz().toString());
+        restIntent.putExtra("tic_girx",this.ticWatchRepository.getGirx().toString());
+        restIntent.putExtra("tic_giry",this.ticWatchRepository.getGiry().toString());
+        restIntent.putExtra("tic_girz",this.ticWatchRepository.getGirz().toString());
+
+        restIntent.putExtra("e4_accx",this.e4BandRepository.getCurrentAccX().toString());
+        restIntent.putExtra("e4_accy",this.e4BandRepository.getCurrentAccY().toString());
+        restIntent.putExtra("e4_accz",this.e4BandRepository.getCurrentAccZ().toString());
+        restIntent.putExtra("e4_bvp",this.e4BandRepository.getCurrentBvp().toString());
+        restIntent.putExtra("e4_hr",this.e4BandRepository.getCurrentHr().toString());
+        restIntent.putExtra("e4_gsr",this.e4BandRepository.getCurrentGsr().toString());
+        restIntent.putExtra("e4_ibi",this.e4BandRepository.getCurrentIbi().toString());
+        restIntent.putExtra("e4_temp",this.e4BandRepository.getCurrentTemp().toString());
+
+        restIntent.putExtra("ehb_bpm",this.eHealthBoardRepository.getBPM().toString());
+        restIntent.putExtra("ehb_o2",this.eHealthBoardRepository.getOxBlood().toString());
+        restIntent.putExtra("ehb_air",this.eHealthBoardRepository.getAirFlow().toString());
+
+        restIntent.putExtra("timestamp",this.instant.toString());
+        restIntent.putExtra("id",this.session_id);
+
+        MyApp.getContext().startService(restIntent);
+
+
+    }
+
+
 
     /**
      * Método para actualizar los datos de la E4 en el viewModel Global que almacena los datos

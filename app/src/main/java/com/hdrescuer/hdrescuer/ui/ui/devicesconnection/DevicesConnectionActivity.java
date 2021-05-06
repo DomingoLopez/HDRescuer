@@ -182,9 +182,14 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         getSupportActionBar().hide();
 
         //Obtenemos el id del usuario
-        Intent i = getIntent();
-        this. user_id = i.getStringExtra("id");
-        this.user_name = i.getStringExtra("username");
+        if (Constants.CONNECTION_MODE == "STREAMING") {
+            Intent i = getIntent();
+            this. user_id = i.getStringExtra("id");
+            this.user_name = i.getStringExtra("username");
+        }else{
+            this.user_id = null;
+            this.user_name = "Modo OFFLINE";
+        }
 
         //Obtenemos la fecha:hora actual
         this.currentDate = Calendar.getInstance().getTime();
@@ -551,17 +556,22 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     @RequiresApi(api = Build.VERSION_CODES.O)
     void initSession(){
 
-        //1. Hacemos una llamada al servidor para indicarle que iniciamos la sesión
-            //1.1. Creamos un intent que pasaremos a nuestro StartStopSessionService para iniciar la sesión en el servidor y que devuelva el id_session de la nueva sesión
         Intent intent = new Intent(this.getApplicationContext(), StartStopSessionService.class);
-        intent.setAction("START_SESSION");
         this.instant = Clock.systemUTC().instant();
-        intent.putExtra("user_id",this.user_id);
-        intent.putExtra("timestamp_ini",this.instant.toString());
-        intent.putExtra("e4band",this.e4Connected);
-        intent.putExtra("ticwatch",this.ticwatchConnected);
-        intent.putExtra("ehealthboard",this.ehealthConnected);
-        intent.putExtra("receiver",this.sessionResult);
+
+        if(Constants.CONNECTION_MODE=="STREAMING"){
+            intent.setAction("START_SESSION");
+            intent.putExtra("user_id",this.user_id);
+            intent.putExtra("timestamp_ini",this.instant.toString());
+            intent.putExtra("e4band",this.e4Connected);
+            intent.putExtra("ticwatch",this.ticwatchConnected);
+            intent.putExtra("ehealthboard",this.ehealthConnected);
+            intent.putExtra("receiver",this.sessionResult);
+        }else{
+            intent.setAction("START_OFFLINE_MODE");
+            intent.putExtra("receiver",this.sessionResult);
+        }
+
         this.startService(intent);
     }
 
@@ -577,7 +587,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     initDBLocalSession();
 
                     //Obtenemos el id de sesión recibido
-                    String session_id = resultData.getString("result");
+                    String session_id;
+                    if(Constants.CONNECTION_MODE=="STREAMING")
+                       session_id = resultData.getString("result");
+                    else
+                        session_id = null;
 
                     if(bluetoothAdapter != null)
                         bluetoothAdapter.cancelDiscovery();
@@ -641,6 +655,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     startActivity(i);
                     //Destruimos el de conexiones para que no se pueda volver a el.
                     finish();
+
                     break;
 
                 //Error al iniciar sesión
@@ -653,6 +668,13 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     stopWatchAndThreads();
                     Toast.makeText(DevicesConnectionActivity.this, "No se ha podido registrar el final de sesión. ¿Dispone de conexión?", Toast.LENGTH_SHORT).show();
                     finish();
+                    break;
+
+
+                 //Case para finalizar la sesión en modo no conexión
+                case 300:
+
+
                     break;
 
             }

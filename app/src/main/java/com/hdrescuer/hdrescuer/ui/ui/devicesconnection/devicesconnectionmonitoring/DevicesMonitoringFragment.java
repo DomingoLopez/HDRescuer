@@ -17,6 +17,7 @@ import android.widget.Button;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardThread;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSessionService;
@@ -150,12 +151,19 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
         EhealthBoardThread.STATUS = "INACTIVO";
 
         Intent intent = new Intent(this.getActivity(), StartStopSessionService.class);
-        intent.setAction("STOP_SESSION");
+
+        if(Constants.CONNECTION_MODE=="STREAMING"){
+            intent.setAction("STOP_SESSION");
+        }else{
+            intent.setAction("STOP_OFFLINE_MODE");
+        }
         String instant = Clock.systemUTC().instant().toString();
         intent.putExtra("id_session",this.session_id);
         intent.putExtra("timestamp_fin",instant);
         intent.putExtra("receiver",this.receiver);
+
         this.getActivity().startService(intent);
+
     }
 
 

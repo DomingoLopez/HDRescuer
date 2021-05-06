@@ -2,7 +2,7 @@
     <string name="app_name">HDRescuer</string>
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
-    <string name="btn_login">Acceder</string>
+    <string name="btn_login">Acceder modo Streaming</string>
     <string name="txt_info_login">Accede a la app con el email y contraseña que obtuviste del equipo de desarrollo</string>
     <string name="app_name_login">HDRESCUER</string>
     <string name="title_activity_home">HomeActivity</string>
@@ -88,6 +88,8 @@
     <string name="label_results_for_healthboard">Resultados para Health Board</string>
     <string name="label_sessions_not_synchronized">Aquí aparecen las sesiones guardadas en el modo \'Sin Conexión\'. Es recomendable sincronizarlas con el servidor.</string>
     <string name="btn_synchronize_session">Sincronizar sesión</string>
+    <string name="tv_description_app_login">Recopilación de datos fisiológicos de pacientes</string>
+    <string name="btn_login_no_conection">Acceder Modo Sin Conexión</string>
 
 
 </resources>

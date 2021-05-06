@@ -77,6 +77,26 @@ public class StartStopSessionService extends IntentService {
                     stopSessionCall(id_session,timestamp_fin);
                     break;
 
+                case "START_OFFLINE_MODE":
+                    this.receiver = intent.getParcelableExtra("receiver");
+                    Bundle bundle =  new Bundle();
+                    bundle.putString("result", "Iniciando sesión offline");
+                    this.receiver.send(1, bundle);
+
+                    break;
+
+                case "STOP_OFFLINE_MODE":
+
+                    this.receiver = intent.getParcelableExtra("receiver");
+                    String timestamp_fin_off = intent.getStringExtra("timestamp_fin");
+
+                    Bundle bundle1 =  new Bundle();
+                    bundle1.putString("result", "Parando sesión offline");
+                    bundle1.putString("result_time", timestamp_fin_off);
+                    this.receiver.send(2, bundle1);
+
+                    break;
+
             }
 
 
