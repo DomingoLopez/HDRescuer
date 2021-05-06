@@ -57,6 +57,7 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.Node;
+import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
@@ -67,6 +68,11 @@ import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.TicWatchRepository;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
+import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
+import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
+import com.hdrescuer.hdrescuer.retrofit.request.RequestServerUp;
 import com.hdrescuer.hdrescuer.ui.HomeActivity;
 import com.hdrescuer.hdrescuer.ui.MainActivity;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
@@ -86,6 +92,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Clase DevicesConnectionActivity. Es el núcleo de la aplicación. Es responsable de buscar los dispositivos e implementar distintas librerías para la interacción con ellos
@@ -483,7 +493,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             case R.id.btn_back_new_monitoring:
 
                 //Hay una sesión en marcha. Paramos los dispositivos
-                if(SampleRateFilterThread.STATUS.equals("ACTIVO")){
+                if(this.sampleRateThread != null && SampleRateFilterThread.STATUS.equals("ACTIVO")){
                     //Paramos las hebras que pudiera haber activas
                     SampleRateFilterThread.STATUS = "INACTIVO";
                     EhealthBoardThread.STATUS = "INACTIVO";
@@ -772,6 +782,62 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         }
 
         private void deleteCurrentSessionFromServer(String session_id){
+
+            AuthConectionClient conectionClient;
+            AuthApiService apiService;
+
+            conectionClient= AuthConectionClient.getInstance();
+            apiService = conectionClient.getAuthApiService();
+
+            JsonObject obj = new JsonObject();
+            obj.addProperty("session_id",session_id);
+
+            //Objeto llamada con respuesta String para borrado de la sesión
+            Call<String> call = apiService.deleteSession(obj);
+
+            //Objeto llamada con respuesta String para borrado de la sesión
+            Call<String> call_data = apiService.deleteSessionData(obj);
+
+
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+
+                    if(response.isSuccessful()) { //Código 200...299
+
+                    }else{
+                        Toast.makeText(DevicesConnectionActivity.this, "No se pudo borrar la sesión",Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(DevicesConnectionActivity.this, "No se pudo borrar la sesión",Toast.LENGTH_LONG).show();
+                }
+
+            });
+
+
+            call_data.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call_data, Response<String> response) {
+
+                    if(response.isSuccessful()) { //Código 200...299
+
+                    }else{
+                        Toast.makeText(DevicesConnectionActivity.this, "No se pudieron borrar los datos de la sesión",Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<String> call_data, Throwable t) {
+                    Toast.makeText(DevicesConnectionActivity.this, "No se pudieron borrar los datos de la sesión",Toast.LENGTH_LONG).show();
+                }
+
+            });
+
 
         }
 

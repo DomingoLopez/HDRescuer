@@ -54,7 +54,6 @@ public class UserListRepository {
                     users.setValue(response.body());
                 }else {
 
-                    Toast.makeText(MyApp.getContext(), "Error al cargar la lista de usuarios", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -91,8 +90,10 @@ public class UserListRepository {
                 if(response.isSuccessful()){
                     List<User> listaClonada = new ArrayList<>();
                     listaClonada.add(response.body());
-                    for (int i = 0; i<users.getValue().size(); i++){
-                        listaClonada.add(new User(users.getValue().get(i)));
+                    if(users.getValue() != null){
+                        for (int i = 0; i<users.getValue().size(); i++){
+                            listaClonada.add(new User(users.getValue().get(i)));
+                        }
                     }
                     users.setValue(listaClonada);
 

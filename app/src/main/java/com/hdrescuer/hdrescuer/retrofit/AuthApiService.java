@@ -125,6 +125,28 @@ public interface AuthApiService {
 
 
 
+    //Borrado de sesiones que no se quieran guardar
+    /**
+     * Método que borra la sesión del módulo de sesiones
+     * @author Domingo Lopez
+     * @param jsonObject
+     * @return Call
+     */
+    @POST("api/sessions/deleteone")
+    Call<String> deleteSession(@Body JsonObject jsonObject);
+
+
+    //Borrado de sesiones que no se quieran guardar
+    /**
+     * Método que borra los datos del módulo de datos
+     * @author Domingo Lopez
+     * @param jsonObject
+     * @return Call
+     */
+    @POST("api/datarecovery/deletedata")
+    Call<String> deleteSessionData(@Body JsonObject jsonObject);
+
+
 
 
 }

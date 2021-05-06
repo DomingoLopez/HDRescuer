@@ -59,9 +59,12 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
     }
 
     void seteaUsuariosPredictivo(){
-        for(int i = 0; i< this.users.size(); i++){
-            this.usuarios_a_predecir.add(this.users.get(i).getLastname()+", "+this.users.get(i).getUsername());
+        if(this.users != null){
+            for(int i = 0; i< this.users.size(); i++){
+                this.usuarios_a_predecir.add(this.users.get(i).getLastname()+", "+this.users.get(i).getUsername());
+            }
         }
+
     }
 
 

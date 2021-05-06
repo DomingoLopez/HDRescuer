@@ -44,7 +44,7 @@ public class SimpleDialogFragment extends DialogFragment {
             builder.setTitle("Añade una descripción a la sesión");
 
         }else if(this.action.equals("CONFIRM_SAVE")){
-            builder.setTitle("¿Desea guardar la sesión localmente?");
+            builder.setTitle("¿Desea guardar la sesión?");
             this.session_description.setVisibility(View.INVISIBLE);
         }
 

@@ -129,9 +129,12 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     }
 
     void setUsersAElegir(){
-        for(int i = 0; i< this.users.size(); i++){
-            this.usuarios_predictivo.put(this.users.get(i).getLastname()+", "+this.users.get(i).getUsername(), this.users.get(i).getId());
+        if(this.users != null){
+            for(int i = 0; i< this.users.size(); i++){
+                this.usuarios_predictivo.put(this.users.get(i).getLastname()+", "+this.users.get(i).getUsername(), this.users.get(i).getId());
+            }
         }
+
     }
 
 
