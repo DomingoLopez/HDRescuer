@@ -231,7 +231,10 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
             switch (resultCode) {
                 case 1: //Case correcto. Sesión subida
 
-                    Toast.makeText(requireActivity(), "Datos enviados", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), "Sesión sincronizada de forma satisfactoria", Toast.LENGTH_SHORT).show();
+                    int deleted_session = (int) resultData.get("deleted_session");
+                    //Borramos la sesión
+                    sessionsListViewModel.deteleSessionByID(deleted_session);
 
                     break;
 

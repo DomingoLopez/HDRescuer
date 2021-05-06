@@ -61,6 +61,7 @@ public class UploadSessionService extends IntentService {
     SessionEntity sessionEntity;
     int id_session_local;
     String user_id;
+    String session_id;
 
 
     private String FILE_NAME_EMPATICA;
@@ -104,6 +105,7 @@ public class UploadSessionService extends IntentService {
                     //Obtenemos la sesión que nos hará falta para el resto de métodos
                     this.sessionEntity = this.sessionsRepository.getByIdSession(id_session_local);
 
+                    createSessionOnServer();
 
                     //Iniciamos la descarga a csv
                     downloadToCSV();
@@ -111,7 +113,7 @@ public class UploadSessionService extends IntentService {
                     //Una vez guardos los datos de la sesión. Subimos los tres ficheros/ o los que haya al servidor
                     //Primero realizamos la llamada  para que cree la sesión en el servidor
 
-                    createSessionOnServer();
+
 
                     //Subimos los archivos
                     uploadCSVToServer();
@@ -159,7 +161,7 @@ public class UploadSessionService extends IntentService {
         ));
         try{
             Response<String> response = call.execute();
-            String session_id = response.body();
+           this.session_id = response.body();
 
         }catch (Exception e ){
 
@@ -167,7 +169,7 @@ public class UploadSessionService extends IntentService {
             deleteFiles();
 
             Bundle bundle =  new Bundle();
-            bundle.putString("result", "Error al iniciar sesión");
+            bundle.putString("result", "Error al subir sesión");
             this.resultCode = 401;
             this.receiver.send(401, bundle);
             e.printStackTrace();
@@ -194,7 +196,7 @@ public class UploadSessionService extends IntentService {
 
             for(int i = 0; i< empaticaEntities.size(); i++){
 
-                fos.write((Integer.toString(id_session_local)+",").getBytes());
+                fos.write((this.session_id+",").getBytes());
                 fos.write(empaticaEntities.get(i).timestamp.getBytes());
                 fos.write((Integer.toString(empaticaEntities.get(i).e4_accx)+",").getBytes());
                 fos.write((Integer.toString(empaticaEntities.get(i).e4_accy)+",").getBytes());
@@ -240,7 +242,7 @@ public class UploadSessionService extends IntentService {
 
             for(int i = 0; i< ticWatchEntities.size(); i++){
 
-                fos.write((Integer.toString(id_session_local)+",").getBytes());
+                fos.write((this.session_id+",").getBytes());
                 fos.write(ticWatchEntities.get(i).timestamp.getBytes());
                 fos.write((Integer.toString(ticWatchEntities.get(i).tic_accx)+",").getBytes());
                 fos.write((Integer.toString(ticWatchEntities.get(i).tic_accy)+",").getBytes());
@@ -291,7 +293,7 @@ public class UploadSessionService extends IntentService {
 
             for(int i = 0; i< healthBoardEntities.size(); i++){
 
-                fos.write((Integer.toString(id_session_local)+",").getBytes());
+                fos.write((this.session_id+",").getBytes());
                 fos.write(healthBoardEntities.get(i).timestamp.getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_bpm)+",").getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_ox_blood)+",").getBytes());
@@ -318,9 +320,17 @@ public class UploadSessionService extends IntentService {
 
 
     void deleteFiles(){
-        File f_emp = new File(FILE_NAME_EMPATICA);
-        File f_tic = new File(FILE_NAME_TICWATCH);
-        File f_hb = new File(FILE_NAME_HEALTHBOARD);
+
+        Uri uri = null;
+        try {
+            uri = Uri.parse((MyApp.getContext().getFilesDir().getCanonicalPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File f_emp = new File(uri.getPath()+"/"+FILE_NAME_EMPATICA);
+        File f_tic = new File(uri.getPath()+"/"+FILE_NAME_TICWATCH);
+        File f_hb = new File(uri.getPath()+"/"+FILE_NAME_HEALTHBOARD);
 
         f_emp.delete();
         f_tic.delete();
@@ -342,40 +352,117 @@ public class UploadSessionService extends IntentService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.i("URI",uri.getPath());
 
-            File f_tic = new File(uri.getPath()+"/"+FILE_NAME_TICWATCH);
-            RequestBody filePart = RequestBody.create(MediaType.parse("text/csv"),f_tic);
 
-            RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM, "ticwatchCSV");
-            MultipartBody.Part file = MultipartBody.Part.createFormData("ticwatchCSV",f_tic.getName(),filePart);
+            if(this.sessionEntity.e4band){
+                File f_emp = new File(uri.getPath() + "/" + FILE_NAME_EMPATICA);
+                RequestBody filePart = RequestBody.create(MediaType.parse("text/csv"), f_emp);
 
-            Call<String> call = authApiService.uploadTicWatchCSV(descriptionPart,file);
+                RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM, "empaticaCSV");
+                MultipartBody.Part file = MultipartBody.Part.createFormData("empaticaCSV", f_emp.getName(), filePart);
 
-            try{
-                Response<String> response = call.execute();
-                String result = response.body();
+                Call<String> call = authApiService.uploadEmpaticaCSV(descriptionPart, file);
 
-                Bundle bundle =  new Bundle();
-                bundle.putString("result", result);
-                this.receiver.send(1, bundle);
+                try {
+                    Response<String> response = call.execute();
+                    String result = response.body();
 
-            }catch (Exception e ){
 
-                //Si algo sale mal, borramos todos los archivos, para que no dejen huella
-                deleteFiles();
 
-                Bundle bundle =  new Bundle();
-                bundle.putString("result", "Error al iniciar sesión");
-                this.resultCode = 402;
-                this.receiver.send(401, bundle);
-                e.printStackTrace();
+                } catch (Exception e) {
+
+                    //Si algo sale mal, borramos todos los archivos, para que no dejen huella
+                    deleteFiles();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("result", "Error al subir sesión empática");
+                    this.resultCode = 402;
+                    this.receiver.send(401, bundle);
+                    e.printStackTrace();
+
+                    return;
+                }
+
+
             }
 
+            if(this.sessionEntity.ticwatch) {
 
+                File f_tic = new File(uri.getPath() + "/" + FILE_NAME_TICWATCH);
+                RequestBody filePart = RequestBody.create(MediaType.parse("text/csv"), f_tic);
+
+                RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM, "ticwatchCSV");
+                MultipartBody.Part file = MultipartBody.Part.createFormData("ticwatchCSV", f_tic.getName(), filePart);
+
+                Call<String> call = authApiService.uploadTicWatchCSV(descriptionPart, file);
+
+                try {
+                    Response<String> response = call.execute();
+                    String result = response.body();
+
+
+
+                } catch (Exception e) {
+
+                    //Si algo sale mal, borramos todos los archivos, para que no dejen huella
+                    deleteFiles();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("result", "Error al subir sesión ticwatch");
+                    this.resultCode = 402;
+                    this.receiver.send(401, bundle);
+                    e.printStackTrace();
+
+                    return;
+                }
+
+            }
+
+            if(this.sessionEntity.ehealthboard){
+
+                File f_hb = new File(uri.getPath() + "/" + FILE_NAME_HEALTHBOARD);
+                RequestBody filePart = RequestBody.create(MediaType.parse("text/csv"), f_hb);
+
+                RequestBody descriptionPart = RequestBody.create(MultipartBody.FORM, "healthboardCSV");
+                MultipartBody.Part file = MultipartBody.Part.createFormData("healthboardCSV", f_hb.getName(), filePart);
+
+                Call<String> call = authApiService.uploadHealthBoardCSV(descriptionPart, file);
+
+                try {
+                    Response<String> response = call.execute();
+                    String result = response.body();
+
+
+
+                } catch (Exception e) {
+
+                    //Si algo sale mal, borramos todos los archivos, para que no dejen huella
+                    deleteFiles();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("result", "Error al subir sesión healthboard");
+                    this.resultCode = 402;
+                    this.receiver.send(401, bundle);
+                    e.printStackTrace();
+
+                    return;
+                }
+            }
+
+            //Si llego aquí,  ha ido bien y puedo borrar los archivos
+
+            this.deleteFiles();
+
+            Bundle bundle = new Bundle();
+            bundle.putString("result", "Sesión sincronizada de forma satisfactoria");
+            bundle.putInt("deleted_session", this.id_session_local);
+            this.resultCode = 1;
+            this.receiver.send(1, bundle);
 
 
         }
+
+        this.resultCode = 9999;
 
 
     }
