@@ -86,6 +86,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Calendar;
@@ -187,6 +188,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
     //Descripción de la sesión (Para el modo no conexión)
     String session_description;
+
+    //Formato para fecha
+    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     /**
      * Método onCreate de la Activity. Recibe un intent e incializa los viewModels, las vistas, eventos y carga los datos iniciales de los elementos de la vista
@@ -387,7 +391,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         //Iniciamos las views a los valores iniciales por defecto
         this.tvUsernameMonitoring.setText(this.user_name);
-        this.tvDateMonitoring.setText(this.currentDate.toString());
+        this.tvDateMonitoring.setText(this.format.format(this.currentDate));
 
         //Botón de la empática
         this.btnE4BandConnect.setBackgroundColor(this.btnE4BandConnect.getContext().getResources().getColor(R.color.e4Connecting));

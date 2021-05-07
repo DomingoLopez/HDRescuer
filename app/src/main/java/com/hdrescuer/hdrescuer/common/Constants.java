@@ -50,7 +50,7 @@ public class Constants {
         long minutes = (secs % 3600) / 60;
         long seconds = secs % 60;
 
-        String chain = String.valueOf(hours)+"h : "+ String.valueOf(minutes) +"m : "+ String.valueOf(seconds)+"s";
+        String chain = String.valueOf(hours)+"h:"+ String.valueOf(minutes) +"m:"+ String.valueOf(seconds)+"s";
 
         return chain;
 

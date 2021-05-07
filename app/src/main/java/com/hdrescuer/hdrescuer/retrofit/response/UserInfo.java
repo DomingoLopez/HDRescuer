@@ -25,9 +25,6 @@ public class UserInfo implements Serializable
     @SerializedName("email")
     @Expose
     private String email;
-    @SerializedName("password")
-    @Expose
-    private String password;
     @SerializedName("gender")
     @Expose
     private String gender;
@@ -75,7 +72,6 @@ public class UserInfo implements Serializable
      * @param username
      * @param lastname
      * @param email
-     * @param password
      * @param gender
      * @param age
      * @param height
@@ -86,13 +82,12 @@ public class UserInfo implements Serializable
      * @param address
      * @param cp
      */
-    public UserInfo(String id, String username, String lastname, String email, String password, String gender, Integer age, String height, Integer weight, Integer phone, Integer phone2, String city, String address, Integer cp) {
+    public UserInfo(String id, String username, String lastname, String email, String gender, Integer age, String height, Integer weight, Integer phone, Integer phone2, String city, String address, Integer cp) {
         super();
         this.id = id;
         this.username = username;
         this.lastname = lastname;
         this.email = email;
-        this.password = password;
         this.gender = gender;
         this.age = age;
         this.height = height;
@@ -138,13 +133,6 @@ public class UserInfo implements Serializable
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getGender() {
         return gender;

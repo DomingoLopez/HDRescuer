@@ -96,7 +96,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         String id = i.getStringExtra("id");
 
         //Iniciamos el dateformat
-        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
             @NonNull
@@ -170,11 +170,11 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         this.tic = findViewById(R.id.last_session_tic);
         this.board = findViewById(R.id.last_session_board);
         this.last_ini = findViewById(R.id.label_last_session_timini);
-        this.last_fin = findViewById(R.id.label_last_session_timfin);
+        //this.last_fin = findViewById(R.id.label_last_session_timfin);
         this.last_total = findViewById(R.id.label_last_session_total);
 
         this.tvini = findViewById(R.id.tvTimesTampIniUsersDetails);
-        this.tvfin = findViewById(R.id.tvTimesTampFinUsersDetails);
+        //this.tvfin = findViewById(R.id.tvTimesTampFinUsersDetails);
         this.tvtotal = findViewById(R.id.tvTotalTimeUsersDetails);
 
 
@@ -245,7 +245,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                         board.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.back_red));
 
                     tvini.setText(dateFormat.format(userDetails.getTimestamp_ini()));
-                    tvfin.setText(dateFormat.format(userDetails.getTimestamp_fin()));
+                    //tvfin.setText(dateFormat.format(userDetails.getTimestamp_fin()));
                     tvtotal.setText(Constants.getHMS(userDetails.getTotal_time()));
 
 
@@ -256,10 +256,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                     tic.setVisibility(View.VISIBLE);
                     board.setVisibility(View.VISIBLE);
                     last_ini.setVisibility(View.VISIBLE);
-                    last_fin.setVisibility(View.VISIBLE);
+                    //last_fin.setVisibility(View.VISIBLE);
                     last_total.setVisibility(View.VISIBLE);
                     tvini.setVisibility(View.VISIBLE);
-                    tvfin.setVisibility(View.VISIBLE);
+                    //tvfin.setVisibility(View.VISIBLE);
                     tvtotal.setVisibility(View.VISIBLE);
 
 
@@ -272,10 +272,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                    tic.setVisibility(View.GONE);
                    board.setVisibility(View.GONE);
                    last_ini.setVisibility(View.GONE);
-                   last_fin.setVisibility(View.GONE);
+                   //last_fin.setVisibility(View.GONE);
                    last_total.setVisibility(View.GONE);
                    tvini.setVisibility(View.GONE);
-                   tvfin.setVisibility(View.GONE);
+                   //tvfin.setVisibility(View.GONE);
                    tvtotal.setVisibility(View.GONE);
 
                 }

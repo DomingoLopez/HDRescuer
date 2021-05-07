@@ -89,7 +89,7 @@
     <string name="label_sessions_not_synchronized">Aquí aparecen las sesiones guardadas en el modo \'Sin Conexión\'. Es recomendable sincronizarlas con el servidor.</string>
     <string name="btn_synchronize_session">Sincronizar sesión</string>
     <string name="tv_description_app_login">Recopilación de datos fisiológicos de pacientes</string>
-    <string name="btn_login_no_conection">Acceder Modo Sin Conexión</string>
+    <string name="btn_login_no_conection">Acceder Modo OFFLINE</string>
 
     <string name="dialog_confirm">Confirmar</string>
     <string name="dialog_dismiss">Cancelar</string>

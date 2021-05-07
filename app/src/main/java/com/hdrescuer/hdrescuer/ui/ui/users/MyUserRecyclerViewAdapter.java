@@ -36,7 +36,7 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
         this.ctx = contexto;
         this.mValues = items;
         this.mOnClickListener = onClickListener;
-        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
 
     @Override
