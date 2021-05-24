@@ -15,8 +15,10 @@ import com.hdrescuer.hdrescuer.common.SharedPreferencesManager;
 import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestLogin;
+import com.hdrescuer.hdrescuer.retrofit.request.RequestServerUp;
 import com.hdrescuer.hdrescuer.retrofit.response.ResponseAuth;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +31,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btn_login;
+    Button btn_login_no_connection;
     EditText etEmail, etPassword;
 
     //Servicio de Login y ConectionClient
@@ -70,8 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void findViews() {
         this.btn_login = findViewById(R.id.btn_login);
-        this.etEmail = findViewById(R.id.editTextEmail);
-        this.etPassword = findViewById(R.id.editTextPassword);
+        this.btn_login_no_connection = findViewById(R.id.btn_login_no_connection);
     }
 
     /**
@@ -79,29 +81,81 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @author Domingo Lopez
      */
     private void events() {
+
         this.btn_login.setOnClickListener(this);
+        this.btn_login_no_connection.setOnClickListener(this);
     }
 
 
     @Override
     public void onClick(View v) {
 
-        //Para no tener que registrarme cada vez
-        /*Intent i = new Intent(MainActivity.this, SessionResultActivity.class);
-        startActivity(i);
-        finish();*/
-        Intent i = new Intent(MainActivity.this, HomeActivity.class);
-        startActivity(i);
-        finish();
-        //this.goToLogin();
+        switch (v.getId()){
+            case R.id.btn_login:
+                Constants.CONNECTION_MODE = "STREAMING";
+                checkServerUp();
+                break;
+
+
+            case R.id.btn_login_no_connection:
+                Constants.CONNECTION_MODE="OFFLINE";
+                Intent i_offline = new Intent(MainActivity.this, DevicesConnectionActivity.class);
+                startActivity(i_offline);
+                break;
+        }
+
+
     }
 
 
-    /**
-     * Método que valida el email y password del usuario y realizar petición asíncrona al servidor. Almacena el Token recibido y preferencias generales del usuario para posteriores llamadas
-     * @author Domingo Lopez
+
+    private void checkServerUp() {
+
+
+            //Objeto de tipo RequestLogin
+            RequestServerUp requestServerUp = new RequestServerUp("test");
+            //Objeto llamada con respuesta como objeto de tipo ResponseAuth que hemos creado
+            Call<String> call = this.loginApiService.doServerTest(requestServerUp);
+
+
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+
+                    if(response.isSuccessful()) { //Código 200...299
+
+                        Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                        startActivity(i);
+
+                    }else{
+                        Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
+                }
+
+            });
+
+
+        }
+
+
+
+
+
+    //PROGRAMADO PARA REQUERIR PASSWORD EN CASO DE MÚLTIPLES USUARIOS HACIENDO USO DE LA APP CON DISTINTOS PACIENTES POR USUARIOS.
+    //NO ES EL CASO
+
+    /*
+     Método que valida el email y password del usuario y realizar petición asíncrona al servidor. Almacena el Token recibido y preferencias generales del usuario para posteriores llamadas
+     @author Domingo Lopez
      */
-    private void goToLogin() {
+
+    /*private void goToLogin() {
         String email = this.etEmail.getText().toString();
         String pass = this.etPassword.getText().toString();
 
@@ -147,9 +201,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }else{
                         Toast.makeText(MainActivity.this, "Algo salió mal. Revise sus datos de acceso", Toast.LENGTH_LONG).show();
-                        /*Intent i = new Intent(MainActivity.this, HomeActivity.class);
-                        startActivity(i);
-                        finish();*/
                     }
 
                 }
@@ -161,5 +212,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             });
         }
-    }
+    }*/
 }

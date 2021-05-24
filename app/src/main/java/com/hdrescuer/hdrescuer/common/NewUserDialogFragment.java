@@ -39,7 +39,6 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
     EditText numHeight;
     EditText numWeight;
     EditText numPhone;
-    EditText edpassword;
     ImageButton add_user_btn;
     ImageButton close_btn;
     EditText numPhone2;
@@ -99,7 +98,6 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
         this.edName = view.findViewById(R.id.txtName);
         this.edLastName = view.findViewById(R.id.txtlastName);
         this.edEmail = view.findViewById(R.id.txtEmail);
-        this.edpassword = view.findViewById(R.id.txtPassword);
         this.GenderGroup = view.findViewById(R.id.rgGender);
         this.rbmale = view.findViewById(R.id.rbVaron);
         this.rbfemale = view.findViewById(R.id.rbMujer);
@@ -138,8 +136,7 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
                 this.numPhone.setText("");
                 this.numPhone2.setText("");
                 this.edAddress.setText("");
-                this.edciudad.setText("");
-                this.edpassword.setText("");
+                this.edciudad.setText("");;
                 this.numcp.setText("");
 
                 break;
@@ -149,7 +146,6 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
                 this.edName.setText(this.userDetails.getUsername());
                 this.edLastName.setText(this.userDetails.getLastname());
                 this.edEmail.setText(this.userDetails.getEmail());
-                this.edpassword.setHint("Nueva Contraseña");
 
                 if(this.userDetails.getPhone2() == 0)
                     this.numPhone2.setText("");
@@ -223,7 +219,6 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
 
                     String direccion = this.edAddress.getText().toString();
                     String city = this.edciudad.getText().toString();
-                    String password = this.edpassword.getText().toString();
                     String height = this.numHeight.getText().toString();
                     int weight = Integer.parseInt(this.numWeight.getText().toString());
 
@@ -238,14 +233,14 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
 
                    if(this.type == UserActionDialog.NEW_USER){
 
-                       UserDetails user = new UserDetails(null, name, lastname,email,password,gender, age, height, weight,phone, phone2, city,direccion,cp);
+                       UserDetails user = new UserDetails(null, name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
                        UserListViewModel userListViewModel = new ViewModelProvider(this.getActivity()).get(UserListViewModel.class);
                        userListViewModel.setNewUser(user);
                        getDialog().dismiss();
 
                    }else if(this.type == UserActionDialog.MODIFY_USER){
 
-                       UserInfo user = new UserInfo(this.userDetails.getId(), name, lastname,email,password,gender, age, height, weight,phone, phone2, city,direccion,cp);
+                       UserInfo user = new UserInfo(this.userDetails.getId(), name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
                        UserDetailsViewModel userDetailsViewModel = new ViewModelProvider(this.getActivity()).get(UserDetailsViewModel.class);
                        userDetailsViewModel.updateUserDetails(user);
                        userDetailsViewModel.refreshUserDetails();
@@ -273,7 +268,6 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
         String username = this.edName.getText().toString();
         String lastname = this.edLastName.getText().toString();
         String email =  this.edEmail.getText().toString();
-        String password = this.edpassword.getText().toString();
         int gender = this.GenderGroup.getCheckedRadioButtonId();
         String genero = "";
 
@@ -307,12 +301,6 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
             this.edEmail.setError("Email requerido");
         else if(phone.isEmpty())
             this.numPhone.setError("Teléfono requerido");
-        else if(password.isEmpty()){
-            if(this.type == UserActionDialog.NEW_USER)
-                this.edpassword.setError("Contraseña requerida para nuevo usuario");
-            else
-                valido = true;
-        }
         else
             valido = true;
 

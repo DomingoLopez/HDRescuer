@@ -34,6 +34,9 @@ public class Constants {
     //SAMPLE RATE
     public static int SAMPLE_RATE = 200;
 
+    //VARIABLE QUE DEFINE SI ESTAMOS EN MODO NO CONEXIÓN
+    public static String CONNECTION_MODE = "";
+
 
     /**
      * Método que calcula las horas, minutos y segundos de un entero de segundos
@@ -47,7 +50,7 @@ public class Constants {
         long minutes = (secs % 3600) / 60;
         long seconds = secs % 60;
 
-        String chain = String.valueOf(hours)+"h : "+ String.valueOf(minutes) +"m : "+ String.valueOf(seconds)+"s";
+        String chain = String.valueOf(hours)+"h:"+ String.valueOf(minutes) +"m:"+ String.valueOf(seconds)+"s";
 
         return chain;
 
