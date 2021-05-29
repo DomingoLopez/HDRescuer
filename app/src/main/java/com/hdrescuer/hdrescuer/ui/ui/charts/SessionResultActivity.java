@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +18,11 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
+import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
+import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
 import com.hdrescuer.hdrescuer.data.dbrepositories.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
@@ -26,9 +31,16 @@ import com.hdrescuer.hdrescuer.db.entity.EmpaticaEntity;
 import com.hdrescuer.hdrescuer.db.entity.HealthBoardEntity;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.db.entity.TicWatchEntity;
+import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SessionResultActivity extends AppCompatActivity implements View.OnClickListener{
@@ -61,6 +73,18 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
     int maxBlood = 0;
     int averageBlood = 0;
 
+    //session_local
+    int id_session_local;
+
+    //session_remota
+    String session_id;
+
+    //Session entity actual
+    SessionEntity session;
+
+    //Tipo de acción
+    String action;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +102,13 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
 
         //Obtenemos el intent recibido con el id_Session_local
         Intent intent = getIntent();
-        int id_session_local = intent.getIntExtra("id_session_local",0);
+        this.id_session_local = intent.getIntExtra("id_session_local",0);
+        this.session_id = intent.getStringExtra("id_session_remote");
+        this.action = intent.getStringExtra("action");
 
         if(id_session_local != 0 && (Integer)id_session_local != null){
             this.sessionsRepository = new SessionsRepository(getApplication());
-            SessionEntity session = this.sessionsRepository.getByIdSession(id_session_local);
+            session = this.sessionsRepository.getByIdSession(id_session_local);
 
 
             if(session.e4band) {
@@ -605,12 +631,120 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_back_new_monitoring_session:
-                finish();
+                onBackPressed();
                 break;
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if(this.action == null || !this.action.equals("VISUALIZE")) {
+
+            SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
+                @Override
+                public void onPositiveButtonClick(String description) {
+
+                }
+
+                @Override
+                public void onPositiveButtonClick() {
+
+                    Toast.makeText(SessionResultActivity.this, "Sesión guardada de forma satisfactoria", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+
+                @Override
+                public void onNegativeButtonClick() {
 
 
+                    deleteCurrentSession(id_session_local);
+                    if (Constants.CONNECTION_MODE == "STREAMING")
+                        deleteCurrentSessionFromServer(session_id);
 
+                    Toast.makeText(SessionResultActivity.this, "No se ha registrado la sesión", Toast.LENGTH_SHORT).show();
+                    finish();
+
+                }
+            }, "CONFIRM_SAVE");
+
+            dialogFragment.show(getSupportFragmentManager(), null);
+
+        }else{
+            super.onBackPressed();
+        }
+
+
+    }
+
+
+    private void deleteCurrentSession(int id_session_local){
+        sessionsRepository.deleteByIdSession(id_session_local);
+        if(session.e4band)
+            e4BandRepository.deleteByIdSession(id_session_local);
+        if(session.ticwatch)
+            ticWatchRepository.deleteByIdSession(id_session_local);
+        if(session.ehealthboard)
+            eHealthBoardRepository.deleteByIdSession(id_session_local);
+    }
+
+    private void deleteCurrentSessionFromServer(String session_id){
+
+        AuthConectionClient conectionClient;
+        AuthApiService apiService;
+
+        conectionClient= AuthConectionClient.getInstance();
+        apiService = conectionClient.getAuthApiService();
+
+        JsonObject obj = new JsonObject();
+        obj.addProperty("session_id",session_id);
+
+        //Objeto llamada con respuesta String para borrado de la sesión
+        Call<String> call = apiService.deleteSession(obj);
+
+        //Objeto llamada con respuesta String para borrado de la sesión
+        Call<String> call_data = apiService.deleteSessionData(obj);
+
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+                if(response.isSuccessful()) { //Código 200...299
+
+                }else{
+                    Toast.makeText(SessionResultActivity.this, "No se pudo borrar la sesión",Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(SessionResultActivity.this, "No se pudo borrar la sesión",Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+
+        call_data.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call_data, Response<String> response) {
+
+                if(response.isSuccessful()) { //Código 200...299
+
+                }else{
+                    Toast.makeText(SessionResultActivity.this, "No se pudieron borrar los datos de la sesión",Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<String> call_data, Throwable t) {
+                Toast.makeText(SessionResultActivity.this, "No se pudieron borrar los datos de la sesión",Toast.LENGTH_LONG).show();
+            }
+
+        });
+
+
+    }
 }

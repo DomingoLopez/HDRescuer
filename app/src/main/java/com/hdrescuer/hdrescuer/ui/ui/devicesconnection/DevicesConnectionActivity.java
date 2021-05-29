@@ -545,7 +545,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 }else{
                     //Método que inicia la sesión.
 
-                    if(Constants.CONNECTION_MODE == "OFFLINE"){
+
 
                         SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
                             @Override
@@ -563,9 +563,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                         dialogFragment.show(getSupportFragmentManager(),null);
 
-                    }else{
-                        initSession();
-                    }
+
 
                 }
 
@@ -638,6 +636,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             intent.putExtra("e4band",this.e4Connected);
             intent.putExtra("ticwatch",this.ticwatchConnected);
             intent.putExtra("ehealthboard",this.ehealthConnected);
+            intent.putExtra("description",this.session_description);
             intent.putExtra("receiver",this.sessionResult);
         }else{
             intent.setAction("START_OFFLINE_MODE");
@@ -718,40 +717,15 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     //Obtenemos el timestamp fin del result
                     String timestamp_fin = resultData.getString("result_time");
                     stopWatchAndThreads();
+                    stopDBLocalSession(timestamp_fin);
 
-                    SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
-                        @Override
-                        public void onPositiveButtonClick(String description) {
-
-                        }
-
-                        @Override
-                        public void onPositiveButtonClick(){
-                            stopDBLocalSession(timestamp_fin);
-                            Toast.makeText(DevicesConnectionActivity.this, "Sesión guardada de forma satisfactoria", Toast.LENGTH_SHORT).show();
-
-                            Intent i = new Intent(DevicesConnectionActivity.this, SessionResultActivity.class);
-                            i.putExtra("id_session_local",id_session_local);
-                            startActivity(i);
-                            //Destruimos el de conexiones para que no se pueda volver a el.
-                            finish();
-                        }
-
-                        @Override
-                        public void onNegativeButtonClick(){
-
-
-                            deleteCurrentSession(id_session_local);
-                            deleteCurrentSessionFromServer(session_id);
-
-                            Toast.makeText(DevicesConnectionActivity.this, "No se ha registrado la sesión", Toast.LENGTH_SHORT).show();
-                            finish();
-
-                        }
-                    },"CONFIRM_SAVE");
-
-                    dialogFragment.show(getSupportFragmentManager(),null);
-
+                    //Mostramos resultados
+                    Intent i = new Intent(DevicesConnectionActivity.this, SessionResultActivity.class);
+                    i.putExtra("id_session_local",id_session_local);
+                    i.putExtra("id_session_remote",session_id);
+                    startActivity(i);
+                    //Destruimos el de conexiones para que no se pueda volver a el.
+                    finish();
 
 
                     break;
@@ -778,72 +752,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             }
         }
 
-        private void deleteCurrentSession(int id_session_local){
-            sessionsRepository.deleteByIdSession(id_session_local);
-            e4BandRepository.deleteByIdSession(id_session_local);
-            ticWatchRepository.deleteByIdSession(id_session_local);
-            eHealthBoardRepository.deleteByIdSession(id_session_local);
-        }
 
-        private void deleteCurrentSessionFromServer(String session_id){
-
-            AuthConectionClient conectionClient;
-            AuthApiService apiService;
-
-            conectionClient= AuthConectionClient.getInstance();
-            apiService = conectionClient.getAuthApiService();
-
-            JsonObject obj = new JsonObject();
-            obj.addProperty("session_id",session_id);
-
-            //Objeto llamada con respuesta String para borrado de la sesión
-            Call<String> call = apiService.deleteSession(obj);
-
-            //Objeto llamada con respuesta String para borrado de la sesión
-            Call<String> call_data = apiService.deleteSessionData(obj);
-
-
-            call.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-
-                    if(response.isSuccessful()) { //Código 200...299
-
-                    }else{
-                        Toast.makeText(DevicesConnectionActivity.this, "No se pudo borrar la sesión",Toast.LENGTH_LONG).show();
-                    }
-
-                }
-
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
-                    Toast.makeText(DevicesConnectionActivity.this, "No se pudo borrar la sesión",Toast.LENGTH_LONG).show();
-                }
-
-            });
-
-
-            call_data.enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call_data, Response<String> response) {
-
-                    if(response.isSuccessful()) { //Código 200...299
-
-                    }else{
-                        Toast.makeText(DevicesConnectionActivity.this, "No se pudieron borrar los datos de la sesión",Toast.LENGTH_LONG).show();
-                    }
-
-                }
-
-                @Override
-                public void onFailure(Call<String> call_data, Throwable t) {
-                    Toast.makeText(DevicesConnectionActivity.this, "No se pudieron borrar los datos de la sesión",Toast.LENGTH_LONG).show();
-                }
-
-            });
-
-
-        }
 
 
         private void initDBLocalSession() {
@@ -1127,13 +1036,13 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         stopWatchAndThreads();
 
-        //Si estamos en Streaming, borramos la sesión local almacenada
-        if(Constants.CONNECTION_MODE=="STREAMING"){
+        //NO BORRAMOS LA SESIÓN LOCAL ALMACENADA.
+        /*if(Constants.CONNECTION_MODE=="STREAMING"){
             this.sessionsRepository.deleteByIdSession(this.id_session_local);
             this.e4BandRepository.deleteByIdSession(this.id_session_local);
             this.ticWatchRepository.deleteByIdSession(this.id_session_local);
             this.eHealthBoardRepository.deleteByIdSession(this.id_session_local);
-        }
+        }*/
 
 
     }

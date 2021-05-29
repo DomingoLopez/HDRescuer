@@ -157,7 +157,8 @@ public class UploadSessionService extends IntentService {
                 this.sessionEntity.total_time,
                 this.sessionEntity.e4band,
                 this.sessionEntity.ticwatch,
-                this.sessionEntity.ehealthboard
+                this.sessionEntity.ehealthboard,
+                this.sessionEntity.description
         ));
         try{
             Response<String> response = call.execute();

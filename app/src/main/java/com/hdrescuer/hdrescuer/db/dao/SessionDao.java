@@ -30,10 +30,15 @@ public interface SessionDao {
     @Query("DELETE FROM SESSION WHERE id_session_local = :id_session_local")
     void deleteById(int id_session_local);
 
-    @Query("SELECT * FROM SESSION ORDER BY timestamp_ini DESC")
+    @Query("SELECT * FROM SESSION  WHERE user_id IS NULL ORDER BY timestamp_ini DESC")
     List<SessionEntity> getAllSessions();
+
+    @Query("SELECT * FROM SESSION  WHERE user_id =:user_id ORDER BY timestamp_ini DESC")
+    List<SessionEntity> getAllHistSessions(String user_id);
 
     @Query("SELECT * FROM SESSION WHERE id_session_local = :id_session_local")
     SessionEntity getSessionById(int id_session_local);
+
+
 
 }

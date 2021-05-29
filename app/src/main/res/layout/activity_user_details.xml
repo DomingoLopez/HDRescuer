@@ -262,7 +262,7 @@
                 android:id="@+id/btn_new_monitoring"
                 android:layout_width="wrap_content"
                 android:layout_height="47dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/btn_new_monitoring"
                 android:textSize="12sp"
@@ -281,13 +281,13 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/last_session_board"
-                app:layout_constraintTop_toTopOf="@+id/last_session_board" />
+                app:layout_constraintTop_toTopOf="@+id/label_last_monitoring" />
 
             <TextView
                 android:id="@+id/label_last_session_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="2dp"
                 android:text="Duración:"
                 android:textColor="@color/blue_secondary"
                 android:textSize="16sp"
@@ -325,6 +325,19 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_patient_hist"
+                android:layout_width="wrap_content"
+                android:layout_height="47dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="#4CAF50"
+                android:text="Histórico"
+                app:icon="@drawable/ic_baseline_content_paste_24"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_new_monitoring"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_new_monitoring"
+                app:layout_constraintTop_toTopOf="@+id/btn_new_monitoring" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

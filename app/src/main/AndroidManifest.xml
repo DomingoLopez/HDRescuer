@@ -18,12 +18,14 @@
         android:theme="@style/Theme.HDRescuer"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
+        <activity android:name=".ui.ui.patienthist.PatientSessionListActivity"></activity>
+
         <service
             android:name=".ui.ui.devicesconnection.services.StartStopSessionService"
-            android:exported="false"></service>
+            android:exported="false" />
         <service
             android:name=".ui.ui.localsessions.services.UploadSessionService"
-            android:exported="false"></service>
+            android:exported="false" />
         <service
             android:name=".ui.ui.devicesconnection.services.RestSampleRateService"
             android:exported="false" />

@@ -33,6 +33,9 @@ public class Session implements Serializable
     @SerializedName("ehealthboard")
     @Expose
     private Boolean ehealthboard;
+    @SerializedName("description")
+    @Expose
+    private String description;
     private final static long serialVersionUID = 1292988452008497775L;
 
     /**
@@ -54,7 +57,7 @@ public class Session implements Serializable
      * @param ehealthboard
      * @param userId
      */
-    public Session(String userId, String timestampIni, String timestampFin, long totalTime, Boolean e4band, Boolean ticwatch, Boolean ehealthboard) {
+    public Session(String userId, String timestampIni, String timestampFin, long totalTime, Boolean e4band, Boolean ticwatch, Boolean ehealthboard, String description) {
         super();
         this.userId = userId;
         this.timestampIni = timestampIni;
@@ -63,6 +66,7 @@ public class Session implements Serializable
         this.e4band = e4band;
         this.ticwatch = ticwatch;
         this.ehealthboard = ehealthboard;
+        this.description = description;
     }
 
     public String getUserId() {
@@ -121,4 +125,15 @@ public class Session implements Serializable
         this.ehealthboard = ehealthboard;
     }
 
+    public void setTotalTime(long totalTime) {
+        this.totalTime = totalTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

@@ -24,6 +24,7 @@ import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
 import com.hdrescuer.hdrescuer.common.UserActionDialog;
+import com.hdrescuer.hdrescuer.ui.ui.patienthist.PatientSessionListActivity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,6 +57,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     ImageView btn_back;
     Button btn_new_monitoring;
     Button btn_edit_data;
+    Button btn_patient_hist;
 
     //Cardview ultima monitorización
     TextView tvnosession;
@@ -137,6 +139,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         this.btn_back.setOnClickListener(this);
         this.btn_new_monitoring.setOnClickListener(this);
         this.btn_edit_data.setOnClickListener(this);
+        this.btn_patient_hist.setOnClickListener(this);
     }
 
     /**
@@ -161,6 +164,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         this.btn_back = findViewById(R.id.btn_back_new_monitoring);
         this.btn_new_monitoring = findViewById(R.id.btn_new_monitoring);
         this.btn_edit_data = findViewById(R.id.btn_edit_data);
+        this.btn_patient_hist = findViewById(R.id.btn_patient_hist);
 
         //Ultima sesión
 
@@ -261,6 +265,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                     tvini.setVisibility(View.VISIBLE);
                     //tvfin.setVisibility(View.VISIBLE);
                     tvtotal.setVisibility(View.VISIBLE);
+                    btn_patient_hist.setVisibility(View.VISIBLE);
 
 
                 }else{
@@ -277,6 +282,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                    tvini.setVisibility(View.GONE);
                    //tvfin.setVisibility(View.GONE);
                    tvtotal.setVisibility(View.GONE);
+                    btn_patient_hist.setVisibility(View.GONE);
 
                 }
 
@@ -320,6 +326,13 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             case R.id.btn_edit_data:
                 NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.MODIFY_USER,this.user);
                 dialog.show(this.getSupportFragmentManager(), "NewUserFragment");
+                break;
+
+            case R.id.btn_patient_hist:
+                Intent in = new Intent(MyApp.getContext(), PatientSessionListActivity.class);
+                in.putExtra("id", id);
+                in.putExtra("username",this.username.getText().toString());
+                startActivity(in);
                 break;
 
         }
