@@ -11,9 +11,9 @@ import com.google.gson.annotations.SerializedName;
 public class RequestSendData implements Serializable
 {
 
-    @SerializedName("id")
+    @SerializedName("session_id")
     @Expose
-    private String id;
+    private int session_id;
     @SerializedName("timeStamp")
     @Expose
     private String timeStamp;
@@ -100,7 +100,7 @@ public class RequestSendData implements Serializable
     /**
      * Cosntructor con parámetros
      * @author Domingo Lopez
-     * @param userId
+     * @param session_id
      * @param timeStamp
      * @param ticHrppg
      * @param ticHrppgraw
@@ -126,9 +126,9 @@ public class RequestSendData implements Serializable
      * @param ehb_o2
      * @param ehb_air
      */
-    public RequestSendData(String userId, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp, String ehb_bmp, String ehb_o2, String ehb_air) {
+    public RequestSendData(int session_id, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp, String ehb_bmp, String ehb_o2, String ehb_air) {
         super();
-        this.id = userId;
+        this.session_id = session_id;
         this.timeStamp = timeStamp;
         this.ticHrppg = ticHrppg;
         this.ticHrppgraw = ticHrppgraw;
@@ -155,12 +155,13 @@ public class RequestSendData implements Serializable
         this.ehb_air = ehb_air;
     }
 
-    public String getUserId() {
-        return id;
+
+    public int getSession_id() {
+        return session_id;
     }
 
-    public void setUserId(String userId) {
-        this.id = userId;
+    public void setSession_id(int session_id) {
+        this.session_id = session_id;
     }
 
     public String getTimeStamp() {

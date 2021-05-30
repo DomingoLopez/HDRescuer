@@ -1,15 +1,25 @@
 package com.hdrescuer.hdrescuer.data;
 
+import android.widget.Toast;
+
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.dbrepositories.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.EHealthBoardRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.TicWatchRepository;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
+import com.hdrescuer.hdrescuer.ui.ui.patienthist.PatientSessionListActivity;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SessionsHistListRepository {
@@ -67,6 +77,9 @@ public class SessionsHistListRepository {
         this.eHealthBoardRepository.deleteByIdSession(id_session_local);
         this.ticWatchRepository.deleteByIdSession(id_session_local);
 
+        //replicación en ell servidor
+        deleteCurrentSessionFromServer(id_session_local);
+
         sessions = getAllSessions();
 
     }
@@ -75,6 +88,66 @@ public class SessionsHistListRepository {
     public void refreshSessions(){
         this.sessions = getAllSessions();
     }
+
+
+    private void deleteCurrentSessionFromServer(int session_id) {
+
+        AuthConectionClient conectionClient;
+        AuthApiService apiService;
+
+        conectionClient = AuthConectionClient.getInstance();
+        apiService = conectionClient.getAuthApiService();
+
+        JsonObject obj = new JsonObject();
+        obj.addProperty("session_id", session_id);
+
+        //Objeto llamada con respuesta String para borrado de la sesión
+        Call<Integer> call = apiService.deleteSession(obj);
+
+        //Objeto llamada con respuesta String para borrado de la sesión
+        Call<Integer> call_data = apiService.deleteSessionData(obj);
+
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+
+                if (response.isSuccessful()) { //Código 200...299
+
+                } else {
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+
+            }
+
+        });
+
+
+        call_data.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call_data, Response<Integer> response) {
+
+                if (response.isSuccessful()) { //Código 200...299
+
+                } else {
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call_data, Throwable t) {
+
+            }
+
+        });
+    }
+
 
 
 }

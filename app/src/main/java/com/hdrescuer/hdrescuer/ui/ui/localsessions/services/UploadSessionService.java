@@ -61,7 +61,7 @@ public class UploadSessionService extends IntentService {
     SessionEntity sessionEntity;
     int id_session_local;
     String user_id;
-    String session_id;
+    int session_id;
 
 
     private String FILE_NAME_EMPATICA;
@@ -95,7 +95,7 @@ public class UploadSessionService extends IntentService {
                     //Obtenemos los parámetros
 
                     this.user_id = intent.getStringExtra("user_id");
-                    this.id_session_local = intent.getIntExtra("id_session_local",0);
+                    this.session_id = intent.getIntExtra("session_id",0);
                     this.receiver = intent.getParcelableExtra("receiver");
                     //Iniciamos los nombres de archivo
                     this.FILE_NAME_EMPATICA = "empatica_session_"+id_session_local+".csv";
@@ -103,7 +103,7 @@ public class UploadSessionService extends IntentService {
                     this.FILE_NAME_HEALTHBOARD = "healthboard_session_"+id_session_local+".csv";
 
                     //Obtenemos la sesión que nos hará falta para el resto de métodos
-                    this.sessionEntity = this.sessionsRepository.getByIdSession(id_session_local);
+                    this.sessionEntity = this.sessionsRepository.getByIdSession(session_id);
 
                     createSessionOnServer();
 
@@ -150,7 +150,8 @@ public class UploadSessionService extends IntentService {
     void createSessionOnServer(){
 
         //Llamada síncrona
-        Call<String> call = authApiService.createSessionFromLocal(new Session(
+        Call<Integer> call = authApiService.createSessionFromLocal(new Session(
+                this.session_id,
                 this.user_id,
                 this.sessionEntity.timestamp_ini,
                 this.sessionEntity.timestamp_fin,
@@ -161,7 +162,7 @@ public class UploadSessionService extends IntentService {
                 this.sessionEntity.description
         ));
         try{
-            Response<String> response = call.execute();
+            Response<Integer> response = call.execute();
            this.session_id = response.body();
 
         }catch (Exception e ){
@@ -193,7 +194,7 @@ public class UploadSessionService extends IntentService {
             fos = MyApp.getContext().openFileOutput(FILE_NAME_EMPATICA, MODE_PRIVATE);
 
 
-            fos.write("ID_SESSION_LOCAL,TIMESTAMP,E4_ACCX,E4_ACCY,E4_ACCZ,E4_BVP,E4_HR,E4_GSR,E4_IBI,E4_TEMP\n".getBytes());
+            fos.write("SESSION_ID,TIMESTAMP,E4_ACCX,E4_ACCY,E4_ACCZ,E4_BVP,E4_HR,E4_GSR,E4_IBI,E4_TEMP\n".getBytes());
 
             for(int i = 0; i< empaticaEntities.size(); i++){
 
@@ -239,7 +240,7 @@ public class UploadSessionService extends IntentService {
             fos = MyApp.getContext().openFileOutput(FILE_NAME_TICWATCH, MODE_PRIVATE);
 
 
-            fos.write("ID_SESSION_LOCAL,TIMESTAMP,TIC_ACCX,TIC_ACCY,TIC_ACCZ,TIC_ACCLX,TIC_ACCLY,TIC_ACCLZ,TIC_GIRX,TIC_GIRY,TIC_GIRZ,TIC_HRPPG,TIC_STEP\n".getBytes());
+            fos.write("SESSION_ID,TIMESTAMP,TIC_ACCX,TIC_ACCY,TIC_ACCZ,TIC_ACCLX,TIC_ACCLY,TIC_ACCLZ,TIC_GIRX,TIC_GIRY,TIC_GIRZ,TIC_HRPPG,TIC_STEP\n".getBytes());
 
             for(int i = 0; i< ticWatchEntities.size(); i++){
 
@@ -290,7 +291,7 @@ public class UploadSessionService extends IntentService {
         try {
             fos = MyApp.getContext().openFileOutput(FILE_NAME_HEALTHBOARD, MODE_PRIVATE);
 
-            fos.write("ID_SESSION_LOCAL,TIMESTAMP,EHB_BPM,EHB_OX_BLOOD,EHB_AIR_FLOW\n".getBytes());
+            fos.write("SESSION_ID,TIMESTAMP,EHB_BPM,EHB_OX_BLOOD,EHB_AIR_FLOW\n".getBytes());
 
             for(int i = 0; i< healthBoardEntities.size(); i++){
 

@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
@@ -32,6 +33,8 @@ import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.ui.HomeActivity;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
@@ -48,6 +51,10 @@ import java.time.Clock;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class LocalSessionsFragment extends Fragment implements ListItemClickListener, View.OnClickListener {
@@ -213,7 +220,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
 
             case "SHOW_RESULTS":
                 Intent i = new Intent(requireActivity(), SessionResultActivity.class);
-                i.putExtra("id_session_local",this.sessionList.get(position).getId_session_local());
+                i.putExtra("session_id",this.sessionList.get(position).getId_session_local());
                 i.putExtra("action","VISUALIZE");
                 startActivity(i);
 
@@ -231,6 +238,8 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
                     public void onPositiveButtonClick() {
 
                         sessionsListViewModel.deteleSessionByID(sessionList.get(position).getId_session_local());
+
+
                     }
 
                     @Override
@@ -259,7 +268,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
                     Intent intent = new Intent(this.getContext(), UploadSessionService.class);
                     intent.setAction("START_UPLOAD");
                     intent.putExtra("user_id",user_selected);
-                    intent.putExtra("id_session_local", id_session_local);
+                    intent.putExtra("session_id", id_session_local);
                     intent.putExtra("receiver",this.sessionResult);
                     MyApp.getInstance().startService(intent);
 
@@ -290,7 +299,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
                     SessionEntity sesionActualizar = sessionList.get(position_selected);
                     sesionActualizar.setUser_id(user_selected);
                     sessionsListViewModel.udpateSession(sesionActualizar);
-                    sessionsListViewModel.refreshSessions();
+                    //sessionsListViewModel.refreshSessions();
 
                     break;
 
@@ -313,6 +322,8 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
             }
         }
     };
+
+
 
 
 

@@ -180,11 +180,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //TimeStamp
     Instant instant;
 
-    //Identificador de sesión local actual
-    int id_session_local;
-
-    //Identificador de sesión remota
-    String session_id;
+    //Identificador de sesión
+    int session_id;
 
     //Descripción de la sesión (Para el modo no conexión)
     String session_description;
@@ -510,7 +507,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                         intent.setAction("STOP_OFFLINE_MODE");
                     }
                     String instant = Clock.systemUTC().instant().toString();
-                    intent.putExtra("id_session",session_id);
+                    intent.putExtra("session_id",session_id);
                     intent.putExtra("timestamp_fin",instant);
                     intent.putExtra("receiver",sessionResult);
 
@@ -629,8 +626,18 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         Intent intent = new Intent(this.getApplicationContext(), StartStopSessionService.class);
         this.instant = Clock.systemUTC().instant();
 
+        //Obtengo el id máximo de sesión local
+        int max_id = sessionsRepository.getMaxSession();
+        //Log.i("MAXIMA SESION",""+max_id);
+        if(max_id >= 1){
+            session_id = max_id + 1;
+        }else{ //si no hay sesiones. La inicio a 1
+            session_id = 1;
+        }
+
         if(Constants.CONNECTION_MODE=="STREAMING"){
             intent.setAction("START_SESSION");
+            intent.putExtra("session_id",session_id);
             intent.putExtra("user_id",this.user_id);
             intent.putExtra("timestamp_ini",this.instant.toString());
             intent.putExtra("e4band",this.e4Connected);
@@ -656,13 +663,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                     //Guardamos la sesión en la BD
                     initDBLocalSession();
-
-                    //Obtenemos el id de sesión recibido
-
-                    if(Constants.CONNECTION_MODE=="STREAMING")
-                      session_id = resultData.getString("result");
-                    else
-                      session_id = null;
 
                     if(bluetoothAdapter != null)
                         bluetoothAdapter.cancelDiscovery();
@@ -699,7 +699,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                     //Iniciamos proceso en Background para lectura de datos según el sample rate que le pongamos
                     SampleRateFilterThread.STATUS = "ACTIVO";
-                    sampleRateThread = new SampleRateFilterThread(ticWatchRepository, e4BandRepository, eHealthBoardRepository, globalMonitoringViewModel, session_id, id_session_local);
+                    sampleRateThread = new SampleRateFilterThread(ticWatchRepository, e4BandRepository, eHealthBoardRepository, globalMonitoringViewModel, session_id);
                     sampleRateThread.start();
 
 
@@ -721,8 +721,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                     //Mostramos resultados
                     Intent i = new Intent(DevicesConnectionActivity.this, SessionResultActivity.class);
-                    i.putExtra("id_session_local",id_session_local);
-                    i.putExtra("id_session_remote",session_id);
+                    i.putExtra("session_id",session_id);
                     startActivity(i);
                     //Destruimos el de conexiones para que no se pueda volver a el.
                     finish();
@@ -757,18 +756,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
         private void initDBLocalSession() {
 
-            //Obtengo el id máximo de sesión local
-            int max_id = sessionsRepository.getMaxSession();
-            //Log.i("MAXIMA SESION",""+max_id);
-            if(max_id >= 1){
-                id_session_local = max_id + 1;
-            }else{ //si no hay sesiones. La inicio a 1
-                id_session_local = 1;
-            }
-
             //Inicio la sesión
             sessionsRepository.insertSession(new SessionEntity(
-                    id_session_local,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected, session_description
+                    session_id,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected, session_description
             ));
 
 
@@ -779,7 +769,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         private void stopDBLocalSession(String timestamp_fin) {
             //Hacemos update de la sesión
             sessionsRepository.updateSession(new SessionEntity(
-                    id_session_local,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,session_description
+                    session_id,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,session_description
             ));
 
 

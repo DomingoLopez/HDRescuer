@@ -48,7 +48,7 @@ public class RestSampleRateService extends IntentService {
 
                 //Recogemos todos los parámetros y creamos el objeto a mandar por REST (de momento)
                 RequestSendData newRequest = new RequestSendData(
-                        intent.getStringExtra("id"),
+                        intent.getIntExtra("session_id",0),
                         intent.getStringExtra("timestamp"),
                         intent.getStringExtra("tic_hrppg"),
                         intent.getStringExtra("tic_hrppgraw"),

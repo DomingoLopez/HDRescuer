@@ -77,7 +77,7 @@ public interface AuthApiService {
      * @return Call
      */
     @POST("api/sessions/user/init")
-    Call<String> initSession(@Body Session session);
+    Call<Integer> initSession(@Body Session session);
 
     /**
      * Método que realiza llamada al servidor para parar una sesión
@@ -86,7 +86,7 @@ public interface AuthApiService {
      * @return Call
      */
     @POST("api/sessions/stop")
-    Call<String> stopSession(@Body JsonObject jsonObject);
+    Call<Integer> stopSession(@Body JsonObject jsonObject);
 
 
     //Métodos para gestionar las sesiones guardadas en modo no conexión
@@ -98,7 +98,7 @@ public interface AuthApiService {
      * @return Call
      */
     @POST("api/sessions/createfromlocal")
-    Call<String> createSessionFromLocal(@Body Session session);
+    Call<Integer> createSessionFromLocal(@Body Session session);
 
 
     @Multipart
@@ -133,7 +133,7 @@ public interface AuthApiService {
      * @return Call
      */
     @POST("api/sessions/deleteone")
-    Call<String> deleteSession(@Body JsonObject jsonObject);
+    Call<Integer> deleteSession(@Body JsonObject jsonObject);
 
 
     //Borrado de sesiones que no se quieran guardar
@@ -144,7 +144,7 @@ public interface AuthApiService {
      * @return Call
      */
     @POST("api/datarecovery/deletedata")
-    Call<String> deleteSessionData(@Body JsonObject jsonObject);
+    Call<Integer> deleteSessionData(@Body JsonObject jsonObject);
 
 
 

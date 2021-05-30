@@ -52,6 +52,7 @@ public class StartStopSessionService extends IntentService {
                 case "START_SESSION":
                     //Creamos la nueva sesión
                     Session session  = new Session(
+                            intent.getIntExtra("session_id",0),
                             intent.getStringExtra("user_id"),
                             intent.getStringExtra("timestamp_ini"),
                             intent.getStringExtra("timestamp_ini"),
@@ -70,7 +71,7 @@ public class StartStopSessionService extends IntentService {
                     break;
 
                 case "STOP_SESSION":
-                    String id_session = intent.getStringExtra("id_session");
+                    int id_session = intent.getIntExtra("session_id",0);
                     String timestamp_fin = intent.getStringExtra("timestamp_fin");
                     this.receiver = intent.getParcelableExtra("receiver");
 
@@ -109,13 +110,13 @@ public class StartStopSessionService extends IntentService {
      * @param session
      */
     public void initSessionCall(Session session){
-        Call<String> call = authApiService.initSession(session);
+        Call<Integer> call = authApiService.initSession(session);
         try{
-            Response<String> response = call.execute();
-            String session_id = response.body();
+            Response<Integer> response = call.execute();
+            int session_id = response.body();
 
             Bundle bundle =  new Bundle();
-            bundle.putString("result", session_id);
+            bundle.putInt("result", session_id);
             this.receiver.send(1, bundle);
 
         }catch (Exception e ){
@@ -137,25 +138,25 @@ public class StartStopSessionService extends IntentService {
      * @param id_session
      * @param timestamp_fin
      */
-    public void stopSessionCall(String id_session, String timestamp_fin){
+    public void stopSessionCall(int id_session, String timestamp_fin){
 
         JsonObject obj = new JsonObject();
-        obj.addProperty("id_session",id_session);
+        obj.addProperty("session_id",id_session);
         obj.addProperty("timestamp_fin",timestamp_fin);
 
-        Call<String> call = authApiService.stopSession( obj );
+        Call<Integer> call = authApiService.stopSession( obj );
         try{
-            Response<String> response = call.execute();
-            String session_id = response.body();
+            Response<Integer> response = call.execute();
+            int session_id = response.body();
 
             Bundle bundle =  new Bundle();
-            bundle.putString("result", session_id);
+            bundle.putInt("result", session_id);
             bundle.putString("result_time", timestamp_fin);
             this.receiver.send(2, bundle);
 
         }catch (Exception e ){
             Bundle bundle =  new Bundle();
-            bundle.putString("result", "Error al iniciar sesión");
+            bundle.putString("result", "Error al parar la sesión");
             this.receiver.send(401, bundle);
             e.printStackTrace();
         }

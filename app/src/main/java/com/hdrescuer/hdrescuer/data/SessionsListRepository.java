@@ -4,6 +4,7 @@ import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
@@ -64,6 +65,9 @@ public class SessionsListRepository {
 
     public void deleteSessionByID(int id_session_local){
         this.sessionsRepository.deleteByIdSession(id_session_local);
+        //Replicación en el servidor
+        deleteCurrentSessionFromServer(id_session_local);
+
         List<SessionEntity> sesiones_locales;
         sesiones_locales = this.sessionsRepository.getAllSession();
 
@@ -72,16 +76,82 @@ public class SessionsListRepository {
 
     public void updateSession(SessionEntity sessionEntity){
         this.sessionsRepository.updateSession(sessionEntity);
-        List<SessionEntity> sesiones_locales;
-        sesiones_locales = this.sessionsRepository.getAllSession();
 
-        sessions.setValue(sesiones_locales);
+        List<SessionEntity> tmp = this.sessions.getValue();
+
+        for(int i = 0; i< tmp.size(); i++){
+            if(tmp.get(i).id_session_local == sessionEntity.id_session_local) {
+                tmp.remove(i);
+                break;
+            }
+        }
+        sessions.setValue(tmp);
     }
 
 
     public void refreshSessions(){
         this.sessions = getAllSessions();
     }
+
+
+    private void deleteCurrentSessionFromServer(int session_id) {
+
+        AuthConectionClient conectionClient;
+        AuthApiService apiService;
+
+        conectionClient = AuthConectionClient.getInstance();
+        apiService = conectionClient.getAuthApiService();
+
+        JsonObject obj = new JsonObject();
+        obj.addProperty("session_id", session_id);
+
+        //Objeto llamada con respuesta String para borrado de la sesión
+        Call<Integer> call = apiService.deleteSession(obj);
+
+        //Objeto llamada con respuesta String para borrado de la sesión
+        Call<Integer> call_data = apiService.deleteSessionData(obj);
+
+
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+
+                if (response.isSuccessful()) { //Código 200...299
+
+                } else {
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+
+            }
+
+        });
+
+
+        call_data.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call_data, Response<Integer> response) {
+
+                if (response.isSuccessful()) { //Código 200...299
+
+                } else {
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call_data, Throwable t) {
+
+            }
+
+        });
+    }
+
 
 
 }

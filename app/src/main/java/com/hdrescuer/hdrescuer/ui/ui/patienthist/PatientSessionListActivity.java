@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
@@ -26,6 +27,8 @@ import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
@@ -37,6 +40,10 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PatientSessionListActivity extends AppCompatActivity implements ListItemClickListener, View.OnClickListener {
 
@@ -131,7 +138,7 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
             case "SHOW_RESULTS":
 
                 Intent i = new Intent(PatientSessionListActivity.this, SessionResultActivity.class);
-                i.putExtra("id_session_local",this.sessionList.get(position).getId_session_local());
+                i.putExtra("session_id",this.sessionList.get(position).getId_session_local());
                 i.putExtra("action","VISUALIZE");
                 startActivity(i);
 
@@ -149,6 +156,7 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
                     public void onPositiveButtonClick() {
 
                         sessionsHistListViewModel.deteleSessionByID(sessionList.get(position).getId_session_local());
+
                     }
 
                     @Override
@@ -168,6 +176,9 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
 
 
     }
+
+
+
 
     @Override
     public void onClick(View view) {

@@ -32,9 +32,8 @@ public class SampleRateFilterThread extends Thread{
     public static  String STATUS="ACTIVO";
     private static String ACTION_SEND = "ACTION_SEND";
 
-    private String session_id;
-    private int id_session_local;
-//    private long instant = 0;
+    private int session_id;
+
     private Instant instant;
 
     /**
@@ -49,10 +48,9 @@ public class SampleRateFilterThread extends Thread{
     public SampleRateFilterThread(TicWatchRepository ticWatchRepository,
                                   E4BandRepository e4BandRepository,
                                   EHealthBoardRepository eHealthBoardRepository,
-                                  GlobalMonitoringViewModel globalMonitoringViewModel, String session_id, int id_session_local){
+                                  GlobalMonitoringViewModel globalMonitoringViewModel, int session_id){
 
         this.session_id = session_id;
-        this.id_session_local = id_session_local;
         this.ticWatchRepository = ticWatchRepository;
         this.e4BandRepository = e4BandRepository;
         this.eHealthBoardRepository = eHealthBoardRepository;
@@ -131,7 +129,7 @@ public class SampleRateFilterThread extends Thread{
         restIntent.putExtra("ehb_air",this.eHealthBoardRepository.getAirFlow().toString());
 
         restIntent.putExtra("timestamp",this.instant.toString());
-        restIntent.putExtra("id",this.session_id);
+        restIntent.putExtra("session_id",this.session_id);
 
         MyApp.getContext().startService(restIntent);
 
@@ -157,7 +155,7 @@ public class SampleRateFilterThread extends Thread{
             this.globalMonitoringViewModel.setCurrentIbi(this.e4BandRepository.getCurrentIbi());
             this.globalMonitoringViewModel.setCurrentTemp(this.e4BandRepository.getCurrentTemp());
 
-            e4BandRepository.saveDBLocalData(id_session_local,instant.toString());
+            e4BandRepository.saveDBLocalData(session_id,instant.toString());
         }
 
 
@@ -184,7 +182,7 @@ public class SampleRateFilterThread extends Thread{
             this.globalMonitoringViewModel.setGirz(this.ticWatchRepository.getGirz());
 
 
-            ticWatchRepository.saveDBLocalData(id_session_local, instant.toString());
+            ticWatchRepository.saveDBLocalData(session_id, instant.toString());
         }
 
     }
@@ -201,7 +199,7 @@ public class SampleRateFilterThread extends Thread{
             this.globalMonitoringViewModel.setOxi_o2(this.eHealthBoardRepository.getOxBlood());
             this.globalMonitoringViewModel.setOxi_air(this.eHealthBoardRepository.getAirFlow());
 
-            eHealthBoardRepository.saveDBLocalData(id_session_local,instant.toString());
+            eHealthBoardRepository.saveDBLocalData(session_id,instant.toString());
         }
     }
 

@@ -12,6 +12,9 @@ import com.google.gson.annotations.SerializedName;
 public class Session implements Serializable
 {
 
+    @SerializedName("session_id")
+    @Expose
+    private int session_id;
     @SerializedName("user_id")
     @Expose
     private String userId;
@@ -57,8 +60,9 @@ public class Session implements Serializable
      * @param ehealthboard
      * @param userId
      */
-    public Session(String userId, String timestampIni, String timestampFin, long totalTime, Boolean e4band, Boolean ticwatch, Boolean ehealthboard, String description) {
+    public Session(int session_id,String userId, String timestampIni, String timestampFin, long totalTime, Boolean e4band, Boolean ticwatch, Boolean ehealthboard, String description) {
         super();
+        this.session_id = session_id;
         this.userId = userId;
         this.timestampIni = timestampIni;
         this.timestampFin = timestampFin;
@@ -67,6 +71,14 @@ public class Session implements Serializable
         this.ticwatch = ticwatch;
         this.ehealthboard = ehealthboard;
         this.description = description;
+    }
+
+    public int getSession_id() {
+        return session_id;
+    }
+
+    public void setSession_id(int session_id) {
+        this.session_id = session_id;
     }
 
     public String getUserId() {

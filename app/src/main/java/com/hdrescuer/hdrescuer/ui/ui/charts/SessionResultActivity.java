@@ -74,10 +74,8 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
     int averageBlood = 0;
 
     //session_local
-    int id_session_local;
+    int session_id;
 
-    //session_remota
-    String session_id;
 
     //Session entity actual
     SessionEntity session;
@@ -102,30 +100,29 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
 
         //Obtenemos el intent recibido con el id_Session_local
         Intent intent = getIntent();
-        this.id_session_local = intent.getIntExtra("id_session_local",0);
-        this.session_id = intent.getStringExtra("id_session_remote");
+        this.session_id = intent.getIntExtra("session_id",0);
         this.action = intent.getStringExtra("action");
 
-        if(id_session_local != 0 && (Integer)id_session_local != null){
+        if(session_id != 0 ){
             this.sessionsRepository = new SessionsRepository(getApplication());
-            session = this.sessionsRepository.getByIdSession(id_session_local);
+            session = this.sessionsRepository.getByIdSession(session_id);
 
 
             if(session.e4band) {
                 this.e4BandRepository = new E4BandRepository(getApplication());
-                ArrayList<LineData> lineDataArrayEmp = generateE4BandData(id_session_local);
+                ArrayList<LineData> lineDataArrayEmp = generateE4BandData(session_id);
                 list.add(new EmpaticaChartItem(lineDataArrayEmp,getApplicationContext()));
             }
 
             if(session.ticwatch) {
                 this.ticWatchRepository = new TicWatchRepository(getApplication());
-                ArrayList<LineData> lineDataArray = generateTicWatchData(id_session_local);
+                ArrayList<LineData> lineDataArray = generateTicWatchData(session_id);
                 list.add(new TicWatchChartItem(lineDataArray, this.steps_tic, getApplicationContext()));
             }
 
             if(session.ehealthboard) {
                 this.eHealthBoardRepository = new EHealthBoardRepository(getApplication());
-                ArrayList<LineData> lineDataArrayHB = generateHealthBoardData(id_session_local);
+                ArrayList<LineData> lineDataArrayHB = generateHealthBoardData(session_id);
                 list.add(new HealthBoardChartItem(lineDataArrayHB, this.minBlood, this.maxBlood, this.averageBlood, getApplicationContext()));
             }
 
@@ -658,7 +655,7 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
                 public void onNegativeButtonClick() {
 
 
-                    deleteCurrentSession(id_session_local);
+                    deleteCurrentSession(session_id);
                     if (Constants.CONNECTION_MODE == "STREAMING")
                         deleteCurrentSessionFromServer(session_id);
 
@@ -688,7 +685,7 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
             eHealthBoardRepository.deleteByIdSession(id_session_local);
     }
 
-    private void deleteCurrentSessionFromServer(String session_id){
+    private void deleteCurrentSessionFromServer(int session_id){
 
         AuthConectionClient conectionClient;
         AuthApiService apiService;
@@ -700,15 +697,15 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
         obj.addProperty("session_id",session_id);
 
         //Objeto llamada con respuesta String para borrado de la sesión
-        Call<String> call = apiService.deleteSession(obj);
+        Call<Integer> call = apiService.deleteSession(obj);
 
         //Objeto llamada con respuesta String para borrado de la sesión
-        Call<String> call_data = apiService.deleteSessionData(obj);
+        Call<Integer> call_data = apiService.deleteSessionData(obj);
 
 
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
 
                 if(response.isSuccessful()) { //Código 200...299
 
@@ -719,16 +716,16 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 Toast.makeText(SessionResultActivity.this, "No se pudo borrar la sesión",Toast.LENGTH_LONG).show();
             }
 
         });
 
 
-        call_data.enqueue(new Callback<String>() {
+        call_data.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<String> call_data, Response<String> response) {
+            public void onResponse(Call<Integer> call_data, Response<Integer> response) {
 
                 if(response.isSuccessful()) { //Código 200...299
 
@@ -739,7 +736,7 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
             }
 
             @Override
-            public void onFailure(Call<String> call_data, Throwable t) {
+            public void onFailure(Call<Integer> call_data, Throwable t) {
                 Toast.makeText(SessionResultActivity.this, "No se pudieron borrar los datos de la sesión",Toast.LENGTH_LONG).show();
             }
 

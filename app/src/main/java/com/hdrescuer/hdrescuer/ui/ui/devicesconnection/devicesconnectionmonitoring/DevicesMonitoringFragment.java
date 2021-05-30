@@ -34,7 +34,7 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
     TabLayout tabLayout;
     ViewPager2 viewPager;
     Button btnStopMonitor;
-    String session_id;
+    int session_id;
     ResultReceiver receiver;
 
 
@@ -52,7 +52,7 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
      * @param session_id
      * @param receiver
      */
-    public DevicesMonitoringFragment(String session_id, ResultReceiver receiver){
+    public DevicesMonitoringFragment(int session_id, ResultReceiver receiver){
         this.session_id = session_id;
         this.receiver = receiver;
     }
@@ -158,7 +158,7 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
             intent.setAction("STOP_OFFLINE_MODE");
         }
         String instant = Clock.systemUTC().instant().toString();
-        intent.putExtra("id_session",this.session_id);
+        intent.putExtra("session_id",this.session_id);
         intent.putExtra("timestamp_fin",instant);
         intent.putExtra("receiver",this.receiver);
 
