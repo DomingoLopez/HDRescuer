@@ -4,9 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,16 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
-import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
-import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -131,8 +125,8 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
             duration = view.findViewById(R.id.tvDurationHIST);
             description = view.findViewById(R.id.tvDescriptionHIST);
 
-            viewResults = view.findViewById(R.id.viewResults);
-            deleteSession = view.findViewById(R.id.deleteSessionHist);
+            viewResults = view.findViewById(R.id.viewResultsLoc);
+            deleteSession = view.findViewById(R.id.deleteSessionLoc);
 
             //Seteamos el listener para cada botón del holder
             viewResults.setOnClickListener(this);
@@ -152,12 +146,12 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
             int position = getAdapterPosition();
 
             switch (v.getId()){
-                case R.id.viewResults:
+                case R.id.viewResultsLoc:
 
                     mOnClickListener.onListItemClickUser(position, "SHOW_RESULTS");
                     break;
 
-                case R.id.deleteSessionHist:
+                case R.id.deleteSessionLoc:
                     mOnClickListener.onListItemClickUser(position, "DELETE_SESSION");
                     break;
 

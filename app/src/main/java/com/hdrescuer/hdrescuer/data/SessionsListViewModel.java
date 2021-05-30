@@ -13,7 +13,7 @@ import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import java.util.List;
 
 /**
- * ViewModel de la lista de usuarios
+ * ViewModel de la lista de sesiones
  * @author Domingo Lopez
  */
 public class SessionsListViewModel extends AndroidViewModel {
@@ -36,6 +36,8 @@ public class SessionsListViewModel extends AndroidViewModel {
         return this.sessionsListRepository.getSessions();
     }
 
+
+    public void udpateSession(SessionEntity sessionEntity){this.sessionsListRepository.updateSession(sessionEntity);}
 
     public void deleteSessions(){
         this.sessionsListRepository.deleteSessions();

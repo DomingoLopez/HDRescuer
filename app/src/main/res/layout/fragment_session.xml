@@ -92,9 +92,33 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/btn_synchronize_session"
+            android:textSize="10sp"
             app:icon="@drawable/ic_baseline_upload_24"
             app:layout_constraintStart_toStartOf="@+id/tvAutoCompletablePatient"
             app:layout_constraintTop_toBottomOf="@+id/tvAutoCompletablePatient" />
+
+        <ImageView
+            android:id="@+id/viewResultsLoc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@color/blue_secondary"
+            android:padding="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/deleteSessionLoc"
+            app:layout_constraintTop_toTopOf="@+id/deleteSessionLoc"
+            app:srcCompat="@drawable/ic_baseline_leaderboard_24" />
+
+        <ImageView
+            android:id="@+id/deleteSessionLoc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F44336"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnUploadSessionLocale"
+            app:layout_constraintEnd_toEndOf="@+id/tvAutoCompletablePatient"
+            app:layout_constraintTop_toTopOf="@+id/btnUploadSessionLocale"
+            app:srcCompat="@drawable/ic_baseline_delete_24" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -46,6 +46,9 @@ public class SimpleDialogFragment extends DialogFragment {
         }else if(this.action.equals("CONFIRM_SAVE")){
             builder.setTitle("¿Desea guardar la sesión?");
             this.session_description.setVisibility(View.INVISIBLE);
+        }else if(this.action.equals("DELETE_SESSION")){
+            builder.setTitle("¿Desea borrar la sesión?");
+            this.session_description.setVisibility(View.INVISIBLE);
         }
 
 
@@ -61,6 +64,8 @@ public class SimpleDialogFragment extends DialogFragment {
                         onSimpleDialogClick.onPositiveButtonClick(description);
                     }else if(action.equals("CONFIRM_SAVE")){
                         onSimpleDialogClick.onPositiveButtonClick();
+                    }else if(action.equals("DELETE_SESSION")){
+                        onSimpleDialogClick.onPositiveButtonClick();
                     }
             }
         });
@@ -71,6 +76,8 @@ public class SimpleDialogFragment extends DialogFragment {
                     if(action.equals("SET_DESCRIPTION")){
                         SimpleDialogFragment.this.getDialog().cancel();
                     }else if(action.equals("CONFIRM_SAVE")){
+                        onSimpleDialogClick.onNegativeButtonClick();
+                    }else if(action.equals("DELETE_SESSION")){
                         onSimpleDialogClick.onNegativeButtonClick();
                     }
 

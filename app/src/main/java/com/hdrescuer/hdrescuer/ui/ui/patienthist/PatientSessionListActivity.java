@@ -18,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
+import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
+import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
 import com.hdrescuer.hdrescuer.data.SessionsHistListViewModel;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
@@ -135,8 +138,29 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
                 break;
 
             case "DELETE_SESSION":
-                //Log.i("ENTRO","ENTRO");
-                this.sessionsHistListViewModel.deteleSessionByID(this.sessionList.get(position).getId_session_local());
+
+                SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
+                    @Override
+                    public void onPositiveButtonClick(String description) {
+
+                    }
+
+                    @Override
+                    public void onPositiveButtonClick() {
+
+                        sessionsHistListViewModel.deteleSessionByID(sessionList.get(position).getId_session_local());
+                    }
+
+                    @Override
+                    public void onNegativeButtonClick() {
+
+
+                    }
+                }, "DELETE_SESSION");
+
+                dialogFragment.show(getSupportFragmentManager(), null);
+
+
 
                 break;
         }

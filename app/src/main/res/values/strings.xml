@@ -16,7 +16,7 @@
     <string name="menu_users">Usuarios</string>
     <string name="menu_support">Información</string>
     <string name="menu_config">Configuración</string>
-    <string name="menu_sessions">Sesiones locales</string>
+    <string name="menu_sessions">Sesiones Offline</string>
     <string name="label_last_monitoring">Última sesión </string>
     <string name="label_edad">Edad:</string>
     <string name="label_altura">Altura:</string>

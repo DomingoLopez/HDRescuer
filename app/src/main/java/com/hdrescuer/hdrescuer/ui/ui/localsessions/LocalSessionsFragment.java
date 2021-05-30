@@ -27,10 +27,13 @@ import com.google.android.gms.wearable.DataItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.MyApp;
+import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
+import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
+import com.hdrescuer.hdrescuer.ui.HomeActivity;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
@@ -38,6 +41,7 @@ import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardThre
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSessionService;
 import com.hdrescuer.hdrescuer.ui.ui.localsessions.services.UploadSessionService;
+import com.hdrescuer.hdrescuer.ui.ui.patienthist.PatientSessionListActivity;
 import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
 
 import java.time.Clock;
@@ -63,6 +67,9 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     public Map<String, String> usuarios_predictivo = new HashMap<String,String>();
 
     boolean alreadyCreated = false;
+
+    int position_selected;
+    String user_selected;
 
 
     public LocalSessionsFragment() {
@@ -202,26 +209,69 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     @Override
     public void onListItemClickUser(int position, String user_elegido){
 
-        if(user_elegido == null || user_elegido == ""){
-            Toast.makeText(requireActivity(), "No ha seleccionado un paciente para la sesión", Toast.LENGTH_SHORT).show();
-            return;
+        switch (user_elegido){
+
+            case "SHOW_RESULTS":
+                Intent i = new Intent(requireActivity(), SessionResultActivity.class);
+                i.putExtra("id_session_local",this.sessionList.get(position).getId_session_local());
+                i.putExtra("action","VISUALIZE");
+                startActivity(i);
+
+                break;
+
+
+            case "DELETE_SESSION":
+                SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
+                    @Override
+                    public void onPositiveButtonClick(String description) {
+
+                    }
+
+                    @Override
+                    public void onPositiveButtonClick() {
+
+                        sessionsListViewModel.deteleSessionByID(sessionList.get(position).getId_session_local());
+                    }
+
+                    @Override
+                    public void onNegativeButtonClick() {
+
+
+                    }
+                }, "DELETE_SESSION");
+
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), null);
+
+                break;
+
+            default:
+
+                if(user_elegido == null || user_elegido == ""){
+                    Toast.makeText(requireActivity(), "No ha seleccionado un paciente para la sesión", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Si el usuario contiene algo, lo comparamos con el Map que tenemos
+                this.user_selected = this.usuarios_predictivo.get(user_elegido);
+                if(user_selected != null){
+                    int id_session_local = this.sessionList.get(position).id_session_local;
+                    this.position_selected = position;
+                    Intent intent = new Intent(this.getContext(), UploadSessionService.class);
+                    intent.setAction("START_UPLOAD");
+                    intent.putExtra("user_id",user_selected);
+                    intent.putExtra("id_session_local", id_session_local);
+                    intent.putExtra("receiver",this.sessionResult);
+                    MyApp.getInstance().startService(intent);
+
+                }else{
+                    Toast.makeText(requireActivity(), "Debe escribir el nombre del paciente al que pertenece la sesión", Toast.LENGTH_SHORT).show();
+                }
+
+
+                break;
         }
 
-        //Si el usuario contiene algo, lo comparamos con el Map que tenemos
-        String user_id = this.usuarios_predictivo.get(user_elegido);
-        if(user_id != null){
-            int id_session_local = this.sessionList.get(position).id_session_local;
 
-            Intent intent = new Intent(this.getContext(), UploadSessionService.class);
-            intent.setAction("START_UPLOAD");
-            intent.putExtra("user_id",user_id);
-            intent.putExtra("id_session_local", id_session_local);
-            intent.putExtra("receiver",this.sessionResult);
-            MyApp.getInstance().startService(intent);
-
-        }else{
-            Toast.makeText(requireActivity(), "Debe escribir el nombre del paciente al que pertenece la sesión", Toast.LENGTH_SHORT).show();
-        }
 
     }
 
@@ -237,7 +287,10 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
                     Toast.makeText(requireActivity(), "Sesión sincronizada de forma satisfactoria", Toast.LENGTH_SHORT).show();
                     int deleted_session = (int) resultData.get("deleted_session");
                     //Borramos la sesión
-                    sessionsListViewModel.deteleSessionByID(deleted_session);
+                    SessionEntity sesionActualizar = sessionList.get(position_selected);
+                    sesionActualizar.setUser_id(user_selected);
+                    sessionsListViewModel.udpateSession(sesionActualizar);
+                    sessionsListViewModel.refreshSessions();
 
                     break;
 

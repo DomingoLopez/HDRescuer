@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -137,6 +138,10 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
         public final TextView description;
         public final AutoCompleteTextView autoCompleteTextView;
         public final Button btnUploadSession;
+        public final ImageView deleteSession;
+        public final ImageView viewResults;
+
+
         private WeakReference<ListItemClickListener> listenerRef;
 
         public ViewHolder(View view, ListItemClickListener listener) {
@@ -151,9 +156,13 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
             description = view.findViewById(R.id.tvDescription);
             autoCompleteTextView = view.findViewById(R.id.tvAutoCompletablePatient);
             btnUploadSession = view.findViewById(R.id.btnUploadSessionLocale);
+            deleteSession = view.findViewById(R.id.deleteSessionLoc);
+            viewResults = view.findViewById(R.id.viewResultsLoc);
 
             //Seteamos el listener para cada botón del holder
             btnUploadSession.setOnClickListener(this);
+            deleteSession.setOnClickListener(this);
+            viewResults.setOnClickListener(this);
             view.setOnClickListener(this);
 
         }
@@ -166,16 +175,28 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
         @Override
         public void onClick(View v) {
 
-            if(v.getId() == btnUploadSession.getId()){
 
-                String user_elegido = autoCompleteTextView.getText().toString();
-                autoCompleteTextView.clearFocus();
-                autoCompleteTextView.setText("");
+            switch (v.getId()){
+                case R.id.btnUploadSessionLocale:
+                    String user_elegido = autoCompleteTextView.getText().toString();
+                    autoCompleteTextView.clearFocus();
+                    autoCompleteTextView.setText("");
+
+                    listenerRef.get().onListItemClickUser(getAdapterPosition(), user_elegido);
+
+                    break;
+
+                case R.id.deleteSessionLoc:
+                    listenerRef.get().onListItemClickUser(getAdapterPosition(), "DELETE_SESSION");
+                    break;
 
 
-                listenerRef.get().onListItemClickUser(getAdapterPosition(), user_elegido);
+                case R.id.viewResultsLoc:
+                    listenerRef.get().onListItemClickUser(getAdapterPosition(), "SHOW_RESULTS");
+                    break;
 
             }
+
 
         }
     }

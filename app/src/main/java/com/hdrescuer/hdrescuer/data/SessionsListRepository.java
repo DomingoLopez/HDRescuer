@@ -70,6 +70,14 @@ public class SessionsListRepository {
         sessions.setValue(sesiones_locales);
     }
 
+    public void updateSession(SessionEntity sessionEntity){
+        this.sessionsRepository.updateSession(sessionEntity);
+        List<SessionEntity> sesiones_locales;
+        sesiones_locales = this.sessionsRepository.getAllSession();
+
+        sessions.setValue(sesiones_locales);
+    }
+
 
     public void refreshSessions(){
         this.sessions = getAllSessions();
