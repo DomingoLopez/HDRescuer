@@ -12,24 +12,21 @@ import java.util.Date;
  */
 public class User {
 
-    @SerializedName("id")
+    @SerializedName("user_id")
     @Expose
-    private String id;
+    private int user_id;
     @SerializedName("username")
     @Expose
     private String username;
     @SerializedName("lastname")
     @Expose
     private String lastname;
-    @SerializedName("createdAt")
-    @Expose
-    private Date createdAt;
     @SerializedName("session_id")
     @Expose
     private String session_id;
     @SerializedName("timestamp_ini")
     @Expose
-    private Date timestamp_ini;
+    private String timestamp_ini;
     @SerializedName("total_time")
     @Expose
     private Integer total_time;
@@ -44,16 +41,16 @@ public class User {
     /**
      * Cosntructor con parámetros
      * @author Domingo Lopez
-     * @param id
+     * @param user_id
      * @param username
      * @param lastname
      * @param session_id
      * @param timestamp_ini
      * @param total_time
      */
-    public User(String id, String username,String lastname, String session_id, Date timestamp_ini, Integer total_time) {
+    public User(int user_id, String username,String lastname, String session_id, String timestamp_ini, Integer total_time) {
         super();
-        this.id = id;
+        this.user_id = user_id;
         this.username = username;
         this.lastname = lastname;
         this.session_id = session_id;
@@ -63,7 +60,7 @@ public class User {
 
     public User(User user) {
         super();
-        this.id = user.id;
+        this.user_id = user.user_id;
         this.username = user.username;
         this.lastname = user.lastname;
         this.session_id = user.session_id;
@@ -71,13 +68,12 @@ public class User {
         this.total_time = user.total_time;
     }
 
-
-    public String getId() {
-        return id;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public String getUsername() {
@@ -105,11 +101,11 @@ public class User {
         this.session_id = session_id;
     }
 
-    public Date getTimestamp_ini() {
+    public String getTimestamp_ini() {
         return timestamp_ini;
     }
 
-    public void setTimestamp_ini(Date timestamp_ini) {
+    public void setTimestamp_ini(String timestamp_ini) {
         this.timestamp_ini = timestamp_ini;
     }
 

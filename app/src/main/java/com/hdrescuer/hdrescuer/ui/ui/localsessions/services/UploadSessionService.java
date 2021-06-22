@@ -1,16 +1,11 @@
 package com.hdrescuer.hdrescuer.ui.ui.localsessions.services;
 
-import android.app.DownloadManager;
 import android.app.IntentService;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.ResultReceiver;
-import android.util.Log;
 
-import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.dbrepositories.E4BandRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.EHealthBoardRepository;
@@ -22,18 +17,11 @@ import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.db.entity.TicWatchEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
-import com.hdrescuer.hdrescuer.retrofit.request.Session;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -41,7 +29,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.http.Multipart;
 
 public class UploadSessionService extends IntentService {
 
@@ -60,7 +47,7 @@ public class UploadSessionService extends IntentService {
 
     SessionEntity sessionEntity;
     int id_session_local;
-    String user_id;
+    int user_id;
     int session_id;
 
 
@@ -94,7 +81,7 @@ public class UploadSessionService extends IntentService {
                 case "START_UPLOAD":
                     //Obtenemos los parámetros
 
-                    this.user_id = intent.getStringExtra("user_id");
+                    this.user_id = intent.getIntExtra("user_id",0);
                     this.session_id = intent.getIntExtra("session_id",0);
                     this.receiver = intent.getParcelableExtra("receiver");
                     //Iniciamos los nombres de archivo
@@ -150,7 +137,7 @@ public class UploadSessionService extends IntentService {
     void createSessionOnServer(){
 
         //Llamada síncrona
-        Call<Integer> call = authApiService.createSessionFromLocal(new Session(
+        Call<Integer> call = authApiService.createSessionFromLocal(new SessionEntity(
                 this.session_id,
                 this.user_id,
                 this.sessionEntity.timestamp_ini,

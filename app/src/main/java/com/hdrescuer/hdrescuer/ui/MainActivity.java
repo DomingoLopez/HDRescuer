@@ -93,7 +93,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.btn_login:
                 Constants.CONNECTION_MODE = "STREAMING";
+                //Comprobamos si el servidor está up y hay conexión a internet
                 checkServerUp();
+                //Iniciamos la aplicación
+                Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(i);
                 break;
 
 
@@ -124,11 +128,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     if(response.isSuccessful()) { //Código 200...299
 
-                        Intent i = new Intent(MainActivity.this, HomeActivity.class);
-                        startActivity(i);
+                        Constants.CONNECTION_UP = "SI";
 
                     }else{
                         Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
+                        Constants.CONNECTION_UP = "NO";
                     }
 
                 }
@@ -136,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
+                    Constants.CONNECTION_UP = "NO";
                 }
 
             });

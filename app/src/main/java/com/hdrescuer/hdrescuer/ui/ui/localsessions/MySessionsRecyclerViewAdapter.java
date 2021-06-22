@@ -1,8 +1,6 @@
 package com.hdrescuer.hdrescuer.ui.ui.localsessions;
 
 import android.content.Context;
-import android.support.wearable.view.WearableListView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +16,16 @@ import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
-import com.hdrescuer.hdrescuer.retrofit.request.Session;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Clase RecyclerView para la lista de usuarios
@@ -84,7 +78,7 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
 
 
             holder.tvTimestampini.setText(dateFormat.format(Date.from(Instant.parse(holder.mItem.getTimestamp_ini()))));
-            holder.id_session_local.setText(Integer.toString(holder.mItem.getId_session_local()));
+            holder.id_session_local.setText(Integer.toString(holder.mItem.getSession_id()));
             holder.duration.setText(Constants.getHMS(holder.mItem.getTotal_time()));
 
             if(holder.mItem.getDescription().equals(""))

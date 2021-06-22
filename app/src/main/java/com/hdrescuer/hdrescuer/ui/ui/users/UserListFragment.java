@@ -172,9 +172,9 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     @Override
     public void onListItemClick(int position) {
 
-        String id = this.userList.get(position).getId();
+        int id = this.userList.get(position).getUser_id();
         Intent i = new Intent(MyApp.getContext(), UserDetailsActivity.class);
-        i.putExtra("id", id);
+        i.putExtra("user_id", id);
         startActivity(i);
     }
 

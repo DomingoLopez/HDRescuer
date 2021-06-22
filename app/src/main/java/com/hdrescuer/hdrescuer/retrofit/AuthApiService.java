@@ -1,11 +1,13 @@
 package com.hdrescuer.hdrescuer.retrofit;
 
+import android.se.omapi.Session;
+
 import com.google.gson.JsonObject;
+import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestSendData;
-import com.hdrescuer.hdrescuer.retrofit.request.Session;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
-import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
 
 import java.util.List;
 
@@ -37,20 +39,20 @@ public interface AuthApiService {
     /**
      * Método que realiza llamada al servidor para obtener los detalles de un usuario
      * @author Domingo Lopez
-     * @param id
+     * @param user_id
      * @return Call
      */
-    @GET("api/apicomposer/get-user-details/{id}")
-    Call<UserDetails> getUserDetails(@Path("id") String id); //Solo viaja una id
+    @GET("api/apicomposer/get-user-details/{user_id}")
+    Call<UserDetails> getUserDetails(@Path("user_id") int user_id); //Solo viaja una id
 
     /**
      * Método que realiza llamada al servidor para crear un nuevo usuario
      * @author Domingo Lopez
-     * @param userDetails
+     * @param userEntity
      * @return Call
      */
     @POST("api/users/newuser")
-    Call<User> setNewUser(@Body UserDetails userDetails);
+    Call<User> setNewUser(@Body UserEntity userEntity);
 
     /**
      * Método que realiza llamada al servidor para actualizar los datos del usuario
@@ -59,7 +61,7 @@ public interface AuthApiService {
      * @return Call
      */
     @POST("api/users/updateuser")
-    Call<String> updateUser(@Body UserInfo userInfo);
+    Call<String> updateUser(@Body UserEntity userInfo);
 
     /**
      * Método que realiza llamada al servidor para enviar paquete de datos
@@ -77,7 +79,7 @@ public interface AuthApiService {
      * @return Call
      */
     @POST("api/sessions/user/init")
-    Call<Integer> initSession(@Body Session session);
+    Call<Integer> initSession(@Body SessionEntity session);
 
     /**
      * Método que realiza llamada al servidor para parar una sesión
@@ -98,7 +100,7 @@ public interface AuthApiService {
      * @return Call
      */
     @POST("api/sessions/createfromlocal")
-    Call<Integer> createSessionFromLocal(@Body Session session);
+    Call<Integer> createSessionFromLocal(@Body SessionEntity session);
 
 
     @Multipart

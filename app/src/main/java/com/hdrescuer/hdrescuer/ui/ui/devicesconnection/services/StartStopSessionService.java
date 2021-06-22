@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 
 import com.google.gson.JsonObject;
+import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
-import com.hdrescuer.hdrescuer.retrofit.request.Session;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -51,9 +51,9 @@ public class StartStopSessionService extends IntentService {
             switch (action){
                 case "START_SESSION":
                     //Creamos la nueva sesión
-                    Session session  = new Session(
+                    SessionEntity session  = new SessionEntity(
                             intent.getIntExtra("session_id",0),
-                            intent.getStringExtra("user_id"),
+                            intent.getIntExtra("user_id",0),
                             intent.getStringExtra("timestamp_ini"),
                             intent.getStringExtra("timestamp_ini"),
                             0,
@@ -109,7 +109,7 @@ public class StartStopSessionService extends IntentService {
      * Inicio de la sesión. Llamada al servidor con los parámetros introducidos
      * @param session
      */
-    public void initSessionCall(Session session){
+    public void initSessionCall(SessionEntity session){
         Call<Integer> call = authApiService.initSession(session);
         try{
             Response<Integer> response = call.execute();

@@ -87,7 +87,6 @@ public class HomeActivity extends AppCompatActivity {
         this.sessionsListViewModel.getSessions().observe(this, new Observer<List<SessionEntity>>() {
             @Override
             public void onChanged(List<SessionEntity> sessions) {
-                Log.i("ENTROOOO","SESIONES CAMBIAN"+sessions.size());
                 if(sessions.size() < 1){
                     //Si no hay sesiones, no muestres el icono de que hay sesiones pendientes
                     sessions_not_registered.setVisibility(View.INVISIBLE);

@@ -2,28 +2,45 @@ package com.hdrescuer.hdrescuer.db.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-import java.time.Instant;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "SESSION", primaryKeys = {"id_session_local"})
+@Entity(tableName = "SESSION", primaryKeys = {"session_id"})
 public class SessionEntity {
 
     @NonNull
-    public int id_session_local;
-
-    public String user_id;
+    @SerializedName("session_id")
+    @Expose
+    public int session_id;
+    @SerializedName("user_id")
+    @Expose
+    public int user_id;
+    @SerializedName("timestamp_ini")
+    @Expose
     public String timestamp_ini;
+    @SerializedName("timestamp_fin")
+    @Expose
     public String timestamp_fin;
+    @SerializedName("total_time")
+    @Expose
     public long total_time;
+    @SerializedName("e4band")
+    @Expose
     public boolean e4band;
+    @SerializedName("ticwatch")
+    @Expose
     public boolean ticwatch;
+    @SerializedName("ehealthboard")
+    @Expose
     public boolean ehealthboard;
+    @SerializedName("description")
+    @Expose
     public String description;
 
 
-    public SessionEntity(int id_session_local, String user_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch, boolean ehealthboard, String description) {
-        this.id_session_local = id_session_local;
+    public SessionEntity(int session_id, int user_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch, boolean ehealthboard, String description) {
+        this.session_id = session_id;
         this.user_id = user_id;
         this.timestamp_ini = timestamp_ini;
         this.timestamp_fin = timestamp_fin;
@@ -34,19 +51,19 @@ public class SessionEntity {
         this.description = description;
     }
 
-    public int getId_session_local() {
-        return id_session_local;
+    public int getSession_id() {
+        return session_id;
     }
 
-    public void setId_session_local(int id_session_local) {
-        this.id_session_local = id_session_local;
+    public void setSession_id(int session_id) {
+        this.session_id = session_id;
     }
 
-    public String getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 

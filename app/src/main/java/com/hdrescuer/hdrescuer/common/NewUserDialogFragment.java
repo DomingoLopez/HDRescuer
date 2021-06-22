@@ -18,10 +18,12 @@ import android.widget.RadioGroup;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
+import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
-import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
+
+import java.time.Clock;
 
 /**
  * Clase dentro del paquete common, ya que sirve para el alta y modificación de un usuario.
@@ -47,20 +49,22 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
     EditText numcp;
 
     UserActionDialog type;
-    UserDetails userDetails;
+    UserEntity userEntity;
 
     //Servicio de api
     AuthConectionClient authConectionClient;
     AuthApiService authApiService;
 
+    //Servicio de la BD para usuarios
+
     /**
      * Constructor del diálogo
      * @param type
-     * @param userDetails
+     * @param userEntity
      */
-    public NewUserDialogFragment(UserActionDialog type, UserDetails userDetails){
+    public NewUserDialogFragment(UserActionDialog type, UserEntity userEntity){
         this.type = type;
-        this.userDetails = userDetails;
+        this.userEntity = userEntity;
         this.authConectionClient = AuthConectionClient.getInstance();
         this.authApiService = this.authConectionClient.getAuthApiService();
     }
@@ -143,36 +147,36 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
 
             case MODIFY_USER:
                 //Diálogo para modificar el usuario
-                this.edName.setText(this.userDetails.getUsername());
-                this.edLastName.setText(this.userDetails.getLastname());
-                this.edEmail.setText(this.userDetails.getEmail());
+                this.edName.setText(this.userEntity.getUsername());
+                this.edLastName.setText(this.userEntity.getLastname());
+                this.edEmail.setText(this.userEntity.getEmail());
 
-                if(this.userDetails.getPhone2() == 0)
+                if(this.userEntity.getPhone2() == "")
                     this.numPhone2.setText("");
                 else
-                    this.numPhone2.setText(this.userDetails.getPhone2().toString());
+                    this.numPhone2.setText(this.userEntity.getPhone2());
 
-                if(this.userDetails.getPhone() == 0)
+                if(this.userEntity.getPhone() == "")
                     this.numPhone.setText("");
                 else
-                    this.numPhone.setText(this.userDetails.getPhone().toString());
+                    this.numPhone.setText(this.userEntity.getPhone());
 
-                if(this.userDetails.getGender().equals("M"))
+                if(this.userEntity.getGender().equals("M"))
                     this.rbmale.toggle();
-                else if(this.userDetails.getGender().equals("F"))
+                else if(this.userEntity.getGender().equals("F"))
                     this.rbfemale.toggle();
 
-                this.edciudad.setText(this.userDetails.getCity());
-                this.edAddress.setText(this.userDetails.getAddress());
+                this.edciudad.setText(this.userEntity.getCity());
+                this.edAddress.setText(this.userEntity.getAddress());
 
-                if(this.userDetails.getCp() == 0)
+                if(this.userEntity.getCp() == "")
                     this.numcp.setText("");
                 else
-                    this.numcp.setText(this.userDetails.getCp().toString());
+                    this.numcp.setText(this.userEntity.getCp().toString());
 
-                this.numAge.setText(this.userDetails.getAge().toString());
-                this.numHeight.setText(this.userDetails.getHeight());
-                this.numWeight.setText(this.userDetails.getWeight().toString());
+                this.numAge.setText(this.userEntity.getAge().toString());
+                this.numHeight.setText(this.userEntity.getHeight());
+                this.numWeight.setText(this.userEntity.getWeight().toString());
 
 
 
@@ -205,17 +209,17 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
                     int age = Integer.parseInt(this.numAge.getText().toString());
                     String email = this.edEmail.getText().toString();
 
-                    int phone = 0;
+                    String phone = "";
                     if(!this.numPhone.getText().toString().isEmpty())
-                        phone = Integer.parseInt(this.numPhone.getText().toString().replace(" ",""));
+                        phone = this.numPhone.getText().toString().replace(" ","");
 
-                    int phone2 = 0;
+                    String phone2 = "";
                     if(!this.numPhone2.getText().toString().isEmpty())
-                        phone2 = Integer.parseInt(this.numPhone2.getText().toString().replace(" ",""));
+                        phone2 = this.numPhone2.getText().toString().replace(" ","");
 
-                    int cp = 0;
+                    String cp = "";
                     if(!this.numcp.getText().toString().isEmpty())
-                        cp = Integer.parseInt(this.numcp.getText().toString().replace(" ",""));
+                        cp =this.numcp.getText().toString().replace(" ","");
 
                     String direccion = this.edAddress.getText().toString();
                     String city = this.edciudad.getText().toString();
@@ -232,15 +236,15 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
                         gender = " ";
 
                    if(this.type == UserActionDialog.NEW_USER){
-
-                       UserDetails user = new UserDetails(null, name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
+                       String instant = Clock.systemUTC().instant().toString();
+                       UserEntity user = new UserEntity(0,instant, name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
                        UserListViewModel userListViewModel = new ViewModelProvider(this.getActivity()).get(UserListViewModel.class);
                        userListViewModel.setNewUser(user);
                        getDialog().dismiss();
 
                    }else if(this.type == UserActionDialog.MODIFY_USER){
 
-                       UserInfo user = new UserInfo(this.userDetails.getId(), name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
+                       UserEntity user = new UserEntity(this.userEntity.getUser_id(),this.userEntity.getCreatedAt(), name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
                        UserDetailsViewModel userDetailsViewModel = new ViewModelProvider(this.getActivity()).get(UserDetailsViewModel.class);
                        userDetailsViewModel.updateUserDetails(user);
                        userDetailsViewModel.refreshUserDetails();

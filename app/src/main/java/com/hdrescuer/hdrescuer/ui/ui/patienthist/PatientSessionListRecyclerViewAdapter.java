@@ -61,7 +61,7 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
 
 
             holder.tvTimestampini.setText(dateFormat.format(Date.from(Instant.parse(holder.mItem.getTimestamp_ini()))));
-            holder.id_session_local.setText(Integer.toString(holder.mItem.getId_session_local()));
+            holder.id_session_local.setText(Integer.toString(holder.mItem.getSession_id()));
             holder.duration.setText(Constants.getHMS(holder.mItem.getTotal_time()));
 
             if(holder.mItem.getDescription().equals(""))

@@ -130,7 +130,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Botón de start monitoring
     Button btnStartMonitoring;
 
-    String user_id;
+    int user_id;
     String user_name;
     Date currentDate;
 
@@ -206,10 +206,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         //Obtenemos el id del usuario
         if (Constants.CONNECTION_MODE == "STREAMING") {
             Intent i = getIntent();
-            this. user_id = i.getStringExtra("id");
+            this. user_id = i.getIntExtra("id",0);
             this.user_name = i.getStringExtra("username");
         }else{
-            this.user_id = null;
+            this.user_id = 0;
             this.user_name = "Modo OFFLINE";
         }
 

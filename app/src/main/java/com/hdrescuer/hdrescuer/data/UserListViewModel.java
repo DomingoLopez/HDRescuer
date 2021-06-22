@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
@@ -42,10 +43,10 @@ public class UserListViewModel extends AndroidViewModel {
     /**
      * Método que le dice al repositorio que cree un nuevo usuario
      * @author Domingo Lopez
-     * @param userInfo
+     * @param userEntity
      */
-    public void setNewUser(UserDetails userInfo){
-        this.userListRepository.setNewUser(userInfo);
+    public void setNewUser(UserEntity userEntity){
+        this.userListRepository.setNewUser(userEntity);
     }
 
     /**

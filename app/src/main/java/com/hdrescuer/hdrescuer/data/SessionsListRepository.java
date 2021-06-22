@@ -1,7 +1,5 @@
 package com.hdrescuer.hdrescuer.data;
 
-import android.widget.Toast;
-
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonObject;
@@ -10,10 +8,7 @@ import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
-import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -80,7 +75,7 @@ public class SessionsListRepository {
         List<SessionEntity> tmp = this.sessions.getValue();
 
         for(int i = 0; i< tmp.size(); i++){
-            if(tmp.get(i).id_session_local == sessionEntity.id_session_local) {
+            if(tmp.get(i).session_id == sessionEntity.session_id) {
                 tmp.remove(i);
                 break;
             }

@@ -37,6 +37,9 @@ public class Constants {
     //VARIABLE QUE DEFINE SI ESTAMOS EN MODO NO CONEXIÓN
     public static String CONNECTION_MODE = "";
 
+    //VARIABLE QUE DEFINE SI TENEMOS CONEXIÓN O NO
+    public static String CONNECTION_UP ="NO";
+
 
     /**
      * Método que calcula las horas, minutos y segundos de un entero de segundos

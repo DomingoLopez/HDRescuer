@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.se.omapi.Session;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +19,8 @@ import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
+import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
@@ -41,7 +44,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     //ViewModel
     UserDetailsViewModel userDetailsViewModel;
     //Parámetros de la ficha del usuario
-    String id;
+    int user_id;
     TextView username;
     TextView height;
     TextView weight;
@@ -75,6 +78,8 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
 
     UserDetails user;
+    UserEntity userEntity;
+    SessionEntity sessionEntity;
     private DateFormat dateFormat;
 
     boolean alreadyCreated = false;
@@ -95,7 +100,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
         //Obtenemos el id del usuario
         Intent i = getIntent();
-        String id = i.getStringExtra("id");
+        int id = i.getIntExtra("user_id",0);
 
         //Iniciamos el dateformat
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -194,7 +199,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         this.userDetailsViewModel.getUser().observe(this, new Observer<UserDetails>() {
             @Override
             public void onChanged(UserDetails userDetails) {
-                id = userDetails.getId();
+                user_id = userDetails.getUser_id();
                 //Setear todos los parámetros de la UI
                 username.setText(userDetails.getUsername() + " " + userDetails.getLastname());
                 age.setText(userDetails.getAge().toString());
@@ -210,17 +215,17 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
                 email.setText(userDetails.getEmail());
 
-                if(userDetails.getPhone() == 0)
+                if(userDetails.getPhone() == "")
                     phone.setText("");
                 else
                     phone.setText(userDetails.getPhone().toString());
 
-                if(userDetails.getPhone2() == 0)
+                if(userDetails.getPhone2() == "")
                     phone2.setText("");
                 else
                     phone2.setText(userDetails.getPhone2().toString());
 
-                if(userDetails.getCp() == 0)
+                if(userDetails.getCp() == "")
                     cp.setText("");
                 else
                     cp.setText(userDetails.getCp().toString());
@@ -230,7 +235,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                 //last_monitoring.setText(userDetails.getLastMonitoring());
 
 
-                if(userDetails.getSession_id() != null){
+                if(userDetails.getSession_id() != 0){
 
                     //Le damos valor
                     if(userDetails.isE4band())
@@ -291,6 +296,20 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
+        this.userDetailsViewModel.getUserEntity().observe(this, new Observer<UserEntity>() {
+            @Override
+            public void onChanged(UserEntity uEntity) {
+                userEntity = uEntity;
+            }
+        });
+
+        this.userDetailsViewModel.getSessionEntity().observe(this, new Observer<SessionEntity>() {
+            @Override
+            public void onChanged(SessionEntity seEntity) {
+                sessionEntity = seEntity;
+            }
+        });
+
     }
 
     /**
@@ -318,19 +337,19 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             case R.id.btn_new_monitoring:
 
                 Intent i = new Intent(MyApp.getContext(), DevicesConnectionActivity.class);
-                i.putExtra("id", id);
+                i.putExtra("id", user_id);
                 i.putExtra("username",this.username.getText().toString());
                 startActivity(i);
                 break;
 
             case R.id.btn_edit_data:
-                NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.MODIFY_USER,this.user);
+                NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.MODIFY_USER,this.userEntity);
                 dialog.show(this.getSupportFragmentManager(), "NewUserFragment");
                 break;
 
             case R.id.btn_patient_hist:
                 Intent in = new Intent(MyApp.getContext(), PatientSessionListActivity.class);
-                in.putExtra("id", id);
+                in.putExtra("id", user_id);
                 in.putExtra("username",this.username.getText().toString());
                 startActivity(in);
                 break;

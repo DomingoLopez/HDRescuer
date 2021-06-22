@@ -8,8 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
-import com.hdrescuer.hdrescuer.retrofit.response.UserInfo;
 
 /**
  * ViewModel para los detalles del usuario
@@ -19,7 +20,7 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
 
 
     public UserDetailsRepository userDetailsRepository;
-    String user_id;
+    int user_id;
 
     /**
      * Constructor Factory del ViewModel
@@ -27,7 +28,7 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
      * @param application
      * @param id
      */
-    public UserDetailsViewModel(@NonNull Application application, String id) {
+    public UserDetailsViewModel(@NonNull Application application, int id) {
         super(application);
         this.user_id = id;
         this.userDetailsRepository = new UserDetailsRepository(id);
@@ -41,16 +42,26 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
      */
     public MutableLiveData<UserDetails> getUser() {
 
-        return this.userDetailsRepository.getUser();
+        return this.userDetailsRepository.getUserDetails();
+    }
+
+    public MutableLiveData<UserEntity> getUserEntity() {
+
+        return this.userDetailsRepository.getUserEntity();
+    }
+
+    public MutableLiveData<SessionEntity> getSessionEntity() {
+
+        return this.userDetailsRepository.getSessionEntity();
     }
 
     /**
      * Método que llama al repositorio para actualizar los datos
      * @author Domingo Lopez
-     * @param userInfo
+     * @param userEntity
      */
-    public void updateUserDetails(UserInfo userInfo){
-        this.userDetailsRepository.updateUser(userInfo);
+    public void updateUserDetails(UserEntity userEntity){
+        this.userDetailsRepository.updateUser(userEntity);
     }
 
     /**

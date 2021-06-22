@@ -5,27 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
@@ -33,28 +23,14 @@ import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
-import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.ui.HomeActivity;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardThread;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.SampleRateFilterThread;
-import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.StartStopSessionService;
 import com.hdrescuer.hdrescuer.ui.ui.localsessions.services.UploadSessionService;
-import com.hdrescuer.hdrescuer.ui.ui.patienthist.PatientSessionListActivity;
 import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
 
-import java.time.Clock;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class LocalSessionsFragment extends Fragment implements ListItemClickListener, View.OnClickListener {
@@ -71,12 +47,12 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     SessionsListViewModel sessionsListViewModel;
     UserListViewModel userListViewModel;
 
-    public Map<String, String> usuarios_predictivo = new HashMap<String,String>();
+    public Map<String, Integer> usuarios_predictivo = new HashMap<String,Integer>();
 
     boolean alreadyCreated = false;
 
     int position_selected;
-    String user_selected;
+    int user_selected;
 
 
     public LocalSessionsFragment() {
@@ -145,7 +121,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     void setUsersAElegir(){
         if(this.users != null){
             for(int i = 0; i< this.users.size(); i++){
-                this.usuarios_predictivo.put(this.users.get(i).getLastname()+", "+this.users.get(i).getUsername(), this.users.get(i).getId());
+                this.usuarios_predictivo.put(this.users.get(i).getLastname()+", "+this.users.get(i).getUsername(), this.users.get(i).getUser_id());
             }
         }
 
@@ -220,7 +196,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
 
             case "SHOW_RESULTS":
                 Intent i = new Intent(requireActivity(), SessionResultActivity.class);
-                i.putExtra("session_id",this.sessionList.get(position).getId_session_local());
+                i.putExtra("session_id",this.sessionList.get(position).getSession_id());
                 i.putExtra("action","VISUALIZE");
                 startActivity(i);
 
@@ -237,7 +213,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
                     @Override
                     public void onPositiveButtonClick() {
 
-                        sessionsListViewModel.deteleSessionByID(sessionList.get(position).getId_session_local());
+                        sessionsListViewModel.deteleSessionByID(sessionList.get(position).getSession_id());
 
 
                     }
@@ -262,8 +238,8 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
 
                 //Si el usuario contiene algo, lo comparamos con el Map que tenemos
                 this.user_selected = this.usuarios_predictivo.get(user_elegido);
-                if(user_selected != null){
-                    int id_session_local = this.sessionList.get(position).id_session_local;
+                if(user_selected != 0){
+                    int id_session_local = this.sessionList.get(position).session_id;
                     this.position_selected = position;
                     Intent intent = new Intent(this.getContext(), UploadSessionService.class);
                     intent.setAction("START_UPLOAD");

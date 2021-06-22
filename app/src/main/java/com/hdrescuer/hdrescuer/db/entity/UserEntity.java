@@ -1,90 +1,65 @@
+package com.hdrescuer.hdrescuer.db.entity;
 
-package com.hdrescuer.hdrescuer.retrofit.response;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Clase UserInfo, Serializable con sus Getters y setters
- * @author Domingo Lopez
- */
-public class UserInfo implements Serializable
-{
-    @SerializedName("id")
+@Entity(tableName = "USER", primaryKeys = {"user_id"})
+public class UserEntity {
+
+    @SerializedName("user_id")
     @Expose
-    private String id;
+    @NonNull
+    public int user_id;
+    @SerializedName("created_At")
+    @Expose
+    public String createdAt;
     @SerializedName("username")
     @Expose
-    private String username;
+    public String username;
     @SerializedName("lastname")
     @Expose
-    private String lastname;
+    public String lastname;
     @SerializedName("email")
     @Expose
-    private String email;
+    public String email;
     @SerializedName("gender")
     @Expose
-    private String gender;
+    public String gender;
     @SerializedName("age")
     @Expose
-    private Integer age;
+    public Integer age;
     @SerializedName("height")
     @Expose
-    private String height;
+    public String height;
     @SerializedName("weight")
     @Expose
-    private Integer weight;
+    public Integer weight;
     @SerializedName("phone")
     @Expose
-    private Integer phone;
+    public String phone;
     @SerializedName("phone2")
     @Expose
-    private Integer phone2;
+    public String phone2;
     @SerializedName("city")
     @Expose
-    private String city;
+    public String city;
     @SerializedName("address")
     @Expose
-    private String address;
+    public String address;
     @SerializedName("cp")
     @Expose
-    private Integer cp;
+    public String cp;
 
 
 
-    private final static long serialVersionUID = 9212788480303221900L;
-
-    /**
-     * Constructor sin parámetros
-     * @author Domingo Lopez
-     *
-     */
-    public UserInfo() {
-    }
-
-    /**
-     * Constructor con parámetros
-     * @author Domingo Lopez
-     * @param id
-     * @param username
-     * @param lastname
-     * @param email
-     * @param gender
-     * @param age
-     * @param height
-     * @param weight
-     * @param phone
-     * @param phone2
-     * @param city
-     * @param address
-     * @param cp
-     */
-    public UserInfo(String id, String username, String lastname, String email, String gender, Integer age, String height, Integer weight, Integer phone, Integer phone2, String city, String address, Integer cp) {
-        super();
-        this.id = id;
+    public UserEntity(int user_id, String createdAt, String username, String lastname, String email, String gender, Integer age, String height, Integer weight, String phone, String phone2, String city, String address, String cp) {
+        this.user_id = user_id;
+        this.createdAt = createdAt;
         this.username = username;
         this.lastname = lastname;
         this.email = email;
@@ -97,18 +72,25 @@ public class UserInfo implements Serializable
         this.city = city;
         this.address = address;
         this.cp = cp;
-
     }
 
 
-
-    public String getId(){
-        return id;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setId(String id){
-        this.id = id;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -132,7 +114,6 @@ public class UserInfo implements Serializable
     public void setEmail(String email) {
         this.email = email;
     }
-
 
     public String getGender() {
         return gender;
@@ -166,19 +147,19 @@ public class UserInfo implements Serializable
         this.weight = weight;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public Integer getPhone2() {
+    public String getPhone2() {
         return phone2;
     }
 
-    public void setPhone2(Integer phone2) {
+    public void setPhone2(String phone2) {
         this.phone2 = phone2;
     }
 
@@ -198,12 +179,11 @@ public class UserInfo implements Serializable
         this.address = address;
     }
 
-    public Integer getCp() {
+    public String getCp() {
         return cp;
     }
 
-    public void setCp(Integer cp) {
+    public void setCp(String cp) {
         this.cp = cp;
     }
-
 }

@@ -37,6 +37,17 @@ public class SessionsRepository {
 
     public SessionEntity getByIdSession(int id_session_local){return sessionDao.getSessionById(id_session_local);}
 
+
+    public SessionEntity getMaxSessionShortByUserId(int user_id){return sessionDao.getMaxSessionShortByUserId(user_id);}
+
+
+
+
+
+
+
+
+
     public void insertSession(SessionEntity session){
         new insertSessionAsyncTask(sessionDao).execute(session);
     }
