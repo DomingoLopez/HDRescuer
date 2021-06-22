@@ -848,18 +848,12 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
      */
     @Override
     public void didUpdateStatus(EmpaStatus status) {
-        // Update the UI
-        Log.i("STATUS",status.name());
-
-        // The device manager is ready for use
+        // DeviceManager Ready
         if (status == EmpaStatus.READY) {
-            Log.i("ESTADO:",status.toString());
-            Log.i("STATUS",status.name());
-
-            // Start scanning
+            // Comienza el Escanero
             try {
                 deviceManager.startScanning();
-                // The device manager has established a connection
+                // Conexión establecida
             } catch (Exception e) {
                 new AlertDialog.Builder(this)
                         .setTitle("Error")
@@ -873,18 +867,13 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                         })
                         .show();
             }
-
-
             // Si se establece la conexión
         } else if (status == EmpaStatus.CONNECTED) {
-            Log.i("ESTADO:",status.toString());
-
            this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     btnE4BandConnect.setText("Conectado");
                     btnE4BandConnect.setBackgroundColor(btnE4BandConnect.getContext().getResources().getColor(R.color.e4connected));
-
                     e4Connected = true;
                 }
             });
@@ -928,9 +917,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
      */
     @Override
     public void didDiscoverDevice(EmpaticaDevice bluetoothDevice, String deviceLabel, int rssi, boolean allowed) {
-
         if (allowed) {
-
             // Paramos de escanear
             deviceManager.stopScanning();
             try {
@@ -938,7 +925,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 deviceManager.connectDevice(bluetoothDevice);
             } catch (ConnectionNotAllowedException e) {
                 Log.i("ERROR","Connection:"+e.toString());
-                //Toast.makeText(DevicesConnectionActivity.this, "No puedes conectarte con la pulsera Empática", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -1048,7 +1034,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.wearNodesWithApp = capabilityInfo.getNodes();
 
         findAllWearDevices();
-
         verifyNodeAndWaitForMonitoring();
     }
 
@@ -1132,7 +1117,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         } else if (this.wearNodesWithApp.isEmpty()) {
             Log.d("INFO", "El dispositivo WearOs no dispone de la app necesaria");
         } else if (this.wearNodesWithApp.size() < this.allConnectedNodes.size()) {
-            // TODO: Add your code to communicate with the wear app(s) via
+
             Log.i("INFO","Algún nodo conectado. Esperando inicio de la monitorización...");
             this.btnWatchConnect.setText("Conectado");
             this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4connected));
@@ -1140,7 +1125,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             ticwatchConnected = true;
 
         } else {
-            // TODO: Add your code to communicate with the wear app(s) via
+
             Log.i("INFO","Todos los nodos conectados. Esperando inicio de la monitorización...");
             this.btnWatchConnect.setText("Conectado");
             this.btnWatchConnect.setBackgroundColor(this.btnWatchConnect.getContext().getResources().getColor(R.color.e4connected));
