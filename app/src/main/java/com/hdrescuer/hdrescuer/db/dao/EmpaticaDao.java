@@ -20,10 +20,10 @@ public interface EmpaticaDao {
     @Query("DELETE FROM EMPATICA")
     void deleteAll();
 
-    @Query("DELETE FROM EMPATICA WHERE id_session_local = :id_session_local")
+    @Query("DELETE FROM EMPATICA WHERE session_id = :id_session_local")
     void deleteById(int id_session_local);
 
-    @Query("SELECT * FROM EMPATICA WHERE id_session_local = :id_session_local")
+    @Query("SELECT * FROM EMPATICA WHERE session_id = :id_session_local")
     List<EmpaticaEntity> getEmpaSessionById(int id_session_local);
 
 

@@ -7,12 +7,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.dbrepositories.UsersRepository;
-import com.hdrescuer.hdrescuer.db.dao.UserDao;
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +39,11 @@ public class UserListRepository {
     UserListRepository(){
         this.authConectionClient = AuthConectionClient.getInstance();
         this.authApiService = this.authConectionClient.getAuthApiService();
+        usersRepository = new UsersRepository(MyApp.getInstance());
+
         users = getAllUsers();
 
-        usersRepository = new UsersRepository(MyApp.getInstance());
+
     }
 
     /**
@@ -55,28 +55,30 @@ public class UserListRepository {
         if(users == null)
             users = new MutableLiveData<>();
 
-        Call<List<User>> call = authApiService.getAllUsers();
-        call.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if(response.isSuccessful()){
-                    users.setValue(response.body());
+        if(Constants.CONNECTION_UP.equals("SI")) {
 
+            Call<List<User>> call = authApiService.getAllUsers();
+            call.enqueue(new Callback<List<User>>() {
+                @Override
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    if (response.isSuccessful()) {
+                        //users.setValue(response.body());
+                        users.setValue(usersRepository.getUsersShort());
 
-                }else {
-
-                    users.setValue(usersRepository.getUsersShort());
-
+                    } else {
+                        users.setValue(usersRepository.getUsersShort());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                Toast.makeText(MyApp.getContext(), "Error en la conexión", Toast.LENGTH_SHORT).show();
-                users.setValue(usersRepository.getUsersShort());
-            }
-        });
+                @Override
+                public void onFailure(Call<List<User>> call, Throwable t) {
+                    users.setValue(usersRepository.getUsersShort());
+                }
+            });
 
+        }else{
+            users.setValue(usersRepository.getUsersShort());
+        }
 
         return users;
 

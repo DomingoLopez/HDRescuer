@@ -37,9 +37,12 @@ public class SessionEntity {
     @SerializedName("description")
     @Expose
     public String description;
+    @SerializedName("sync")
+    @Expose
+    public boolean sync;
 
 
-    public SessionEntity(int session_id, int user_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch, boolean ehealthboard, String description) {
+    public SessionEntity(int session_id, int user_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch, boolean ehealthboard, String description, boolean sync) {
         this.session_id = session_id;
         this.user_id = user_id;
         this.timestamp_ini = timestamp_ini;
@@ -49,6 +52,7 @@ public class SessionEntity {
         this.ticwatch = ticwatch;
         this.ehealthboard = ehealthboard;
         this.description = description;
+        this.sync = sync;
     }
 
     public int getSession_id() {
@@ -121,5 +125,13 @@ public class SessionEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isSync() {
+        return sync;
+    }
+
+    public void setSync(boolean sync) {
+        this.sync = sync;
     }
 }

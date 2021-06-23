@@ -1,8 +1,11 @@
 
 package com.hdrescuer.hdrescuer.retrofit.response;
 
+import androidx.room.Ignore;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -90,6 +93,7 @@ public class UserDetails implements Serializable
      * @author Domingo Lopez
      *
      */
+    @Ignore
     public UserDetails() {
     }
 
@@ -316,5 +320,12 @@ public class UserDetails implements Serializable
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+
+
+
+    public UserEntity getUserEntity(){
+        return new UserEntity(this.user_id,this.createdAt,this.username,this.lastname,this.email,this.gender,this.age,this.height,this.weight,this.phone,this.phone2,this.city,this.address,this.cp);
     }
 }

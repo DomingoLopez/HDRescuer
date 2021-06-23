@@ -15,7 +15,7 @@ public class UserEntity {
     @Expose
     @NonNull
     public int user_id;
-    @SerializedName("created_At")
+    @SerializedName("createdAt")
     @Expose
     public String createdAt;
     @SerializedName("username")

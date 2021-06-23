@@ -19,13 +19,13 @@ public interface TicWatchDao {
     @Query("DELETE FROM TICWATCH")
     void deleteAll();
 
-    @Query("DELETE FROM TICWATCH WHERE id_session_local = :id_session_local")
+    @Query("DELETE FROM TICWATCH WHERE session_id = :id_session_local")
     void deleteById(int id_session_local);
 
-    @Query("SELECT * FROM TICWATCH WHERE id_session_local = :id_session_local")
+    @Query("SELECT * FROM TICWATCH WHERE session_id = :id_session_local")
     List<TicWatchEntity> getTicWatchSessionById(int id_session_local);
 
-    @Query("SELECT MAX(tic_step) FROM TICWATCH WHERE id_session_local = :id_session_local")
+    @Query("SELECT MAX(tic_step) FROM TICWATCH WHERE session_id = :id_session_local")
     int getTicWatchMaxStepById(int id_session_local);
 
 

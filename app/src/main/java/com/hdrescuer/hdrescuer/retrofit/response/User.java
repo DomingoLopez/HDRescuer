@@ -1,10 +1,10 @@
 
 package com.hdrescuer.hdrescuer.retrofit.response;
 
+import androidx.room.Ignore;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.Date;
 
 /**
  * Clase User con sus Getters y setters
@@ -29,12 +29,13 @@ public class User {
     private String timestamp_ini;
     @SerializedName("total_time")
     @Expose
-    private Integer total_time;
+    private long total_time;
 
     /**
      * Constructor sin parámetros
      * @author Domingo Lopez
      */
+    @Ignore
     public User() {
     }
 
@@ -48,7 +49,7 @@ public class User {
      * @param timestamp_ini
      * @param total_time
      */
-    public User(int user_id, String username,String lastname, String session_id, String timestamp_ini, Integer total_time) {
+    public User(int user_id, String username, String lastname, String session_id, String timestamp_ini, long total_time) {
         super();
         this.user_id = user_id;
         this.username = username;
@@ -58,6 +59,7 @@ public class User {
         this.total_time = total_time;
     }
 
+    @Ignore
     public User(User user) {
         super();
         this.user_id = user.user_id;
@@ -109,7 +111,7 @@ public class User {
         this.timestamp_ini = timestamp_ini;
     }
 
-    public Integer getTotal_time() {
+    public long getTotal_time() {
         return total_time;
     }
 

@@ -3,15 +3,10 @@ package com.hdrescuer.hdrescuer.data.dbrepositories;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
-
 import com.hdrescuer.hdrescuer.db.DataRecoveryDataBase;
-import com.hdrescuer.hdrescuer.db.dao.SessionDao;
 import com.hdrescuer.hdrescuer.db.dao.UserDao;
-import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;
+import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 
 import java.util.List;
@@ -41,7 +36,12 @@ public class UsersRepository {
 
     public UserEntity getByIdUser(int user_id){return userDao.getUserById(user_id);}
 
-    public List<User> getUsersShort(){return  userDao.getUsersShort();};
+    public List<User> getUsersShort(){return userDao.getUsersShort();};
+
+
+    public UserDetails getUsersLarge(int user_id){return  userDao.getUsersLarge(user_id);};
+
+
 
     public void insertUser(UserEntity user){
         new insertUserAsyncTask(userDao).execute(user);

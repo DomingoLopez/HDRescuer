@@ -3,13 +3,11 @@ package com.hdrescuer.hdrescuer.db.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
-import java.time.Instant;
-
-@Entity(tableName = "EMPATICA", primaryKeys = {"id_session_local","timestamp"})
+@Entity(tableName = "EMPATICA", primaryKeys = {"session_id","timestamp"})
 public class EmpaticaEntity {
 
     @NonNull
-    public int id_session_local;
+    public int session_id;
     @NonNull
     public String timestamp;
 
@@ -23,8 +21,8 @@ public class EmpaticaEntity {
     public float e4_temp;
 
 
-    public EmpaticaEntity(int id_session_local, String timestamp, int e4_accx, int e4_accy, int e4_accz, float e4_bvp, int e4_hr, float e4_gsr, float e4_ibi, float e4_temp) {
-        this.id_session_local = id_session_local;
+    public EmpaticaEntity(int session_id, String timestamp, int e4_accx, int e4_accy, int e4_accz, float e4_bvp, int e4_hr, float e4_gsr, float e4_ibi, float e4_temp) {
+        this.session_id = session_id;
         this.timestamp = timestamp;
         this.e4_accx = e4_accx;
         this.e4_accy = e4_accy;
@@ -37,12 +35,12 @@ public class EmpaticaEntity {
     }
 
 
-    public int getId_session_local() {
-        return id_session_local;
+    public int getSession_id() {
+        return session_id;
     }
 
-    public void setId_session_local(int id_session_local) {
-        this.id_session_local = id_session_local;
+    public void setSession_id(int session_id) {
+        this.session_id = session_id;
     }
 
     public String getTimeStamp() {

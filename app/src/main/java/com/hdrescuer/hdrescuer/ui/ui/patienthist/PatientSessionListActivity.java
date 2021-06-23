@@ -10,16 +10,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
 import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
 import com.hdrescuer.hdrescuer.data.SessionsHistListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
+import com.hdrescuer.hdrescuer.ui.ui.localsessions.services.UploadSessionService;
 import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
 
 import java.text.DateFormat;
@@ -38,6 +43,9 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
     ImageView back;
 
     DateFormat dateFormat;
+    int user_id;
+
+    int position_selected;
 
 
     @Override
@@ -50,7 +58,7 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
 
         //Obtenemos el id del usuario
         Intent i = getIntent();
-        String id = i.getStringExtra("id");
+       this.user_id = i.getIntExtra("user_id",0);
 
         //Iniciamos el dateformat
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -59,7 +67,7 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new SessionsHistListViewModel(getApplication(),id);
+                return (T) new SessionsHistListViewModel(getApplication(),user_id);
             }
         };
 
@@ -149,7 +157,17 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
 
                 dialogFragment.show(getSupportFragmentManager(), null);
 
+                break;
 
+
+            case "UPLOAD_SESSION":
+                this.position_selected = position;
+                Intent intent = new Intent(this.getApplicationContext(), UploadSessionService.class);
+                intent.setAction("START_UPLOAD");
+                intent.putExtra("user_id",this.user_id);
+                intent.putExtra("session_id", this.sessionList.get(position).getSession_id());
+                intent.putExtra("receiver",this.sessionResult);
+                MyApp.getInstance().startService(intent);
 
                 break;
         }
@@ -157,6 +175,44 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
 
 
     }
+
+    public ResultReceiver sessionResult = new ResultReceiver(new Handler()) {
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            //Broadcast /send the result code in intent service based on your logic(success/error) handle with switch
+            switch (resultCode) {
+                case 1: //Case correcto. Sesión subida
+
+                    Toast.makeText(getApplicationContext(), "Sesión sincronizada de forma satisfactoria", Toast.LENGTH_SHORT).show();
+                    int deleted_session = (int) resultData.get("deleted_session");
+                    //Borramos la sesión
+                    SessionEntity sesionActualizar = sessionList.get(position_selected);
+                    sesionActualizar.setSync(true);
+                    sessionsHistListViewModel.udpateSession(sesionActualizar);
+                    //sessionsListViewModel.refreshSessions();
+
+                    break;
+
+                //Error al descargar a csv la sesión
+                case 400:
+
+                    break;
+
+                //Error al subir la sesión
+                case 401:
+
+                    break;
+
+
+                //Error al subir los csv
+                case 402:
+
+                    break;
+
+            }
+        }
+    };
 
 
 

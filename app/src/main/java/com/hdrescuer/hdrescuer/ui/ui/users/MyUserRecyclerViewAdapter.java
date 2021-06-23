@@ -3,7 +3,6 @@ package com.hdrescuer.hdrescuer.ui.ui.users;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,10 @@ import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 
 
-import org.w3c.dom.Text;
-
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
     final private ListItemClickListener mOnClickListener;
     final private DateFormat dateFormat;
 
-    public MyUserRecyclerViewAdapter(Context contexto,List<User> items, ListItemClickListener onClickListener) {
+    public MyUserRecyclerViewAdapter(Context contexto, List<User> items, ListItemClickListener onClickListener) {
         this.ctx = contexto;
         this.mValues = items;
         this.mOnClickListener = onClickListener;
@@ -59,12 +58,15 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
 
             holder.user_name.setText(holder.mItem.getUsername() + " " +holder.mItem.getLastname());
 
-            if(holder.mItem.getTimestamp_ini() != null)
-                holder.last_monitoring.setText(dateFormat.format(holder.mItem.getTimestamp_ini()));
+            if(holder.mItem.getTimestamp_ini() != null) {
+
+                holder.last_monitoring.setText(dateFormat.format(Date.from(Instant.parse(holder.mItem.getTimestamp_ini()))));
+
+            }
             else
                 holder.last_monitoring.setText("- -");
 
-            if(holder.mItem.getTotal_time() != null)
+            if(holder.mItem.getTotal_time() != 0)
                 holder.sesion_duration.setText(Constants.getHMS(holder.mItem.getTotal_time()));
             else
                 holder.sesion_duration.setText("- -");

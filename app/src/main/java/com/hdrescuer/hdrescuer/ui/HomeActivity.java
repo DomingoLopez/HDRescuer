@@ -13,7 +13,9 @@ import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
+import com.hdrescuer.hdrescuer.data.dbrepositories.UsersRepository;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
+import com.hdrescuer.hdrescuer.retrofit.response.User;
 
 import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.Observer;
@@ -72,6 +74,10 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
+
+
 
         //INICIAMOS VIEWMODELS QUE USARÁN LOS DISTINTOS FRAGMENTS DEL MENÚ PRINCIPAL
 

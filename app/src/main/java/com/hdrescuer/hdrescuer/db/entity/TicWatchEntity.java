@@ -3,13 +3,11 @@ package com.hdrescuer.hdrescuer.db.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
-import java.time.Instant;
-
-@Entity(tableName = "TICWATCH", primaryKeys = {"id_session_local","timestamp"})
+@Entity(tableName = "TICWATCH", primaryKeys = {"session_id","timestamp"})
 public class TicWatchEntity {
 
     @NonNull
-    public int id_session_local;
+    public int session_id;
     @NonNull
     public String timestamp;
 
@@ -26,8 +24,8 @@ public class TicWatchEntity {
     public int tic_step;
 
 
-    public TicWatchEntity(int id_session_local, String timestamp, int tic_accx, int tic_accy, int tic_accz, int tic_acclx, int tic_accly, int tic_acclz, int tic_girx, int tic_giry, int tic_girz, float tic_hrppg, int tic_step) {
-        this.id_session_local = id_session_local;
+    public TicWatchEntity(int session_id, String timestamp, int tic_accx, int tic_accy, int tic_accz, int tic_acclx, int tic_accly, int tic_acclz, int tic_girx, int tic_giry, int tic_girz, float tic_hrppg, int tic_step) {
+        this.session_id = session_id;
         this.timestamp = timestamp;
         this.tic_accx = tic_accx;
         this.tic_accy = tic_accy;
@@ -42,12 +40,12 @@ public class TicWatchEntity {
         this.tic_step = tic_step;
     }
 
-    public int getId_session_local() {
-        return id_session_local;
+    public int getSession_id() {
+        return session_id;
     }
 
-    public void setId_session_local(int id_session_local) {
-        this.id_session_local = id_session_local;
+    public void setSession_id(int session_id) {
+        this.session_id = session_id;
     }
 
     public String getTimestamp() {

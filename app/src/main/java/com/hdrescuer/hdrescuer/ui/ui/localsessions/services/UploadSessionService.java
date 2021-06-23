@@ -46,7 +46,6 @@ public class UploadSessionService extends IntentService {
     EHealthBoardRepository healthBoardRepository;
 
     SessionEntity sessionEntity;
-    int id_session_local;
     int user_id;
     int session_id;
 
@@ -85,9 +84,9 @@ public class UploadSessionService extends IntentService {
                     this.session_id = intent.getIntExtra("session_id",0);
                     this.receiver = intent.getParcelableExtra("receiver");
                     //Iniciamos los nombres de archivo
-                    this.FILE_NAME_EMPATICA = "empatica_session_"+id_session_local+".csv";
-                    this.FILE_NAME_TICWATCH = "ticwatch_session_"+id_session_local+".csv";
-                    this.FILE_NAME_HEALTHBOARD = "healthboard_session_"+id_session_local+".csv";
+                    this.FILE_NAME_EMPATICA = "empatica_session_"+session_id+".csv";
+                    this.FILE_NAME_TICWATCH = "ticwatch_session_"+session_id+".csv";
+                    this.FILE_NAME_HEALTHBOARD = "healthboard_session_"+session_id+".csv";
 
                     //Obtenemos la sesión que nos hará falta para el resto de métodos
                     this.sessionEntity = this.sessionsRepository.getByIdSession(session_id);
@@ -146,7 +145,8 @@ public class UploadSessionService extends IntentService {
                 this.sessionEntity.e4band,
                 this.sessionEntity.ticwatch,
                 this.sessionEntity.ehealthboard,
-                this.sessionEntity.description
+                this.sessionEntity.description,
+                true
         ));
         try{
             Response<Integer> response = call.execute();
@@ -171,7 +171,7 @@ public class UploadSessionService extends IntentService {
 
     void createEmpaticaCSV(){
 
-        List<EmpaticaEntity> empaticaEntities = this.e4BandRepository.getByIdSession(id_session_local);
+        List<EmpaticaEntity> empaticaEntities = this.e4BandRepository.getByIdSession(session_id);
 
 
         //Creamos el archivo csv
@@ -217,7 +217,7 @@ public class UploadSessionService extends IntentService {
 
     void createTicWatchCSV(){
 
-        List<TicWatchEntity>ticWatchEntities = this.ticWatchRepository.getByIdSession(id_session_local);
+        List<TicWatchEntity>ticWatchEntities = this.ticWatchRepository.getByIdSession(session_id);
 
 
         //Creamos el archivo csv
@@ -269,7 +269,7 @@ public class UploadSessionService extends IntentService {
     void createHealthBoardCSV(){
 
 
-        List<HealthBoardEntity>healthBoardEntities = this.healthBoardRepository.getByIdSession(id_session_local);
+        List<HealthBoardEntity>healthBoardEntities = this.healthBoardRepository.getByIdSession(session_id);
 
 
         //Creamos el archivo csv
@@ -444,7 +444,7 @@ public class UploadSessionService extends IntentService {
 
             Bundle bundle = new Bundle();
             bundle.putString("result", "Sesión sincronizada de forma satisfactoria");
-            bundle.putInt("deleted_session", this.id_session_local);
+            bundle.putInt("deleted_session", this.session_id);
             this.resultCode = 1;
             this.receiver.send(1, bundle);
 

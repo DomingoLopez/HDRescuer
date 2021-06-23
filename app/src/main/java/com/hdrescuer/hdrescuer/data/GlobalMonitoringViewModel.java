@@ -1,17 +1,12 @@
 package com.hdrescuer.hdrescuer.data;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
-
-import java.text.DecimalFormat;
 
 /**
  * ViewModel Global para el almacenamiento en vivo de los datos de los dispositivos. Es el núcleo de los datos que se mostrarán en pantalla y se mandará al servidor

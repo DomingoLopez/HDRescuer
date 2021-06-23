@@ -3,13 +3,11 @@ package com.hdrescuer.hdrescuer.db.entity;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
-import java.time.Instant;
-
-@Entity(tableName = "HEALTHBOARD", primaryKeys = {"id_session_local","timestamp"})
+@Entity(tableName = "HEALTHBOARD", primaryKeys = {"session_id","timestamp"})
 public class HealthBoardEntity {
 
     @NonNull
-    public int id_session_local;
+    public int session_id;
     @NonNull
     public String timestamp;
 
@@ -17,20 +15,20 @@ public class HealthBoardEntity {
     public int ehb_ox_blood;
     public int ehb_air_flow;
 
-    public HealthBoardEntity(int id_session_local, String timestamp, int ehb_bpm, int ehb_ox_blood, int ehb_air_flow) {
-        this.id_session_local = id_session_local;
+    public HealthBoardEntity(int session_id, String timestamp, int ehb_bpm, int ehb_ox_blood, int ehb_air_flow) {
+        this.session_id = session_id;
         this.timestamp = timestamp;
         this.ehb_bpm = ehb_bpm;
         this.ehb_ox_blood = ehb_ox_blood;
         this.ehb_air_flow = ehb_air_flow;
     }
 
-    public int getId_session_local() {
-        return id_session_local;
+    public int getSession_id() {
+        return session_id;
     }
 
-    public void setId_session_local(int id_session_local) {
-        this.id_session_local = id_session_local;
+    public void setSession_id(int session_id) {
+        this.session_id = session_id;
     }
 
     public String getTimestamp() {

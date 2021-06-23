@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
 import java.util.List;
 

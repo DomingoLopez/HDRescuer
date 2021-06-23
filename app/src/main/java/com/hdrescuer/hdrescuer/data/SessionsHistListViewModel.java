@@ -19,14 +19,14 @@ import java.util.List;
 public class SessionsHistListViewModel extends AndroidViewModel implements ViewModelProvider.Factory{
 
     private SessionsHistListRepository sessionsHistListRepository;
-    String user_id;
+    int user_id;
 
     /**
      * Constructor
      * @author Domingo Lopez
      * @param application
      */
-    public SessionsHistListViewModel(@NonNull Application application, String user_id) {
+    public SessionsHistListViewModel(@NonNull Application application, int user_id) {
         super(application);
         this.user_id = user_id;
         this.sessionsHistListRepository = new SessionsHistListRepository(user_id);
@@ -42,6 +42,8 @@ public class SessionsHistListViewModel extends AndroidViewModel implements ViewM
     public void deleteSessions(){
         this.sessionsHistListRepository.deleteSessions();
     }
+
+    public void udpateSession(SessionEntity sessionEntity){this.sessionsHistListRepository.updateSession(sessionEntity);}
 
     public void deteleSessionByID(int id_session_local){this.sessionsHistListRepository.deleteSessionByID(id_session_local);}
 

@@ -26,7 +26,7 @@ public class SessionsRepository {
 
     public List<SessionEntity> getAllSession(){ return sessionDao.getAllSessions();}
 
-    public List<SessionEntity> getAllHistSessions(String user_id){ return sessionDao.getAllHistSessions(user_id);}
+    public List<SessionEntity> getAllHistSessions(int user_id){ return sessionDao.getAllHistSessions(user_id);}
 
 
     public int getMaxSession(){return sessionDao.getMaxSession();}

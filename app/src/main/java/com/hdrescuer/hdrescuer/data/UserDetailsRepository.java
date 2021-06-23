@@ -6,9 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
-import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.UsersRepository;
-import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
@@ -28,11 +26,9 @@ public class UserDetailsRepository {
     AuthApiService authApiService;
     AuthConectionClient authConectionClient;
     MutableLiveData<UserDetails> userDetails;
-    MutableLiveData<UserEntity> userEntity;
-    MutableLiveData<SessionEntity> sessionEntity;
 
     UsersRepository usersRepository;
-    SessionsRepository sessionsRepository;
+
 
     /**
      * Cosntructor con parámetros, recibe un id de usuario y hace llamada al servidor
@@ -42,10 +38,7 @@ public class UserDetailsRepository {
     UserDetailsRepository(int id){
         this.authConectionClient = AuthConectionClient.getInstance();
         this.authApiService = this.authConectionClient.getAuthApiService();
-
-        usersRepository = new UsersRepository(MyApp.getInstance());
-        sessionsRepository = new SessionsRepository(MyApp.getInstance());
-
+        this.usersRepository = new UsersRepository(MyApp.getInstance());
         this.userDetails = this.getUser(id);
     }
 
@@ -60,11 +53,6 @@ public class UserDetailsRepository {
         if(userDetails == null)
             userDetails = new MutableLiveData<>();
 
-        if(userEntity == null)
-            userEntity = new MutableLiveData<>();
-
-        if(sessionEntity == null)
-            sessionEntity = new MutableLiveData<>();
 
         if(Constants.CONNECTION_UP.equals("SI")) {
 
@@ -73,42 +61,11 @@ public class UserDetailsRepository {
                 @Override
                 public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
                     if (response.isSuccessful()) {
-
-                        UserDetails userDet = response.body();
-
-                        userEntity.setValue(new UserEntity(
-                                userDet.getUser_id(),
-                                userDet.getCreatedAt(),
-                                userDet.getUsername(),
-                                userDet.getLastname(),
-                                userDet.getEmail(),
-                                userDet.getGender(),
-                                userDet.getAge(),
-                                userDet.getHeight(),
-                                userDet.getWeight(),
-                                userDet.getPhone(),
-                                userDet.getPhone2(),
-                                userDet.getCity(),
-                                userDet.getAddress(),
-                                userDet.getCp()
-                        ));
-
-                        sessionEntity.setValue(new SessionEntity(
-                                userDet.getSession_id(),
-                                userDet.getUser_id(),
-                                userDet.getTimestamp_ini(),
-                                userDet.getTimestamp_fin(),
-                                userDet.getTotal_time(),
-                                userDet.isE4band(),
-                                userDet.isTicwatch(),
-                                userDet.isEhealthboard(),
-                                userDet.getDescription()
-                        ));
-
-                        userDetails.setValue(response.body());
+                        //userDetails.setValue(response.body());
+                        userDetails.setValue(usersRepository.getUsersLarge(id));
                     } else {
 
-
+                        userDetails.setValue(usersRepository.getUsersLarge(id));
 
                     }
                 }
@@ -116,19 +73,16 @@ public class UserDetailsRepository {
 
                 @Override
                 public void onFailure(Call<UserDetails> call, Throwable t) {
-                    Toast.makeText(MyApp.getContext(), "Error en la conexión. Accediendo en modo sin conexión", Toast.LENGTH_SHORT).show();
+                    userDetails.setValue(usersRepository.getUsersLarge(id));
 
                 }
-
-
-
 
 
             });
 
         }else{
             //Si no tenemos conexión, mostramos el usuario de la base de datos
-            getUserFromDB(id);
+            userDetails.setValue(usersRepository.getUsersLarge(id));
         }
 
 
@@ -137,54 +91,8 @@ public class UserDetailsRepository {
     }
 
 
-    private void getUserFromDB(int id) {
-        UserEntity uEnt = usersRepository.getByIdUser(id);
-        SessionEntity sEnt = sessionsRepository.getMaxSessionShortByUserId(id);
-
-        userDetails.setValue(new UserDetails(
-                uEnt.getUser_id(),
-                uEnt.getUsername(),
-                uEnt.getLastname(),
-                uEnt.getEmail(),
-                uEnt.getGender(),
-                uEnt.getAge(),
-                uEnt.getHeight(),
-                uEnt.getWeight(),
-                uEnt.getPhone(),
-                uEnt.getPhone2(),
-                uEnt.getCity(),
-                uEnt.getAddress(),
-                uEnt.getCp(),
-                uEnt.getCreatedAt(),
-                sEnt == null ? 0 : sEnt.getSession_id(),
-                sEnt == null ? null : sEnt.getTimestamp_ini(),
-                sEnt == null ? null : sEnt.getTimestamp_fin(),
-                sEnt == null ? 0 : sEnt.getTotal_time(),
-                sEnt == null ? false : sEnt.isE4band(),
-                sEnt == null ? false : sEnt.isTicwatch(),
-                sEnt == null ? false : sEnt.isEhealthboard(),
-                sEnt == null ? null : sEnt.getDescription()
-        ));
-
-        userEntity.setValue(uEnt);
-        sessionEntity.setValue(sEnt);
-
-    }
-
-
-
-
-
     public MutableLiveData<UserDetails> getUserDetails(){
         return this.userDetails;
-    }
-
-    public MutableLiveData<UserEntity> getUserEntity(){
-        return this.userEntity;
-    }
-
-    public MutableLiveData<SessionEntity> getSessionEntity(){
-        return this.sessionEntity;
     }
 
 

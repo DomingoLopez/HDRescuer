@@ -24,13 +24,13 @@
             android:id="@+id/tvTimestampIni"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:text="TextView"
             android:textColor="@color/blue_secondary"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/tvSessionLocal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvSessionLocal" />
 
         <TextView
             android:id="@+id/tvDuration"
@@ -38,11 +38,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="TextView"
+            android:textAlignment="textEnd"
             android:textColor="@color/e4connected"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tvTimestampIni"
-            app:layout_constraintTop_toBottomOf="@+id/tvTimestampIni" />
+            app:layout_constraintStart_toStartOf="@+id/tvlabelIDSessionLocal"
+            app:layout_constraintTop_toBottomOf="@+id/tvlabelIDSessionLocal" />
 
         <TextView
             android:id="@+id/tvDescription"
@@ -58,22 +59,39 @@
             android:id="@+id/tvlabelIDSessionLocal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
             android:text="ID:"
             android:textColor="@color/blue_secondary"
-            app:layout_constraintEnd_toStartOf="@+id/tvSessionLocal"
-            app:layout_constraintTop_toTopOf="@+id/tvTimestampIni" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvSessionLocal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:text="TextView"
             android:textColor="@color/blue_secondary"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/tvlabelIDSessionLocal"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvlabelIDSessionLocal"
             app:layout_constraintTop_toTopOf="@+id/tvlabelIDSessionLocal"
             app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/btn_connection_lost_session"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSessionLocal"
+            app:layout_constraintStart_toEndOf="@+id/tvSessionLocal"
+            app:layout_constraintTop_toTopOf="@+id/tvSessionLocal"
+            app:srcCompat="@drawable/ic_baseline_wifi_off_24" />
 
         <AutoCompleteTextView
             android:id="@+id/tvAutoCompletablePatient"

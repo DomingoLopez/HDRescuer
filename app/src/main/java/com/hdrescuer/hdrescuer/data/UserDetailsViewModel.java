@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
@@ -43,16 +42,6 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
     public MutableLiveData<UserDetails> getUser() {
 
         return this.userDetailsRepository.getUserDetails();
-    }
-
-    public MutableLiveData<UserEntity> getUserEntity() {
-
-        return this.userDetailsRepository.getUserEntity();
-    }
-
-    public MutableLiveData<SessionEntity> getSessionEntity() {
-
-        return this.userDetailsRepository.getSessionEntity();
     }
 
     /**

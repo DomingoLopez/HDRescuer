@@ -30,10 +30,10 @@ public class SessionsHistListRepository {
     E4BandRepository e4BandRepository;
     TicWatchRepository ticWatchRepository;
     EHealthBoardRepository eHealthBoardRepository;
-    String user_id;
+    int user_id;
 
 
-    SessionsHistListRepository(String user_id){
+    SessionsHistListRepository(int user_id){
 
         //Repositorio con la conexión DAO
         this.sessionsRepository = new SessionsRepository(MyApp.getInstance());
@@ -83,6 +83,22 @@ public class SessionsHistListRepository {
         sessions = getAllSessions();
 
     }
+
+    public void updateSession(SessionEntity sessionEntity){
+        this.sessionsRepository.updateSession(sessionEntity);
+
+        List<SessionEntity> tmp = this.sessions.getValue();
+
+        for(int i = 0; i< tmp.size(); i++){
+            if(tmp.get(i).session_id == sessionEntity.session_id) {
+                tmp.get(i).setSync(true);
+                break;
+            }
+        }
+        sessions.setValue(tmp);
+    }
+
+
 
 
     public void refreshSessions(){

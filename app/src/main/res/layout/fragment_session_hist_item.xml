@@ -24,13 +24,14 @@
             android:id="@+id/tvTimestampIniHIST"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:text="TextView"
             android:textColor="@color/blue_secondary"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/tvSessionLocalHIST"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvSessionLocalHIST"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/tvDurationHIST"
@@ -38,11 +39,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="TextView"
+            android:textAlignment="textEnd"
             android:textColor="@color/e4connected"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tvTimestampIniHIST"
-            app:layout_constraintTop_toBottomOf="@+id/tvTimestampIniHIST" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tvlabelIDSessionLocalHIST"
+            app:layout_constraintTop_toBottomOf="@+id/tvlabelIDSessionLocalHIST" />
 
         <TextView
             android:id="@+id/tvDescriptionHIST"
@@ -54,24 +57,41 @@
             app:layout_constraintStart_toStartOf="@+id/tvDurationHIST"
             app:layout_constraintTop_toBottomOf="@+id/tvDurationHIST" />
 
+        <Button
+            android:id="@+id/btnUploadSessionHist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/btn_synchronize_session"
+            android:textSize="10sp"
+            app:icon="@drawable/ic_baseline_upload_24"
+            app:layout_constraintStart_toStartOf="@+id/tvDescriptionHIST"
+            app:layout_constraintTop_toBottomOf="@+id/tvDescriptionHIST" />
+
         <TextView
             android:id="@+id/tvlabelIDSessionLocalHIST"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
             android:text="ID:"
             android:textColor="@color/blue_secondary"
-            app:layout_constraintEnd_toStartOf="@+id/tvSessionLocalHIST"
-            app:layout_constraintTop_toTopOf="@+id/tvTimestampIniHIST" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvSessionLocalHIST"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:text="TextView"
             android:textColor="@color/blue_secondary"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/tvlabelIDSessionLocalHIST"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvlabelIDSessionLocalHIST"
             app:layout_constraintTop_toTopOf="@+id/tvlabelIDSessionLocalHIST"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -79,23 +99,36 @@
             android:id="@+id/viewResultsLoc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:background="@color/blue_secondary"
             android:padding="5dp"
-            app:layout_constraintStart_toStartOf="@+id/tvDescriptionHIST"
-            app:layout_constraintTop_toBottomOf="@+id/tvDescriptionHIST"
+            app:layout_constraintBottom_toBottomOf="@+id/deleteSessionLoc"
+            app:layout_constraintEnd_toStartOf="@+id/deleteSessionLoc"
+            app:layout_constraintTop_toTopOf="@+id/deleteSessionLoc"
+            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/ic_baseline_leaderboard_24" />
 
         <ImageView
             android:id="@+id/deleteSessionLoc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="#F44336"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="@+id/tvDescriptionHIST"
             app:layout_constraintTop_toBottomOf="@+id/tvDescriptionHIST"
             app:srcCompat="@drawable/ic_baseline_delete_24" />
+
+        <ImageView
+            android:id="@+id/btn_connection_lost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSessionLocalHIST"
+            app:layout_constraintStart_toEndOf="@+id/tvSessionLocalHIST"
+            app:layout_constraintTop_toTopOf="@+id/tvSessionLocalHIST"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/ic_baseline_wifi_off_24" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

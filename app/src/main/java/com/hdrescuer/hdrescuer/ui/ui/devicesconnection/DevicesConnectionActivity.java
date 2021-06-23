@@ -186,6 +186,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     //Descripción de la sesión (Para el modo no conexión)
     String session_description;
 
+    //Sesión sincronizada o no
+    boolean sync;
+
     //Formato para fecha
     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -204,13 +207,22 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         getSupportActionBar().hide();
 
         //Obtenemos el id del usuario
-        if (Constants.CONNECTION_MODE == "STREAMING") {
+        if (Constants.CONNECTION_UP.equals("SI")) {
             Intent i = getIntent();
-            this. user_id = i.getIntExtra("id",0);
+            this. user_id = i.getIntExtra("user_id",0);
             this.user_name = i.getStringExtra("username");
+            this.sync = true;
         }else{
-            this.user_id = 0;
-            this.user_name = "Modo OFFLINE";
+            this.sync = false;
+            if(Constants.CONNECTION_MODE.equals("FASTMODE")){
+                this.user_id = 0;
+                this.user_name = "Fast Mode";
+
+            }else{
+                Intent i = getIntent();
+                this. user_id = i.getIntExtra("user_id",0);
+                this.user_name = i.getStringExtra("username");
+            }
         }
 
         //Obtenemos la fecha:hora actual
@@ -758,7 +770,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
             //Inicio la sesión
             sessionsRepository.insertSession(new SessionEntity(
-                    session_id,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected, session_description
+                    session_id,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected, session_description,sync
             ));
 
 
@@ -769,7 +781,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         private void stopDBLocalSession(String timestamp_fin) {
             //Hacemos update de la sesión
             sessionsRepository.updateSession(new SessionEntity(
-                    session_id,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,session_description
+                    session_id,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,session_description,sync
             ));
 
 

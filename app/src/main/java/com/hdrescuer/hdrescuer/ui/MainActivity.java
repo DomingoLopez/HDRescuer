@@ -129,10 +129,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(response.isSuccessful()) { //Código 200...299
 
                         Constants.CONNECTION_UP = "SI";
+                        Constants.CONNECTION_MODE ="STREAMING";
 
                     }else{
                         Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
                         Constants.CONNECTION_UP = "NO";
+                        Constants.CONNECTION_MODE ="OFFLINE";
                     }
 
                 }
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onFailure(Call<String> call, Throwable t) {
                     Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
                     Constants.CONNECTION_UP = "NO";
+                    Constants.CONNECTION_MODE ="OFFLINE";
                 }
 
             });

@@ -1,7 +1,5 @@
 package com.hdrescuer.hdrescuer.retrofit;
 
-import android.se.omapi.Session;
-
 import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;

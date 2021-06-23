@@ -4,8 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -70,6 +72,13 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
                 holder.description.setText(holder.mItem.getDescription());
 
 
+            if(!holder.mItem.isSync()){
+                holder.no_connection_btn.setVisibility(View.VISIBLE);
+                holder.uploadSessionHist.setVisibility(View.VISIBLE);
+            }else{
+                holder.no_connection_btn.setVisibility(View.INVISIBLE);
+                holder.uploadSessionHist.setVisibility(View.INVISIBLE);
+            }
 
         }
     }
@@ -111,6 +120,9 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
 
         public final ImageView viewResults;
         public final ImageView deleteSession;
+        public final ImageView no_connection_btn;
+
+        public final Button uploadSessionHist;
 
         private WeakReference<ListItemClickListener> listenerRef;
 
@@ -127,10 +139,15 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
 
             viewResults = view.findViewById(R.id.viewResultsLoc);
             deleteSession = view.findViewById(R.id.deleteSessionLoc);
+            no_connection_btn = view.findViewById(R.id.btn_connection_lost);
+            uploadSessionHist = view.findViewById(R.id.btnUploadSessionHist);
 
             //Seteamos el listener para cada botón del holder
             viewResults.setOnClickListener(this);
             deleteSession.setOnClickListener(this);
+            no_connection_btn.setOnClickListener(this);
+            uploadSessionHist.setOnClickListener(this);
+
             view.setOnClickListener(this);
 
         }
@@ -155,6 +172,13 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
                     mOnClickListener.onListItemClickUser(position, "DELETE_SESSION");
                     break;
 
+                case R.id.btn_connection_lost:
+                    Toast.makeText(ctx, "Sesión no sincronizada con el servidor", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.btnUploadSessionHist:
+                    mOnClickListener.onListItemClickUser(position, "UPLOAD_SESSION");
+                    break;
 
 
             }

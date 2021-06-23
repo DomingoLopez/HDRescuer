@@ -21,7 +21,6 @@ import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
-import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 
 import java.time.Clock;
 
@@ -244,7 +243,7 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
 
                    }else if(this.type == UserActionDialog.MODIFY_USER){
 
-                       UserEntity user = new UserEntity(this.userEntity.getUser_id(),this.userEntity.getCreatedAt(), name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
+                       UserEntity user = new UserEntity(this.userEntity.getUser_id(),this.userEntity.createdAt, name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
                        UserDetailsViewModel userDetailsViewModel = new ViewModelProvider(this.getActivity()).get(UserDetailsViewModel.class);
                        userDetailsViewModel.updateUserDetails(user);
                        userDetailsViewModel.refreshUserDetails();

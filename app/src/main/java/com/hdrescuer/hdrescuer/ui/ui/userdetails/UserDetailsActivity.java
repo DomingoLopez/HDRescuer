@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.se.omapi.Session;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,8 +18,6 @@ import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
-import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
-import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
@@ -30,7 +27,10 @@ import com.hdrescuer.hdrescuer.common.UserActionDialog;
 import com.hdrescuer.hdrescuer.ui.ui.patienthist.PatientSessionListActivity;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 
 /**
  * Clase UserDetailsActivity, que contiene la lógica para mostrar los detalles del usuario
@@ -78,8 +78,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
 
     UserDetails user;
-    UserEntity userEntity;
-    SessionEntity sessionEntity;
+
     private DateFormat dateFormat;
 
     boolean alreadyCreated = false;
@@ -127,10 +126,9 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     protected void onResume() {
 
         super.onResume();
-        if(!alreadyCreated){
+
             refreshUserDetails();
-        }
-        alreadyCreated = false;
+
 
 
     }
@@ -253,7 +251,9 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                     else
                         board.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.back_red));
 
-                    tvini.setText(dateFormat.format(userDetails.getTimestamp_ini()));
+
+                        tvini.setText(dateFormat.format(Date.from(Instant.parse(userDetails.getTimestamp_ini()))));
+
                     //tvfin.setText(dateFormat.format(userDetails.getTimestamp_fin()));
                     tvtotal.setText(Constants.getHMS(userDetails.getTotal_time()));
 
@@ -296,19 +296,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
-        this.userDetailsViewModel.getUserEntity().observe(this, new Observer<UserEntity>() {
-            @Override
-            public void onChanged(UserEntity uEntity) {
-                userEntity = uEntity;
-            }
-        });
-
-        this.userDetailsViewModel.getSessionEntity().observe(this, new Observer<SessionEntity>() {
-            @Override
-            public void onChanged(SessionEntity seEntity) {
-                sessionEntity = seEntity;
-            }
-        });
 
     }
 
@@ -337,19 +324,19 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             case R.id.btn_new_monitoring:
 
                 Intent i = new Intent(MyApp.getContext(), DevicesConnectionActivity.class);
-                i.putExtra("id", user_id);
+                i.putExtra("user_id", user_id);
                 i.putExtra("username",this.username.getText().toString());
                 startActivity(i);
                 break;
 
             case R.id.btn_edit_data:
-                NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.MODIFY_USER,this.userEntity);
+                NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.MODIFY_USER,this.user.getUserEntity());
                 dialog.show(this.getSupportFragmentManager(), "NewUserFragment");
                 break;
 
             case R.id.btn_patient_hist:
                 Intent in = new Intent(MyApp.getContext(), PatientSessionListActivity.class);
-                in.putExtra("id", user_id);
+                in.putExtra("user_id", user_id);
                 in.putExtra("username",this.username.getText().toString());
                 startActivity(in);
                 break;
