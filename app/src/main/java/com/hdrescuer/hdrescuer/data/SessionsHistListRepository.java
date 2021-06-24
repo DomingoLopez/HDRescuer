@@ -92,6 +92,7 @@ public class SessionsHistListRepository {
         for(int i = 0; i< tmp.size(); i++){
             if(tmp.get(i).session_id == sessionEntity.session_id) {
                 tmp.get(i).setSync(true);
+                tmp.get(i).setCrashed(false);
                 break;
             }
         }

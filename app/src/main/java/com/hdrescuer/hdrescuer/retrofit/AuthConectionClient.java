@@ -2,6 +2,8 @@ package com.hdrescuer.hdrescuer.retrofit;
 
 import com.hdrescuer.hdrescuer.common.Constants;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -29,6 +31,7 @@ public class AuthConectionClient {
 
         //Incluímos en la cabecera de la petición el TOKEN que autoriza al usuario
         OkHttpClient.Builder ok = new OkHttpClient.Builder();
+
         ok.addInterceptor(new AuthInterceptor());
         OkHttpClient cliente = ok.build();
 

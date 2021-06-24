@@ -74,9 +74,19 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
 
             if(!holder.mItem.isSync()){
                 holder.no_connection_btn.setVisibility(View.VISIBLE);
-                holder.uploadSessionHist.setVisibility(View.VISIBLE);
             }else{
                 holder.no_connection_btn.setVisibility(View.INVISIBLE);
+            }
+
+            if(!holder.mItem.isCrashed()){
+                holder.crashed_session.setVisibility(View.INVISIBLE);
+            }else{
+                holder.crashed_session.setVisibility(View.VISIBLE);
+            }
+
+            if(!holder.mItem.isSync() || holder.mItem.isCrashed()){
+                holder.uploadSessionHist.setVisibility(View.VISIBLE);
+            }else {
                 holder.uploadSessionHist.setVisibility(View.INVISIBLE);
             }
 
@@ -122,6 +132,8 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
         public final ImageView deleteSession;
         public final ImageView no_connection_btn;
 
+        public final ImageView crashed_session;
+
         public final Button uploadSessionHist;
 
         private WeakReference<ListItemClickListener> listenerRef;
@@ -142,11 +154,14 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
             no_connection_btn = view.findViewById(R.id.btn_connection_lost);
             uploadSessionHist = view.findViewById(R.id.btnUploadSessionHist);
 
+            crashed_session = view.findViewById(R.id.btn_crashed);
+
             //Seteamos el listener para cada botón del holder
             viewResults.setOnClickListener(this);
             deleteSession.setOnClickListener(this);
             no_connection_btn.setOnClickListener(this);
             uploadSessionHist.setOnClickListener(this);
+            crashed_session.setOnClickListener(this);
 
             view.setOnClickListener(this);
 
@@ -180,6 +195,9 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
                     mOnClickListener.onListItemClickUser(position, "UPLOAD_SESSION");
                     break;
 
+                case R.id.btn_crashed:
+                    Toast.makeText(ctx, "Se perdieron datos en la emisión de la sesión. Sincronízela", Toast.LENGTH_SHORT).show();
+                    break;
 
             }
 

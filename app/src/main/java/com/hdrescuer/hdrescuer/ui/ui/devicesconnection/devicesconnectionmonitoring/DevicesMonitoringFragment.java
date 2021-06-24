@@ -152,7 +152,7 @@ public class DevicesMonitoringFragment extends Fragment implements View.OnClickL
 
         Intent intent = new Intent(this.getActivity(), StartStopSessionService.class);
 
-        if(Constants.CONNECTION_MODE=="STREAMING"){
+        if(Constants.CONNECTION_MODE=="STREAMING" && Constants.CONNECTION_UP.equals("SI")){
             intent.setAction("STOP_SESSION");
         }else{
             intent.setAction("STOP_OFFLINE_MODE");

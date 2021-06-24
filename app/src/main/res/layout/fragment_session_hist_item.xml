@@ -130,6 +130,16 @@
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/ic_baseline_wifi_off_24" />
 
+        <ImageView
+            android:id="@+id/btn_crashed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSessionLocalHIST"
+            app:layout_constraintStart_toEndOf="@+id/tvSessionLocalHIST"
+            app:layout_constraintTop_toTopOf="@+id/tvSessionLocalHIST"
+            app:srcCompat="@drawable/ic_baseline_mobiledata_off_24" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

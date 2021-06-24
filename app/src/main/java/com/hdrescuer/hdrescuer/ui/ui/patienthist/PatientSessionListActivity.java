@@ -228,7 +228,7 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
 
                 //Error al subir la sesión
                 case 401:
-
+                    Toast.makeText(PatientSessionListActivity.this, "Error al subir la sesión. ¿Dispone de conexión?", Toast.LENGTH_SHORT).show();
                     break;
 
 

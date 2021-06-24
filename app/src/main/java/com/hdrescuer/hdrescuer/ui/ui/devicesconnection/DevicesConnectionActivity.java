@@ -253,7 +253,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
+        DevicesConnectionActivity.crashed = false;
         Wearable.getCapabilityClient(this).addListener(this, Constants.CAPABILITY_WEAR_APP);
         this.dataClient = Wearable.getDataClient(this);
         Wearable.getDataClient(this).addListener(this);
@@ -525,7 +525,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                     Intent intent = new Intent(this, StartStopSessionService.class);
 
-                    if(Constants.CONNECTION_MODE=="STREAMING"){
+                    if(Constants.CONNECTION_MODE=="STREAMING" && Constants.CONNECTION_UP.equals("SI")){
                         intent.setAction("STOP_SESSION");
                     }else{
                         intent.setAction("STOP_OFFLINE_MODE");
@@ -537,6 +537,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                    this.startService(intent);
                 }else{
+                    DevicesConnectionActivity.crashed = false;
                     String timeback = String.valueOf(System.currentTimeMillis());
                     this.putDataMapRequestStop.getDataMap().putString(MONITORINGSTOP_KEY, timeback);
                     this.putDataReqStop = this.putDataMapRequestStop.asPutDataRequest();
@@ -564,9 +565,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 if(devices_counter == 0){
                     Toast.makeText(this, "No hay dispositivos conectados, debe conectar alguno antes de empezar la sesión", Toast.LENGTH_SHORT).show();
                 }else{
-                    //Método que inicia la sesión.
-
-
 
                         SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
                             @Override
@@ -659,7 +657,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
             session_id = 1;
         }
 
-        if(Constants.CONNECTION_MODE=="STREAMING"){
+        if(Constants.CONNECTION_MODE=="STREAMING" && Constants.CONNECTION_UP.equals("SI")){
             intent.setAction("START_SESSION");
             intent.putExtra("session_id",session_id);
             intent.putExtra("user_id",this.user_id);
@@ -760,8 +758,14 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                 //Error al finalizar la sesión
                 case 401:
+                    String times_fin = resultData.getString("result_time");
                     stopWatchAndThreads();
-                    Toast.makeText(DevicesConnectionActivity.this, "No se ha podido registrar el final de sesión. ¿Dispone de conexión?", Toast.LENGTH_SHORT).show();
+                    stopDBLocalSession(times_fin);
+                    Toast.makeText(DevicesConnectionActivity.this, "Sesión emitida al servidor corrupta.\n Sincronícela de nuevo más tarde", Toast.LENGTH_SHORT).show();
+                    //Mostramos resultados
+                    Intent in = new Intent(DevicesConnectionActivity.this, SessionResultActivity.class);
+                    in.putExtra("session_id",session_id);
+                    startActivity(in);
                     finish();
                     break;
 
@@ -793,7 +797,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         private void stopDBLocalSession(String timestamp_fin) {
             //Hacemos update de la sesión
             sessionsRepository.updateSession(new SessionEntity(
-                    session_id,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,session_description,sync, crashed
+                    session_id,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,session_description,sync, DevicesConnectionActivity.crashed
             ));
 
 

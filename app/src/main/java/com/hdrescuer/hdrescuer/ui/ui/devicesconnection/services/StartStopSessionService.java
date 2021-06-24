@@ -158,7 +158,8 @@ public class StartStopSessionService extends IntentService {
 
         }catch (Exception e ){
             Bundle bundle =  new Bundle();
-            bundle.putString("result", "Error al parar la sesión");
+            bundle.putInt("result", id_session);
+            bundle.putString("result_time", timestamp_fin);
             this.receiver.send(401, bundle);
             e.printStackTrace();
         }

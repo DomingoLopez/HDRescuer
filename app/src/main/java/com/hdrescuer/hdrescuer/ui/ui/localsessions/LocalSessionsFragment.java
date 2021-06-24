@@ -293,7 +293,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
 
                 //Error al subir la sesión
                 case 401:
-
+                    Toast.makeText(requireActivity(), "Error al subir la sesión. ¿Dispone de conexión?", Toast.LENGTH_SHORT).show();
                     break;
 
 

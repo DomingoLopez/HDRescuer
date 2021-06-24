@@ -82,7 +82,7 @@ public class SampleRateFilterThread extends Thread{
                updateTicWatchData();
                updateBoardData();
 
-               if(Constants.CONNECTION_MODE=="STREAMING"){
+               if(Constants.CONNECTION_MODE=="STREAMING" && Constants.CONNECTION_UP.equals("SI")){
                    uploadDataToServer();
                }
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestSendData;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,18 +83,19 @@ public class RestSampleRateService extends IntentService {
                 call.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
+                        Log.i("RESPONSE",response.toString());
                         if(response.isSuccessful()){
                             Log.i("SUCCESS","CORRECTO");
                         }else {
-
                             Log.i("ERROR", "ERROR EN EL ENVÍO DE LOS DATOS");
+                            DevicesConnectionActivity.crashed = true;
                         }
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        //Toast.makeText(MyApp.getContext(), "Error en la conexión", Toast.LENGTH_SHORT).show();
-                        Log.i("ENVIO","ENVIO REALIZADO");
+                        Log.i("ERROR", "ERROR EN EL ENVÍO DE LOS DATOS FAILURE");
+                        DevicesConnectionActivity.crashed = true;
                     }
                 });
 
