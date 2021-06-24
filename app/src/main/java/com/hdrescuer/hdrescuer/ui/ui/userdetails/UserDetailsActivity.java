@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
@@ -330,8 +331,12 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.btn_edit_data:
-                NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.MODIFY_USER,this.user.getUserEntity());
-                dialog.show(this.getSupportFragmentManager(), "NewUserFragment");
+                if(Constants.CONNECTION_UP.equals("SI")) {
+                    NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.MODIFY_USER, this.user.getUserEntity());
+                    dialog.show(this.getSupportFragmentManager(), "NewUserFragment");
+                }else{
+                    Toast.makeText(this, "Conexión no disponible, vuelva a iniciar sesión", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.btn_patient_hist:

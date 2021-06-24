@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
 import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
@@ -134,46 +135,64 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
                 break;
 
             case "DELETE_SESSION":
+                if(!this.sessionList.get(position).isSync()) {
 
-                SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
-                    @Override
-                    public void onPositiveButtonClick(String description) {
+                    SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
+                        @Override
+                        public void onPositiveButtonClick(String description) {
+                        }
 
+                        @Override
+                        public void onPositiveButtonClick() {
+                            sessionsHistListViewModel.deteleSessionByID(sessionList.get(position).getSession_id());
+                        }
+
+                        @Override
+                        public void onNegativeButtonClick() {
+                        }
+                    }, "DELETE_SESSION");
+                    dialogFragment.show(getSupportFragmentManager(), null);
+                }else{
+                    if(Constants.CONNECTION_UP.equals("SI")){
+                        SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
+                            @Override
+                            public void onPositiveButtonClick(String description) {
+                            }
+
+                            @Override
+                            public void onPositiveButtonClick() {
+                                sessionsHistListViewModel.deteleSessionByID(sessionList.get(position).getSession_id());
+                            }
+
+                            @Override
+                            public void onNegativeButtonClick() {
+                            }
+                        }, "DELETE_SESSION");
+                        dialogFragment.show(getSupportFragmentManager(), null);
+                    }else{
+                        Toast.makeText(this, "Conexión no disponible, vuelva a iniciar sesión", Toast.LENGTH_SHORT).show();
                     }
 
-                    @Override
-                    public void onPositiveButtonClick() {
-
-                        sessionsHistListViewModel.deteleSessionByID(sessionList.get(position).getSession_id());
-
-                    }
-
-                    @Override
-                    public void onNegativeButtonClick() {
-
-
-                    }
-                }, "DELETE_SESSION");
-
-                dialogFragment.show(getSupportFragmentManager(), null);
+                }
 
                 break;
 
 
             case "UPLOAD_SESSION":
-                this.position_selected = position;
-                Intent intent = new Intent(this.getApplicationContext(), UploadSessionService.class);
-                intent.setAction("START_UPLOAD");
-                intent.putExtra("user_id",this.user_id);
-                intent.putExtra("session_id", this.sessionList.get(position).getSession_id());
-                intent.putExtra("receiver",this.sessionResult);
-                MyApp.getInstance().startService(intent);
+                if(Constants.CONNECTION_UP.equals(("SI"))) {
+                    this.position_selected = position;
+                    Intent intent = new Intent(this.getApplicationContext(), UploadSessionService.class);
+                    intent.setAction("START_UPLOAD");
+                    intent.putExtra("user_id", this.user_id);
+                    intent.putExtra("session_id", this.sessionList.get(position).getSession_id());
+                    intent.putExtra("receiver", this.sessionResult);
+                    MyApp.getInstance().startService(intent);
+                }else{
+                    Toast.makeText(this, "Conexión no disponible, vuelva a iniciar sesión", Toast.LENGTH_SHORT).show();
+                }
 
                 break;
         }
-
-
-
     }
 
     public ResultReceiver sessionResult = new ResultReceiver(new Handler()) {

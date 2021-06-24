@@ -14,9 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
 import com.hdrescuer.hdrescuer.common.UserActionDialog;
@@ -190,9 +192,12 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
      */
     @Override
     public void onClick(View view) {
-
-        NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.NEW_USER,null);
-        dialog.show(this.getActivity().getSupportFragmentManager(), "NewUserFragment");
+        if(Constants.CONNECTION_UP.equals("SI")){
+            NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.NEW_USER,null);
+            dialog.show(this.getActivity().getSupportFragmentManager(), "NewUserFragment");
+        }else{
+            Toast.makeText(requireActivity(), "Conexión no disponible, vuelva a iniciar sesión", Toast.LENGTH_SHORT).show();
+        }
 
 
     }

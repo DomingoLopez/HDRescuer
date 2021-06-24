@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
 import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
@@ -204,52 +205,58 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
 
 
             case "DELETE_SESSION":
-                SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
-                    @Override
-                    public void onPositiveButtonClick(String description) {
 
-                    }
+                    SimpleDialogFragment dialogFragment = new SimpleDialogFragment(new OnSimpleDialogClick() {
+                        @Override
+                        public void onPositiveButtonClick(String description) {
 
-                    @Override
-                    public void onPositiveButtonClick() {
+                        }
 
-                        sessionsListViewModel.deteleSessionByID(sessionList.get(position).getSession_id());
+                        @Override
+                        public void onPositiveButtonClick() {
 
-
-                    }
-
-                    @Override
-                    public void onNegativeButtonClick() {
+                            sessionsListViewModel.deteleSessionByID(sessionList.get(position).getSession_id());
 
 
-                    }
-                }, "DELETE_SESSION");
+                        }
 
-                dialogFragment.show(requireActivity().getSupportFragmentManager(), null);
+                        @Override
+                        public void onNegativeButtonClick() {
+
+
+                        }
+                    }, "DELETE_SESSION");
+
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), null);
+
 
                 break;
 
             default:
 
-                if(user_elegido == null || user_elegido == ""){
-                    Toast.makeText(requireActivity(), "No ha seleccionado un paciente para la sesión", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                if(Constants.CONNECTION_UP.equals(("SI"))) {
+                    if (user_elegido == null || user_elegido == "") {
+                        Toast.makeText(requireActivity(), "No ha seleccionado un paciente para la sesión", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                //Si el usuario contiene algo, lo comparamos con el Map que tenemos
-                this.user_selected = this.usuarios_predictivo.get(user_elegido);
-                if(user_selected != 0){
-                    int id_session_local = this.sessionList.get(position).session_id;
-                    this.position_selected = position;
-                    Intent intent = new Intent(this.getContext(), UploadSessionService.class);
-                    intent.setAction("START_UPLOAD");
-                    intent.putExtra("user_id",user_selected);
-                    intent.putExtra("session_id", id_session_local);
-                    intent.putExtra("receiver",this.sessionResult);
-                    MyApp.getInstance().startService(intent);
+                    //Si el usuario contiene algo, lo comparamos con el Map que tenemos
+                    this.user_selected = this.usuarios_predictivo.get(user_elegido);
+                    if (user_selected != 0) {
+                        int id_session_local = this.sessionList.get(position).session_id;
+                        this.position_selected = position;
+                        Intent intent = new Intent(this.getContext(), UploadSessionService.class);
+                        intent.setAction("START_UPLOAD");
+                        intent.putExtra("user_id", user_selected);
+                        intent.putExtra("session_id", id_session_local);
+                        intent.putExtra("receiver", this.sessionResult);
+                        MyApp.getInstance().startService(intent);
 
+                    } else {
+                        Toast.makeText(requireActivity(), "Debe escribir el nombre del paciente al que pertenece la sesión", Toast.LENGTH_SHORT).show();
+                    }
                 }else{
-                    Toast.makeText(requireActivity(), "Debe escribir el nombre del paciente al que pertenece la sesión", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), "Conexión no disponible, vuelva a iniciar sesión", Toast.LENGTH_SHORT).show();
                 }
 
 

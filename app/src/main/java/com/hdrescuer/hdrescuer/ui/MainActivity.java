@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             case R.id.btn_login_no_connection:
-                Constants.CONNECTION_MODE="OFFLINE";
+                Constants.CONNECTION_MODE="FASTMODE";
                 Intent i_offline = new Intent(MainActivity.this, DevicesConnectionActivity.class);
                 startActivity(i_offline);
                 break;

@@ -9,6 +9,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -134,6 +135,7 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
         public final Button btnUploadSession;
         public final ImageView deleteSession;
         public final ImageView viewResults;
+        public final ImageView btn_no_connection;
 
 
         private WeakReference<ListItemClickListener> listenerRef;
@@ -152,11 +154,13 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
             btnUploadSession = view.findViewById(R.id.btnUploadSessionLocale);
             deleteSession = view.findViewById(R.id.deleteSessionLoc);
             viewResults = view.findViewById(R.id.viewResultsLoc);
+            btn_no_connection = view.findViewById(R.id.btn_connection_lost_session);
 
             //Seteamos el listener para cada botón del holder
             btnUploadSession.setOnClickListener(this);
             deleteSession.setOnClickListener(this);
             viewResults.setOnClickListener(this);
+            btn_no_connection.setOnClickListener(this);
             view.setOnClickListener(this);
 
         }
@@ -184,6 +188,9 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
                     listenerRef.get().onListItemClickUser(getAdapterPosition(), "DELETE_SESSION");
                     break;
 
+                case R.id.btn_connection_lost_session:
+                    Toast.makeText(ctx, "Sesión no sincronizada con el servidor", Toast.LENGTH_SHORT).show();
+                    break;
 
                 case R.id.viewResultsLoc:
                     listenerRef.get().onListItemClickUser(getAdapterPosition(), "SHOW_RESULTS");
