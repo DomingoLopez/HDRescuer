@@ -2,7 +2,7 @@
     <string name="app_name">HDRescuer</string>
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
-    <string name="btn_login">Acceder modo Streaming</string>
+    <string name="btn_login">Acceder STANDARD MODE</string>
     <string name="txt_info_login">Accede a la app con el email y contraseña que obtuviste del equipo de desarrollo</string>
     <string name="app_name_login">HDRESCUER</string>
     <string name="title_activity_home">HomeActivity</string>
@@ -16,7 +16,7 @@
     <string name="menu_users">Usuarios</string>
     <string name="menu_support">Información</string>
     <string name="menu_config">Configuración</string>
-    <string name="menu_sessions">Sesiones Offline</string>
+    <string name="menu_sessions">Sesiones FastMode</string>
     <string name="label_last_monitoring">Última sesión </string>
     <string name="label_edad">Edad:</string>
     <string name="label_altura">Altura:</string>
@@ -86,12 +86,14 @@
     <string name="label_results_for_ticwatch">Resultados para TicWatch</string>
     <string name="label_results_for_empatica">Resultados para Empatica Band</string>
     <string name="label_results_for_healthboard">Resultados para Health Board</string>
-    <string name="label_sessions_not_synchronized">Aquí aparecen las sesiones guardadas en el modo \'Sin Conexión\'. Es recomendable sincronizarlas con el servidor.</string>
+    <string name="label_sessions_not_synchronized">Aquí aparecen las sesiones guardadas en el modo \'Fast Mode\'. Es recomendable sincronizarlas con el servidor.</string>
     <string name="btn_synchronize_session">Sincronizar sesión</string>
     <string name="tv_description_app_login">Recopilación de datos fisiológicos de pacientes</string>
-    <string name="btn_login_no_conection">Acceder Modo OFFLINE</string>
+    <string name="btn_login_no_conection">Acceder FAST MODE</string>
 
     <string name="dialog_confirm">Confirmar</string>
     <string name="dialog_dismiss">Cancelar</string>
+
+    <string name="icon_connection_ok">Conexión</string>
 
 </resources>

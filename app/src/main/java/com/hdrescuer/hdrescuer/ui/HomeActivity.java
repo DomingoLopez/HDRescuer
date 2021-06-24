@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.hdrescuer.hdrescuer.R;
+import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
 import com.hdrescuer.hdrescuer.data.UserListViewModel;
@@ -130,6 +132,20 @@ public class HomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(Constants.CONNECTION_UP.equals("SI")){
+            MenuItem item = menu.findItem(R.id.connection_icon);
+            item.setIcon(getDrawable(R.drawable.ic_baseline_wifi_24_green));
+        }else{
+            MenuItem item = menu.findItem(R.id.connection_icon);
+            item.setIcon(getDrawable(R.drawable.ic_baseline_wifi_24_red));
+        }
+
+        return true;
+    }
 
     @Override
     protected void onResume() {

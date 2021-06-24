@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.hdrescuer.hdrescuer.R;
@@ -32,7 +33,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button btn_login;
     Button btn_login_no_connection;
-    EditText etEmail, etPassword;
+
+    ProgressBar progressBar;
+
 
     //Servicio de Login y ConectionClient
     ConectionClient conectionClient;
@@ -74,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void findViews() {
         this.btn_login = findViewById(R.id.btn_login);
         this.btn_login_no_connection = findViewById(R.id.btn_login_no_connection);
+        this.progressBar = findViewById(R.id.indeterminateBar);
+        this.progressBar.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -95,9 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Constants.CONNECTION_MODE = "STREAMING";
                 //Comprobamos si el servidor está up y hay conexión a internet
                 checkServerUp();
-                //Iniciamos la aplicación
-                Intent i = new Intent(MainActivity.this, HomeActivity.class);
-                startActivity(i);
                 break;
 
 
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //Objeto llamada con respuesta como objeto de tipo ResponseAuth que hemos creado
             Call<String> call = this.loginApiService.doServerTest(requestServerUp);
 
-
+            this.progressBar.setVisibility(View.VISIBLE);
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
@@ -137,6 +139,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Constants.CONNECTION_MODE ="OFFLINE";
                     }
 
+                    progressBar.setVisibility(View.INVISIBLE);
+                    //Iniciamos la aplicación
+                    Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(i);
+
                 }
 
                 @Override
@@ -144,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
                     Constants.CONNECTION_UP = "NO";
                     Constants.CONNECTION_MODE ="OFFLINE";
+
+                    progressBar.setVisibility(View.INVISIBLE);
+                    //Iniciamos la aplicación
+                    Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(i);
                 }
 
             });

@@ -40,9 +40,13 @@ public class SessionEntity {
     @SerializedName("sync")
     @Expose
     public boolean sync;
+    @SerializedName("crashed")
+    @Expose
+    public boolean crashed;
 
 
-    public SessionEntity(int session_id, int user_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch, boolean ehealthboard, String description, boolean sync) {
+    public SessionEntity(int session_id, int user_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch,
+                         boolean ehealthboard, String description, boolean sync, boolean crashed) {
         this.session_id = session_id;
         this.user_id = user_id;
         this.timestamp_ini = timestamp_ini;
@@ -53,6 +57,7 @@ public class SessionEntity {
         this.ehealthboard = ehealthboard;
         this.description = description;
         this.sync = sync;
+        this.crashed = crashed;
     }
 
     public int getSession_id() {
@@ -133,5 +138,13 @@ public class SessionEntity {
 
     public void setSync(boolean sync) {
         this.sync = sync;
+    }
+
+    public boolean isCrashed() {
+        return crashed;
+    }
+
+    public void setCrashed(boolean crashed) {
+        this.crashed = crashed;
     }
 }

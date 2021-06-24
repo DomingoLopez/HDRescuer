@@ -146,7 +146,8 @@ public class UploadSessionService extends IntentService {
                 this.sessionEntity.ticwatch,
                 this.sessionEntity.ehealthboard,
                 this.sessionEntity.description,
-                true
+                true,
+                this.sessionEntity.crashed
         ));
         try{
             Response<Integer> response = call.execute();

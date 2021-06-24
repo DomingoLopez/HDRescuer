@@ -107,6 +107,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         CapabilityClient.OnCapabilityChangedListener,
         DataClient.OnDataChangedListener {
 
+    //Indicador de sesión crashed
+    public static boolean crashed = false;
+
     //Repositorios
     E4BandRepository e4BandRepository;
     TicWatchRepository ticWatchRepository;
@@ -126,6 +129,8 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     Button btnE4BandConnect;
     Button btnWatchConnect;
     Button btnEHealthBoardConnect;
+
+    ImageView btn_connection_up;
 
     //Botón de start monitoring
     Button btnStartMonitoring;
@@ -368,6 +373,13 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.btn_back = findViewById(R.id.btn_back_new_monitoring);
         this.tvDateMonitoring = findViewById(R.id.tv_date_monitoring);
         this.btnStartMonitoring = findViewById(R.id.btn_start_monitoring);
+        this.btn_connection_up = findViewById(R.id.btn_connection_up);
+        if(Constants.CONNECTION_UP.equals("SI")){
+            this.btn_connection_up.setImageDrawable(getDrawable(R.drawable.ic_baseline_wifi_24_green));
+        }else{
+            this.btn_connection_up.setImageDrawable(getDrawable(R.drawable.ic_baseline_wifi_24_red));
+        }
+
 
         //Botones para la conexión de los dispositivos
 
@@ -770,7 +782,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
             //Inicio la sesión
             sessionsRepository.insertSession(new SessionEntity(
-                    session_id,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected, session_description,sync
+                    session_id,user_id, instant.toString(),instant.toString(),0, e4Connected, ticwatchConnected,ehealthConnected, session_description,sync, false
             ));
 
 
@@ -781,7 +793,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         private void stopDBLocalSession(String timestamp_fin) {
             //Hacemos update de la sesión
             sessionsRepository.updateSession(new SessionEntity(
-                    session_id,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,session_description,sync
+                    session_id,user_id,instant.toString(),timestamp_fin,Constants.getTotalSecs(instant.toString(),timestamp_fin),e4Connected,ticwatchConnected,ehealthConnected,session_description,sync, crashed
             ));
 
 

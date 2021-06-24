@@ -59,6 +59,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     TextView cp;
     TextView last_monitoring;
     ImageView btn_back;
+    ImageView btn_connection_up;
     Button btn_new_monitoring;
     Button btn_edit_data;
     Button btn_patient_hist;
@@ -169,6 +170,12 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         this.btn_new_monitoring = findViewById(R.id.btn_new_monitoring);
         this.btn_edit_data = findViewById(R.id.btn_edit_data);
         this.btn_patient_hist = findViewById(R.id.btn_patient_hist);
+        this.btn_connection_up = findViewById(R.id.btn_connection_up);
+        if(Constants.CONNECTION_UP.equals("SI")){
+            this.btn_connection_up.setImageDrawable(getDrawable(R.drawable.ic_baseline_wifi_24_green));
+        }else{
+            this.btn_connection_up.setImageDrawable(getDrawable(R.drawable.ic_baseline_wifi_24_red));
+        }
 
         //Ultima sesión
 

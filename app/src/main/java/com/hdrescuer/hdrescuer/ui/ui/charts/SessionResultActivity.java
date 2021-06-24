@@ -66,6 +66,8 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
     ListView listView;
     ImageView backButton;
 
+    ImageView btn_connection_up;
+
     //Algunos Atributos que puestos aquí facilitan la modularidad
     int steps_tic = 0; //Pasos del TicWatch
 
@@ -97,6 +99,13 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
         this.listView = findViewById(R.id.listView1);
         this.backButton = findViewById(R.id.btn_back_new_monitoring_session);
         this.backButton.setOnClickListener(this);
+
+        this.btn_connection_up = findViewById(R.id.btn_connection_up);
+        if(Constants.CONNECTION_UP.equals("SI")){
+            this.btn_connection_up.setImageDrawable(getDrawable(R.drawable.ic_baseline_wifi_24_green));
+        }else{
+            this.btn_connection_up.setImageDrawable(getDrawable(R.drawable.ic_baseline_wifi_24_red));
+        }
 
         //Obtenemos el intent recibido con el id_Session_local
         Intent intent = getIntent();

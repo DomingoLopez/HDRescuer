@@ -39,6 +39,7 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
     PatientSessionListRecyclerViewAdapter adapter;
     List<SessionEntity> sessionList;
     SessionsHistListViewModel sessionsHistListViewModel;
+    ImageView btn_connection_up;
 
     TextView username;
     ImageView back;
@@ -89,6 +90,13 @@ public class PatientSessionListActivity extends AppCompatActivity implements Lis
         this.username.setText("Histórico de sesiones");
         this.back = findViewById(R.id.btn_back_details);
         this.back.setOnClickListener(this);
+
+        this.btn_connection_up = findViewById(R.id.btn_connection_up);
+        if(Constants.CONNECTION_UP.equals("SI")){
+            this.btn_connection_up.setImageDrawable(getDrawable(R.drawable.ic_baseline_wifi_24_green));
+        }else{
+            this.btn_connection_up.setImageDrawable(getDrawable(R.drawable.ic_baseline_wifi_24_red));
+        }
 
         this.recyclerView = findViewById(R.id.list_sessions_hist);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -61,7 +61,8 @@ public class StartStopSessionService extends IntentService {
                             intent.getBooleanExtra("ticwatch",false),
                             intent.getBooleanExtra("ehealthboard",false),
                             intent.getStringExtra("description"),
-                            true
+                            true,
+                            false
                     );
                     this.receiver = intent.getParcelableExtra("receiver");
 
