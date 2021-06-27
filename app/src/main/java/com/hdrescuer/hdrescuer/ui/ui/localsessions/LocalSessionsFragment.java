@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -235,7 +236,8 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
             default:
 
                 if(Constants.CONNECTION_UP.equals(("SI"))) {
-                    if (user_elegido == null || user_elegido == "") {
+
+                    if (user_elegido == null || user_elegido.equals("")) {
                         Toast.makeText(requireActivity(), "No ha seleccionado un paciente para la sesión", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -255,6 +257,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
                     } else {
                         Toast.makeText(requireActivity(), "Debe escribir el nombre del paciente al que pertenece la sesión", Toast.LENGTH_SHORT).show();
                     }
+
                 }else{
                     Toast.makeText(requireActivity(), "Conexión no disponible, vuelva a iniciar sesión", Toast.LENGTH_SHORT).show();
                 }
@@ -281,6 +284,8 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
                     //Borramos la sesión
                     SessionEntity sesionActualizar = sessionList.get(position_selected);
                     sesionActualizar.setUser_id(user_selected);
+                    sesionActualizar.setSync(true);
+                    sesionActualizar.setCrashed(false);
                     sessionsListViewModel.udpateSession(sesionActualizar);
                     //sessionsListViewModel.refreshSessions();
 

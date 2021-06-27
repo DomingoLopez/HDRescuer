@@ -1,6 +1,7 @@
 package com.hdrescuer.hdrescuer.ui.ui.localsessions;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,6 +177,7 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
 
             switch (v.getId()){
                 case R.id.btnUploadSessionLocale:
+
                     String user_elegido = autoCompleteTextView.getText().toString();
                     autoCompleteTextView.clearFocus();
                     autoCompleteTextView.setText("");

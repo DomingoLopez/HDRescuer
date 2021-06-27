@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -181,13 +183,13 @@ public class UploadSessionService extends IntentService {
         try {
             fos = MyApp.getContext().openFileOutput(FILE_NAME_EMPATICA, MODE_PRIVATE);
 
-
-            fos.write("SESSION_ID,TIMESTAMP,E4_ACCX,E4_ACCY,E4_ACCZ,E4_BVP,E4_HR,E4_GSR,E4_IBI,E4_TEMP\n".getBytes());
+            //Sin cabeceras
+            //fos.write("SESSION_ID,TIMESTAMP,E4_ACCX,E4_ACCY,E4_ACCZ,E4_BVP,E4_HR,E4_GSR,E4_IBI,E4_TEMP\n".getBytes());
 
             for(int i = 0; i< empaticaEntities.size(); i++){
 
                 fos.write((this.session_id+",").getBytes());
-                fos.write(empaticaEntities.get(i).timestamp.getBytes());
+                fos.write(Date.from(Instant.parse(empaticaEntities.get(i).timestamp)).toString().getBytes());
                 fos.write((Integer.toString(empaticaEntities.get(i).e4_accx)+",").getBytes());
                 fos.write((Integer.toString(empaticaEntities.get(i).e4_accy)+",").getBytes());
                 fos.write((Integer.toString(empaticaEntities.get(i).e4_accz)+",").getBytes());
@@ -227,13 +229,13 @@ public class UploadSessionService extends IntentService {
         try {
             fos = MyApp.getContext().openFileOutput(FILE_NAME_TICWATCH, MODE_PRIVATE);
 
-
-            fos.write("SESSION_ID,TIMESTAMP,TIC_ACCX,TIC_ACCY,TIC_ACCZ,TIC_ACCLX,TIC_ACCLY,TIC_ACCLZ,TIC_GIRX,TIC_GIRY,TIC_GIRZ,TIC_HRPPG,TIC_STEP\n".getBytes());
+            //Sin cabeceras
+            //fos.write("SESSION_ID,TIMESTAMP,TIC_ACCX,TIC_ACCY,TIC_ACCZ,TIC_ACCLX,TIC_ACCLY,TIC_ACCLZ,TIC_GIRX,TIC_GIRY,TIC_GIRZ,TIC_HRPPG,TIC_STEP\n".getBytes());
 
             for(int i = 0; i< ticWatchEntities.size(); i++){
 
                 fos.write((this.session_id+",").getBytes());
-                fos.write(ticWatchEntities.get(i).timestamp.getBytes());
+                fos.write(Date.from(Instant.parse(ticWatchEntities.get(i).timestamp)).toString().getBytes());
                 fos.write((Integer.toString(ticWatchEntities.get(i).tic_accx)+",").getBytes());
                 fos.write((Integer.toString(ticWatchEntities.get(i).tic_accy)+",").getBytes());
                 fos.write((Integer.toString(ticWatchEntities.get(i).tic_accz)+",").getBytes());
@@ -279,12 +281,13 @@ public class UploadSessionService extends IntentService {
         try {
             fos = MyApp.getContext().openFileOutput(FILE_NAME_HEALTHBOARD, MODE_PRIVATE);
 
-            fos.write("SESSION_ID,TIMESTAMP,EHB_BPM,EHB_OX_BLOOD,EHB_AIR_FLOW\n".getBytes());
+            //Sin cabeceras
+            //fos.write("SESSION_ID,TIMESTAMP,EHB_BPM,EHB_OX_BLOOD,EHB_AIR_FLOW\n".getBytes());
 
             for(int i = 0; i< healthBoardEntities.size(); i++){
 
                 fos.write((this.session_id+",").getBytes());
-                fos.write(healthBoardEntities.get(i).timestamp.getBytes());
+                fos.write(Date.from(Instant.parse(healthBoardEntities.get(i).timestamp)).toString().getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_bpm)+",").getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_ox_blood)+",").getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_air_flow)).getBytes());
