@@ -86,6 +86,19 @@ public class RequestSendData implements Serializable
     @SerializedName("ehb_air")
     @Expose
     private String ehb_air;
+    @SerializedName("e4connected")
+    @Expose
+    private boolean e4connected;
+    @SerializedName("ticwatchconnected")
+    @Expose
+    private boolean ticwatchconnected;
+    @SerializedName("ehealthboardconnected")
+    @Expose
+    private boolean ehealthboardconnected;
+
+
+
+
     private final static long serialVersionUID = 4226884065588354866L;
 
     /**
@@ -125,8 +138,12 @@ public class RequestSendData implements Serializable
      * @param ehb_bmp
      * @param ehb_o2
      * @param ehb_air
+     * @param e4connected
+     * @param ticwatchconnected
+     * @param ehealthboardconnected
      */
-    public RequestSendData(int session_id, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp, String ehb_bmp, String ehb_o2, String ehb_air) {
+    public RequestSendData(int session_id, String timeStamp, String ticHrppg, String ticHrppgraw, String ticStep, String ticAccx, String ticAccy, String ticAccz, String ticAcclx, String ticAccly, String ticAcclz, String ticGirx, String ticGiry, String ticGirz, String e4Accx, String e4Accy, String e4Accz, String e4Bvp, String e4Hr, String e4Gsr, String e4Ibi, String e4Temp, String ehb_bmp, String ehb_o2, String ehb_air,
+                           boolean e4connected, boolean ticwatchconnected, boolean ehealthboardconnected) {
         super();
         this.session_id = session_id;
         this.timeStamp = timeStamp;
@@ -153,6 +170,9 @@ public class RequestSendData implements Serializable
         this.ehb_bpm = ehb_bmp;
         this.ehb_o2 = ehb_o2;
         this.ehb_air = ehb_air;
+        this.e4connected = e4connected;
+        this.ticwatchconnected = ticwatchconnected;
+        this.ehealthboardconnected = ehealthboardconnected;
     }
 
 
@@ -354,5 +374,29 @@ public class RequestSendData implements Serializable
 
     public void setEhb_air(String ehb_air) {
         this.ehb_air = ehb_air;
+    }
+
+    public boolean isE4connected() {
+        return e4connected;
+    }
+
+    public void setE4connected(boolean e4connected) {
+        this.e4connected = e4connected;
+    }
+
+    public boolean isTicwatchconnected() {
+        return ticwatchconnected;
+    }
+
+    public void setTicwatchconnected(boolean ticwatchconnected) {
+        this.ticwatchconnected = ticwatchconnected;
+    }
+
+    public boolean isEhealthboardconnected() {
+        return ehealthboardconnected;
+    }
+
+    public void setEhealthboardconnected(boolean ehealthboardconnected) {
+        this.ehealthboardconnected = ehealthboardconnected;
     }
 }

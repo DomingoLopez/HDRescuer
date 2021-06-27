@@ -128,6 +128,13 @@ public class SampleRateFilterThread extends Thread{
         restIntent.putExtra("timestamp",this.instant.toString());
         restIntent.putExtra("session_id",this.session_id);
 
+        //Pasamos los dispositivos conectados, para que se almacenen en las bases de datos del
+        //servidor de cada dispositivo
+        restIntent.putExtra("e4Connected",this.e4BandRepository.isConnected());
+        restIntent.putExtra("ticWatchConnected",this.ticWatchRepository.isConnected());
+        restIntent.putExtra("eHealthBoardConnected",this.eHealthBoardRepository.isConnected());
+
+
         MyApp.getContext().startService(restIntent);
 
 

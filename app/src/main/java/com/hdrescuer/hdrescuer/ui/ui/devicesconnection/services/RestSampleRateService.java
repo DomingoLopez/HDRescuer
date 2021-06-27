@@ -75,8 +75,10 @@ public class RestSampleRateService extends IntentService {
 
                         intent.getStringExtra("ehb_bpm"),
                         intent.getStringExtra("ehb_o2"),
-                        intent.getStringExtra("ehb_air")
-
+                        intent.getStringExtra("ehb_air"),
+                        intent.getBooleanExtra("e4Connected",false),
+                        intent.getBooleanExtra("ticWatchConnected",false),
+                        intent.getBooleanExtra("eHealthBoardConnected",false)
                 );
 
                 Call<String> call = authApiService.setUserData(newRequest);
