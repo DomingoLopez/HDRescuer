@@ -61,8 +61,8 @@ public class UserDetailsRepository {
                 @Override
                 public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
                     if (response.isSuccessful()) {
-                        //userDetails.setValue(response.body());
-                        userDetails.setValue(usersRepository.getUsersLarge(id));
+                        userDetails.setValue(response.body());
+
                     } else {
 
                         userDetails.setValue(usersRepository.getUsersLarge(id));

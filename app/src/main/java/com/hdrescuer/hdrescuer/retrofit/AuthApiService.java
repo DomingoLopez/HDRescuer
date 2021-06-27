@@ -20,11 +20,10 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 /**
- * Interfaz para realizar llamadas al servidor una vez estemos registrados en el sistema
+ * Interfaz para realizar llamadas al servidor
  * @author Domingo Lopez
  */
 public interface AuthApiService {
-
 
     /**
      * Método que realiza llamada al servidor para obtener lista corta de usuarios
@@ -122,8 +121,6 @@ public interface AuthApiService {
             @Part("description") RequestBody description,
             @Part MultipartBody.Part csv
     );
-
-
 
     //Borrado de sesiones que no se quieran guardar
     /**

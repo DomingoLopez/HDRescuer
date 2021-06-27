@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModel;
@@ -26,14 +25,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.Settings;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +53,6 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.Node;
-import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
@@ -68,13 +63,6 @@ import com.hdrescuer.hdrescuer.data.GlobalMonitoringViewModel;
 import com.hdrescuer.hdrescuer.data.dbrepositories.SessionsRepository;
 import com.hdrescuer.hdrescuer.data.dbrepositories.TicWatchRepository;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
-import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
-import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
-import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
-import com.hdrescuer.hdrescuer.retrofit.request.RequestServerUp;
-import com.hdrescuer.hdrescuer.ui.HomeActivity;
-import com.hdrescuer.hdrescuer.ui.MainActivity;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.devicesconnectionmonitoring.DevicesMonitoringFragment;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.services.EhealthBoardThread;
@@ -93,10 +81,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Clase DevicesConnectionActivity. Es el núcleo de la aplicación. Es responsable de buscar los dispositivos e implementar distintas librerías para la interacción con ellos
@@ -167,7 +151,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     BluetoothDevice ehealthBoardDevice;
     BluetoothSocket bluetoothSocket;
     InputStream myInputStream;
-    OutputStream myOutStrem;
+    OutputStream myOutStream;
     String macAddress = "00:14:03:05:0C:99";
 
 
@@ -274,13 +258,11 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 if(this.bluetoothAdapter.isEnabled()){
                     this.bluetoothAdapter.startDiscovery();
                     this.ehealthBoardDevice = this.bluetoothAdapter.getRemoteDevice(this.macAddress);
-
                     BluetoothSocket tmp = null;
-
                     try{
+                        //Obtenemos el método de la clase BluetoothDevice
                         Method m = this.ehealthBoardDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
                         tmp = (BluetoothSocket) m.invoke(this.ehealthBoardDevice, Integer.valueOf(1));
-
                     }catch(Exception e){
                         e.printStackTrace();
                         Log.i("BOARD_ERROR","La conexión del socket tmp no ha funcionado");
@@ -290,7 +272,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     }
 
                     this.bluetoothSocket = tmp;
-
                     try{
                         this.bluetoothSocket.connect();
                     }catch (Exception e){
@@ -300,7 +281,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                         this.ehealthConnected =  false;
                         return false;
                     }
-
                     try{
                         this.myInputStream = this.bluetoothSocket.getInputStream();
                     }catch (Exception e ){
@@ -311,7 +291,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     }
 
                     try{
-                        this.myOutStrem = this.bluetoothSocket.getOutputStream();
+                        this.myOutStream = this.bluetoothSocket.getOutputStream();
                     }catch (Exception e ){
                         Log.i("BOARD_ERROR","Error "+e.getMessage());
                         Toast.makeText(this, "Error al conectar con la placa eHealth", Toast.LENGTH_SHORT).show();
@@ -321,7 +301,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
 
                     Log.i("BOARD_OK","Conectado a la placa");
                     this.ehealthConnected =  true;
-
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -330,8 +309,6 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                 this.ehealthConnected =  false;
                 return false;
             }
-
-
             return this.ehealthConnected;
     }
 
@@ -709,7 +686,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
                     if(ehealthConnected){ //Si está conectada
                         initEHeatlhBoard(); //Solo hace el inicio para mandar una instrucción de inicio al arduino
                         EhealthBoardThread.STATUS = "ACTIVO";
-                        ehealthBoardThread = new EhealthBoardThread(eHealthBoardRepository, myInputStream, myOutStrem);
+                        ehealthBoardThread = new EhealthBoardThread(eHealthBoardRepository, myInputStream, myOutStream);
                         ehealthBoardThread.start();
                     }else{
                         EhealthBoardThread.STATUS ="INACTIVO";
@@ -812,7 +789,7 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     void initEHeatlhBoard(){
         try{
             byte[] inicio = "S".getBytes();
-            this.myOutStrem.write(inicio);
+            this.myOutStream.write(inicio);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -824,9 +801,9 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
      */
     void stopEHealthBoard(){
         try{
-            if(this.myOutStrem != null) {
+            if(this.myOutStream != null) {
                 byte[] parada = "N".getBytes();
-                this.myOutStrem.write(parada);
+                this.myOutStream.write(parada);
             }
         }catch (Exception e){
             e.printStackTrace();

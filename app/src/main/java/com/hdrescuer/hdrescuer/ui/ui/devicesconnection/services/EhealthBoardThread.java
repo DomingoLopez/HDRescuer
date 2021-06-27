@@ -7,7 +7,9 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 /**
- * Servicio/Thread encargado de recibir los datos de la placa de salud/arduino, procesarlos y escribirlos en el repositorio asociado a la placa
+ * Servicio/Thread encargado de recibir los datos de la placa
+ * de salud/arduino, procesarlos y escribirlos en el
+ * repositorio asociado a la placa
  * @author Domingo Lopez
  */
 public class EhealthBoardThread extends Thread {
@@ -17,7 +19,6 @@ public class EhealthBoardThread extends Thread {
     OutputStream outputStream;
 
     public static String STATUS;
-
 
     //Array temporal para manejar los bytes que se queden sin procesar
     byte[] tmp = null;
@@ -77,7 +78,10 @@ public class EhealthBoardThread extends Thread {
                     for(int i = 0; i<bytesDisponibles; i++){
 
                         byte mibyte = bytesRecibidos[i];
-                        if(mibyte == 43) { //El + es 43 en ASCII, ASÍ que lo usaremos como delimitador de las cadenas de datos
+                        //El símbolo '+' es 43 en ASCII
+                        //Lo usaremos como delimitador de
+                        //las cadenas de datos
+                        if(mibyte == 43) {
                             final_cadena = i ;
                             byte[] bufferFinal = Arrays.copyOf(bytesRecibidos,(final_cadena - inicio_cadena));
                             String cadena = new String(bufferFinal);
@@ -85,8 +89,6 @@ public class EhealthBoardThread extends Thread {
 
                             inicio_cadena = final_cadena+1; //+1 para que no coja el '+' que se ha quedado ahí en medio
                         }
-
-
                     }
 
                     if(bytesDisponibles > final_cadena){ //Quiere decir que nos hemos dejado Bytes sin procesar y en la siguiente lectura del buffer no estarán...
@@ -99,11 +101,7 @@ public class EhealthBoardThread extends Thread {
                     }else{
                         tmp = null;
                     }
-
-
                 }
-
-
             }catch (Exception e){
                 e.printStackTrace();
             }

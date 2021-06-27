@@ -28,7 +28,6 @@ public class UserListRepository {
     AuthApiService authApiService;
     AuthConectionClient authConectionClient;
     MutableLiveData<List<User>> users;
-
     //Dao para la base de datos
     UsersRepository usersRepository;
 
@@ -40,10 +39,7 @@ public class UserListRepository {
         this.authConectionClient = AuthConectionClient.getInstance();
         this.authApiService = this.authConectionClient.getAuthApiService();
         usersRepository = new UsersRepository(MyApp.getInstance());
-
         users = getAllUsers();
-
-
     }
 
     /**
@@ -54,34 +50,30 @@ public class UserListRepository {
     public MutableLiveData<List<User>> getAllUsers(){
         if(users == null)
             users = new MutableLiveData<>();
-
+        //Si disponemos de conexión, obtenemos la lista corta de usuarios
+        //del servidor
         if(Constants.CONNECTION_UP.equals("SI")) {
-
             Call<List<User>> call = authApiService.getAllUsers();
             call.enqueue(new Callback<List<User>>() {
                 @Override
                 public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                     if (response.isSuccessful()) {
-                        //users.setValue(response.body());
-                        users.setValue(usersRepository.getUsersShort());
-
+                        users.setValue(response.body());
                     } else {
                         users.setValue(usersRepository.getUsersShort());
                     }
                 }
-
                 @Override
                 public void onFailure(Call<List<User>> call, Throwable t) {
                     users.setValue(usersRepository.getUsersShort());
                 }
             });
-
+        //Si no disponemos de conexión, obtenemos
+        //los usuarios de la base de datos local
         }else{
             users.setValue(usersRepository.getUsersShort());
         }
-
         return users;
-
     }
 
     /**

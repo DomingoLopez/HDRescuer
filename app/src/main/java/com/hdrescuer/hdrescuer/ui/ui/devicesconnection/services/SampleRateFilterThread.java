@@ -100,9 +100,6 @@ public class SampleRateFilterThread extends Thread{
         Intent restIntent = new Intent(MyApp.getContext(), RestSampleRateService.class);
         restIntent.setAction(ACTION_SEND);
 
-        //Est lo mejor es TODO: Hacer una clase serializable y pasar el objeto entero
-        //Variables a pasar del Watch
-
         restIntent.putExtra("tic_hrppg",this.ticWatchRepository.getHrppg().toString());
         restIntent.putExtra("tic_step",this.ticWatchRepository.getStep().toString());
         restIntent.putExtra("tic_accx",this.ticWatchRepository.getAccx().toString());

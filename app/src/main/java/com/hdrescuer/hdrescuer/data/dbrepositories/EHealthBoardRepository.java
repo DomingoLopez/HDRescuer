@@ -24,7 +24,7 @@ public class EHealthBoardRepository {
     private Integer airFlow;
 
     /**
-     * Constructor vacío
+     * Constructor que recibe el contexto de la aplicación
      * @author Domingo Lopez
      */
     public EHealthBoardRepository(Application application) {

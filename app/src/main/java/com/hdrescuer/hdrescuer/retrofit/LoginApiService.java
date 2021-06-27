@@ -17,14 +17,11 @@ public interface LoginApiService {
 
 
     /**
-     * Método que realiza la llamada al servidor para autenticarse en el sistema
+     * Método que realiza la llamada al servidor para comprobar disponibilidad
      * @author Domingo Lopez
-     * @param requestLogin
+     * @param requestServerUp
      * @return Call
      */
-    @POST("api/auth/login")
-    Call<ResponseAuth> doLogin(@Body RequestLogin requestLogin);
-
     @POST("api/auth/logintest")
     Call<String> doServerTest(@Body RequestServerUp requestServerUp);
 

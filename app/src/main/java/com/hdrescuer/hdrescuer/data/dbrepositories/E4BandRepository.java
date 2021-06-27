@@ -38,8 +38,6 @@ public class E4BandRepository implements EmpaDataDelegate {
     private Float currentIbi;
     private Float currentTemp;
 
-
-
     private ScheduledExecutorService scheduler;
     private float averageHr = 0;
 

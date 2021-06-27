@@ -278,7 +278,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                     tvini.setVisibility(View.VISIBLE);
                     //tvfin.setVisibility(View.VISIBLE);
                     tvtotal.setVisibility(View.VISIBLE);
-                    btn_patient_hist.setVisibility(View.VISIBLE);
+
 
 
                 }else{
@@ -295,7 +295,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                    tvini.setVisibility(View.GONE);
                    //tvfin.setVisibility(View.GONE);
                    tvtotal.setVisibility(View.GONE);
-                    btn_patient_hist.setVisibility(View.GONE);
+
 
                 }
 

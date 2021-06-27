@@ -26,7 +26,7 @@ public class ConectionClient {
      * @author Domingo Lopez
      */
     public ConectionClient() {
-        //TODO:
+
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 

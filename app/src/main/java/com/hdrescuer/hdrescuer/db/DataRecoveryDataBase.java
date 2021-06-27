@@ -28,9 +28,7 @@ public abstract class DataRecoveryDataBase extends RoomDatabase {
 
     private static volatile DataRecoveryDataBase INSTANCE;
 
-
     public static DataRecoveryDataBase getDataBase(final Context context){
-
         if(INSTANCE == null){
             synchronized (DataRecoveryDataBase.class){
                 if(INSTANCE == null){
@@ -41,9 +39,7 @@ public abstract class DataRecoveryDataBase extends RoomDatabase {
                 }
             }
         }
-
         return INSTANCE;
-
     }
 
 }
