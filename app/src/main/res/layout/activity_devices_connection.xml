@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragment_monitoring_show"
         android:layout_width="412dp"
-        android:layout_height="579dp"
+        android:layout_height="565dp"
         android:translationZ="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
