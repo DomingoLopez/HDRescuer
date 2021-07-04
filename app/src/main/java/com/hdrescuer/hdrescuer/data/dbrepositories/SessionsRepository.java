@@ -2,7 +2,7 @@ package com.hdrescuer.hdrescuer.data.dbrepositories;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import androidx.room.Query;
+
 import com.hdrescuer.hdrescuer.db.DataRecoveryDataBase;
 import com.hdrescuer.hdrescuer.db.dao.SessionDao;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
@@ -24,7 +24,7 @@ public class SessionsRepository {
     //Definimos todas las operaciones que vamos a hacer sobre la tabla de la sesión
 
 
-    public List<SessionEntity> getAllSession(){ return sessionDao.getAllSessions();}
+    public List<SessionEntity> getAllFastModeSessions(){ return sessionDao.getAllFastModeSessions();}
 
     public List<SessionEntity> getAllHistSessions(int user_id){ return sessionDao.getAllHistSessions(user_id);}
 

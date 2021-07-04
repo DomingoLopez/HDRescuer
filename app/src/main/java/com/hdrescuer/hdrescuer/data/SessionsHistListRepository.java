@@ -1,7 +1,5 @@
 package com.hdrescuer.hdrescuer.data;
 
-import android.widget.Toast;
-
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonObject;
@@ -13,7 +11,6 @@ import com.hdrescuer.hdrescuer.data.dbrepositories.TicWatchRepository;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
-import com.hdrescuer.hdrescuer.ui.ui.patienthist.PatientSessionListActivity;
 
 import java.util.List;
 
@@ -66,7 +63,7 @@ public class SessionsHistListRepository {
     public void deleteSessions(){
         this.sessionsRepository.deleteAllSession();
         List<SessionEntity> sesiones_locales;
-        sesiones_locales = this.sessionsRepository.getAllSession();
+        sesiones_locales = this.sessionsRepository.getAllFastModeSessions();
 
         sessions.setValue(sesiones_locales);
     }

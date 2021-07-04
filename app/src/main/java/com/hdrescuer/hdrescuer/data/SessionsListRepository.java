@@ -36,7 +36,7 @@ public class SessionsListRepository {
             sessions = new MutableLiveData<>();
 
         List<SessionEntity> sesiones_locales;
-        sesiones_locales = this.sessionsRepository.getAllSession();
+        sesiones_locales = this.sessionsRepository.getAllFastModeSessions();
 
         sessions.setValue(sesiones_locales);
 
@@ -53,7 +53,7 @@ public class SessionsListRepository {
     public void deleteSessions(){
         this.sessionsRepository.deleteAllSession();
         List<SessionEntity> sesiones_locales;
-        sesiones_locales = this.sessionsRepository.getAllSession();
+        sesiones_locales = this.sessionsRepository.getAllFastModeSessions();
 
         sessions.setValue(sesiones_locales);
     }
@@ -64,7 +64,7 @@ public class SessionsListRepository {
         deleteCurrentSessionFromServer(id_session_local);
 
         List<SessionEntity> sesiones_locales;
-        sesiones_locales = this.sessionsRepository.getAllSession();
+        sesiones_locales = this.sessionsRepository.getAllFastModeSessions();
 
         sessions.setValue(sesiones_locales);
     }

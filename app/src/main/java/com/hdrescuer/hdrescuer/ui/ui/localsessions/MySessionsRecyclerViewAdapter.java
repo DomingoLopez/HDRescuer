@@ -61,7 +61,6 @@ public class MySessionsRecyclerViewAdapter extends RecyclerView.Adapter<MySessio
                 this.usuarios_a_predecir.add(this.users.get(i).getLastname()+", "+this.users.get(i).getUsername());
             }
         }
-
     }
 
 

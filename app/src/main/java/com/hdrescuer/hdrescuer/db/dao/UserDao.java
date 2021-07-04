@@ -40,7 +40,7 @@ public interface UserDao {
     @Query("SELECT USER.user_id, USER.username, USER.lastname, SESSION.session_id, SESSION.timestamp_ini, SESSION.total_time " +
             "FROM USER LEFT JOIN SESSION " +
             "ON USER.user_id = SESSION.user_id " +
-            "AND SESSION.session_id  IN (SELECT session_id from (SELECT session_id,MAX(timestamp_ini) FROM SESSION WHERE sync=1 GROUP BY user_id))")
+            "AND SESSION.session_id  IN (SELECT session_id from (SELECT session_id,MAX(timestamp_ini) FROM SESSION WHERE sync=1 AND crashed != 1 GROUP BY user_id))")
     List<User> getUsersShort();
 
 
@@ -49,7 +49,7 @@ public interface UserDao {
             "FROM (SELECT * FROM USER WHERE user_id = :user_id) as USER LEFT JOIN SESSION " +
             "ON USER.user_id = SESSION.user_id  " +
             "AND USER.user_id = :user_id " +
-            "AND SESSION.session_id  IN (SELECT session_id from (SELECT session_id,MAX(timestamp_ini) FROM SESSION  WHERE sync=1 AND user_id = :user_id GROUP BY user_id)) " +
+            "AND SESSION.session_id  IN (SELECT session_id from (SELECT session_id,MAX(timestamp_ini) FROM SESSION  WHERE sync=1 AND crashed != 1 AND user_id = :user_id GROUP BY user_id)) " +
             "")
     UserDetails getUsersLarge(int user_id);
 

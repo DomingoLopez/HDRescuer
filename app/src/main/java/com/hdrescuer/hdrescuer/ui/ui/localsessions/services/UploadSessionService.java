@@ -98,11 +98,6 @@ public class UploadSessionService extends IntentService {
                     //Iniciamos la descarga a csv
                     downloadToCSV();
 
-                    //Una vez guardos los datos de la sesión. Subimos los tres ficheros/ o los que haya al servidor
-                    //Primero realizamos la llamada  para que cree la sesión en el servidor
-
-
-
                     //Subimos los archivos
                     uploadCSVToServer();
 
@@ -176,18 +171,12 @@ public class UploadSessionService extends IntentService {
 
         List<EmpaticaEntity> empaticaEntities = this.e4BandRepository.getByIdSession(session_id);
 
-
-        //Creamos el archivo csv
         FileOutputStream fos = null;
 
         try {
             fos = MyApp.getContext().openFileOutput(FILE_NAME_EMPATICA, MODE_PRIVATE);
 
-            //Sin cabeceras
-            //fos.write("SESSION_ID,TIMESTAMP,E4_ACCX,E4_ACCY,E4_ACCZ,E4_BVP,E4_HR,E4_GSR,E4_IBI,E4_TEMP\n".getBytes());
-
             for(int i = 0; i< empaticaEntities.size(); i++){
-
                 fos.write((this.session_id+",").getBytes());
                 fos.write(Date.from(Instant.parse(empaticaEntities.get(i).timestamp)).toString().getBytes());
                 fos.write((Integer.toString(empaticaEntities.get(i).e4_accx)+",").getBytes());
@@ -198,11 +187,8 @@ public class UploadSessionService extends IntentService {
                 fos.write((Float.toString(empaticaEntities.get(i).e4_gsr)+",").getBytes());
                 fos.write((Float.toString(empaticaEntities.get(i).e4_ibi)+",").getBytes());
                 fos.write((Float.toString(empaticaEntities.get(i).e4_temp)).getBytes());
-
                 fos.write("\n".getBytes());
-
             }
-
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -271,29 +257,18 @@ public class UploadSessionService extends IntentService {
 
     void createHealthBoardCSV(){
 
-
         List<HealthBoardEntity>healthBoardEntities = this.healthBoardRepository.getByIdSession(session_id);
-
-
-        //Creamos el archivo csv
         FileOutputStream fos = null;
-
         try {
             fos = MyApp.getContext().openFileOutput(FILE_NAME_HEALTHBOARD, MODE_PRIVATE);
 
-            //Sin cabeceras
-            //fos.write("SESSION_ID,TIMESTAMP,EHB_BPM,EHB_OX_BLOOD,EHB_AIR_FLOW\n".getBytes());
-
             for(int i = 0; i< healthBoardEntities.size(); i++){
-
                 fos.write((this.session_id+",").getBytes());
                 fos.write(Date.from(Instant.parse(healthBoardEntities.get(i).timestamp)).toString().getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_bpm)+",").getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_ox_blood)+",").getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_air_flow)).getBytes());
-
                 fos.write("\n".getBytes());
-
             }
 
         } catch (FileNotFoundException e) {
