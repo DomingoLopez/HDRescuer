@@ -78,4 +78,7 @@ dependencies {
     implementation 'com.google.android.support:wearable:2.8.1'
     wearApp project(':hdrescuerwatch')
 
+    //Leak Canary
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
 }
