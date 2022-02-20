@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientDataModule;
-import com.hdrescuer.hdrescuer.retrofit.AuthConectionClientUsersModule;
+import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.request.RequestSendData;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,7 +23,7 @@ public class RestSampleRateService extends IntentService {
     private static final String ACTION_SEND = "ACTION_SEND";
 
     AuthApiService authApiService;
-    AuthConectionClientDataModule authConectionClientDataModule;
+    AuthConectionClient authConnectionClient;
 
     /**
      * Constructor vacío
@@ -31,8 +31,8 @@ public class RestSampleRateService extends IntentService {
      */
     public RestSampleRateService() {
         super("RestSampleRateService");
-        this.authConectionClientDataModule = AuthConectionClientDataModule.getInstance();
-        this.authApiService = this.authConectionClientDataModule.getAuthApiService();
+        this.authConnectionClient = AuthConectionClient.getInstance();
+        this.authApiService = this.authConnectionClient.getAuthApiService();
     }
 
 
@@ -49,7 +49,7 @@ public class RestSampleRateService extends IntentService {
 
                 //Recogemos todos los parámetros y creamos el objeto a mandar por REST (de momento)
                 RequestSendData newRequest = new RequestSendData(
-                        intent.getStringExtra("id"),
+                        intent.getIntExtra("session_id",0),
                         intent.getStringExtra("timestamp"),
                         intent.getStringExtra("tic_hrppg"),
                         intent.getStringExtra("tic_hrppgraw"),
@@ -75,26 +75,29 @@ public class RestSampleRateService extends IntentService {
 
                         intent.getStringExtra("ehb_bpm"),
                         intent.getStringExtra("ehb_o2"),
-                        intent.getStringExtra("ehb_air")
-
+                        intent.getStringExtra("ehb_air"),
+                        intent.getBooleanExtra("e4Connected",false),
+                        intent.getBooleanExtra("ticWatchConnected",false),
+                        intent.getBooleanExtra("eHealthBoardConnected",false)
                 );
 
                 Call<String> call = authApiService.setUserData(newRequest);
                 call.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
+                        Log.i("RESPONSE",response.toString());
                         if(response.isSuccessful()){
                             Log.i("SUCCESS","CORRECTO");
                         }else {
-
                             Log.i("ERROR", "ERROR EN EL ENVÍO DE LOS DATOS");
+                            DevicesConnectionActivity.crashed = true;
                         }
                     }
 
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        //Toast.makeText(MyApp.getContext(), "Error en la conexión", Toast.LENGTH_SHORT).show();
-                        Log.i("ENVIO","ENVIO REALIZADO");
+                        Log.i("ERROR", "ERROR EN EL ENVÍO DE LOS DATOS FAILURE");
+                        DevicesConnectionActivity.crashed = true;
                     }
                 });
 

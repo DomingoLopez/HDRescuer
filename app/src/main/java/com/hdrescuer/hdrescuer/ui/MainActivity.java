@@ -6,16 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
-import com.hdrescuer.hdrescuer.common.SharedPreferencesManager;
 import com.hdrescuer.hdrescuer.retrofit.ConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.LoginApiService;
-import com.hdrescuer.hdrescuer.retrofit.request.RequestLogin;
-import com.hdrescuer.hdrescuer.retrofit.response.ResponseAuth;
+import com.hdrescuer.hdrescuer.retrofit.request.RequestServerUp;
+import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,8 +26,8 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btn_login;
-    EditText etEmail, etPassword;
-
+    Button btn_login_no_connection;
+    ProgressBar progressBar;
     //Servicio de Login y ConectionClient
     ConectionClient conectionClient;
     LoginApiService loginApiService;
@@ -69,8 +67,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void findViews() {
         this.btn_login = findViewById(R.id.btn_login);
-        this.etEmail = findViewById(R.id.editTextEmail);
-        this.etPassword = findViewById(R.id.editTextPassword);
+        this.btn_login_no_connection = findViewById(R.id.btn_login_no_connection);
+        this.progressBar = findViewById(R.id.indeterminateBar);
+        this.progressBar.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -78,79 +77,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @author Domingo Lopez
      */
     private void events() {
+
         this.btn_login.setOnClickListener(this);
+        this.btn_login_no_connection.setOnClickListener(this);
     }
 
 
     @Override
     public void onClick(View v) {
-        this.goToLogin();
+
+        switch (v.getId()){
+            case R.id.btn_login:
+                Constants.CONNECTION_MODE = "STREAMING";
+                //Comprobamos si el servidor está up y hay conexión a internet
+                checkServerUp();
+                break;
+
+
+            case R.id.btn_login_no_connection:
+                Constants.CONNECTION_MODE="FASTMODE";
+                Intent i_offline = new Intent(MainActivity.this, DevicesConnectionActivity.class);
+                startActivity(i_offline);
+                break;
+        }
     }
 
-
-    /**
-     * Método que valida el email y password del usuario y realizar petición asíncrona al servidor. Almacena el Token recibido y preferencias generales del usuario para posteriores llamadas
-     * @author Domingo Lopez
-     */
-    private void goToLogin() {
-        String email = this.etEmail.getText().toString();
-        String pass = this.etPassword.getText().toString();
-
-        //Validación
-        if(email.isEmpty())
-            this.etEmail.setError("Email requerido");
-        else if (pass.isEmpty())
-            this.etPassword.setError("Contraseña requerida");
-        else{
-
-            //Objeto de tipo RequestLogin
-            RequestLogin requestLogin = new RequestLogin(email, pass);
-            //Objeto llamada con respuesta como objeto de tipo ResponseAuth que hemos creado
-            Call<ResponseAuth> call = this.loginApiService.doLogin(requestLogin);
+    private void checkServerUp() {
 
 
+            RequestServerUp requestServerUp = new RequestServerUp("test");
+            Call<String> call = this.loginApiService.doServerTest(requestServerUp);
 
-            //Relizamos una llamada ASÍNCRONA, por lo que tenemos dos métodos, onRespose que es success y onFailure
-            call.enqueue(new Callback<ResponseAuth>() {
+            this.progressBar.setVisibility(View.VISIBLE);
+            call.enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(Call<ResponseAuth> call, Response<ResponseAuth> response) {
+                public void onResponse(Call<String> call, Response<String> response) {
 
                     if(response.isSuccessful()) { //Código 200...299
 
-                        Toast.makeText(MainActivity.this, "Sesión iniciada correctamente", Toast.LENGTH_LONG).show();
-
-                        //Almacenamos el token y demás preferencias que devuelve la petición de OK para que estén disponibles en cualquier momento:
-
-                       //Token
-                        SharedPreferencesManager.setSomeStringValue(Constants.PREF_TOKEN,response.body().getToken());
-                        //username
-                        SharedPreferencesManager.setSomeStringValue(Constants.PREF_USERNAME,response.body().getUsername());
-                        //email
-                        SharedPreferencesManager.setSomeStringValue(Constants.PREF_EMAIL,response.body().getEmail());
-                        //created
-                        SharedPreferencesManager.setSomeStringValue(Constants.PREF_CREATED,response.body().getCreated());
-
-                        Intent i = new Intent(MainActivity.this, HomeActivity.class);
-                        startActivity(i);
-
-                        //Destruimos el activity de login para que no se pueda volver a él
-                        finish();
+                        Constants.CONNECTION_UP = "SI";
+                        Constants.CONNECTION_MODE ="STREAMING";
 
                     }else{
-                        Toast.makeText(MainActivity.this, "Algo salió mal. Revise sus datos de acceso", Toast.LENGTH_LONG).show();
-                        /*Intent i = new Intent(MainActivity.this, HomeActivity.class);
-                        startActivity(i);
-                        finish();*/
+                        Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
+                        Constants.CONNECTION_UP = "NO";
+                        Constants.CONNECTION_MODE ="OFFLINE";
                     }
+
+                    progressBar.setVisibility(View.INVISIBLE);
+                    //Iniciamos la aplicación
+                    Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(i);
 
                 }
 
                 @Override
-                public void onFailure(Call<ResponseAuth> call, Throwable t) {
+                public void onFailure(Call<String> call, Throwable t) {
                     Toast.makeText(MainActivity.this, "No se dispone de conexión o el servidor está caído",Toast.LENGTH_LONG).show();
+                    Constants.CONNECTION_UP = "NO";
+                    Constants.CONNECTION_MODE ="OFFLINE";
+
+                    progressBar.setVisibility(View.INVISIBLE);
+                    //Iniciamos la aplicación
+                    Intent i = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(i);
                 }
 
             });
+
+
         }
-    }
 }

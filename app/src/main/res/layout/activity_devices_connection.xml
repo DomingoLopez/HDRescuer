@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ui.userdetails.UserDetailsActivity">
+    tools:context=".ui.ui.patientdetails.PatientDetailsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/fragment_monitoring_show"
         android:layout_width="412dp"
-        android:layout_height="579dp"
+        android:layout_height="565dp"
         android:translationZ="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -197,17 +197,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="16dp"
-        android:text="TextView"
         android:textAlignment="viewStart"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/btn_connection_up"
         app:layout_constraintStart_toEndOf="@+id/btn_back_new_monitoring"
         app:layout_constraintTop_toTopOf="@+id/btn_back_new_monitoring" />
 
+    <ImageView
+        android:id="@+id/btn_connection_up"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_back_new_monitoring"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar2"
+        app:layout_constraintTop_toTopOf="@+id/btn_back_new_monitoring"
+        app:srcCompat="@drawable/ic_baseline_wifi_24_green" />
     <TextView
         android:id="@+id/label_new_data_monitoring"
         android:layout_width="wrap_content"
@@ -225,10 +231,12 @@
         android:id="@+id/tv_date_monitoring"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
+        android:textColor="@color/blue_top_mini_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/label_new_data_monitoring"
+        app:layout_constraintStart_toEndOf="@+id/imageView15"
         app:layout_constraintTop_toBottomOf="@+id/label_new_data_monitoring" />
 
     <Button
@@ -241,6 +249,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_date_monitoring"
+        app:layout_constraintStart_toStartOf="@+id/label_new_data_monitoring"
+        app:layout_constraintTop_toTopOf="@+id/tv_date_monitoring"
+        app:srcCompat="@drawable/ic_baseline_date_range_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

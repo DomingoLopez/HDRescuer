@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
@@ -8,6 +9,13 @@
             android:id="@+id/nav_users"
             android:icon="@drawable/ic_baseline_supervised_user_circle_24"
             android:title="@string/menu_users" />
+
+        <item
+            android:id="@+id/nav_sessions"
+            app:actionViewClass="android.widget.ImageView"
+            android:icon="@drawable/ic_baseline_directions_run_24"
+            android:title="@string/menu_sessions" />
+
         <item
             android:id="@+id/nav_config"
             android:icon="@drawable/ic_baseline_brightness_low_24"
@@ -16,6 +24,8 @@
             android:id="@+id/nav_support"
             android:icon="@drawable/ic_baseline_info_24"
             android:title="@string/menu_support" />
+
+
 
     </group>
 </menu>

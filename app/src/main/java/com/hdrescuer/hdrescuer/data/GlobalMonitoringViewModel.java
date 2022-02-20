@@ -1,17 +1,12 @@
 package com.hdrescuer.hdrescuer.data;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
-
-import java.text.DecimalFormat;
 
 /**
  * ViewModel Global para el almacenamiento en vivo de los datos de los dispositivos. Es el núcleo de los datos que se mostrarán en pantalla y se mandará al servidor
@@ -20,11 +15,10 @@ import java.text.DecimalFormat;
 public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewModelProvider.Factory {
 
 
-    private String user_id;
+    private int user_id;
 
     //Atributos de los sensores del TicWatch
     private MutableLiveData<Float> hrppg;
-    private MutableLiveData<Float> hrppgraw;
     private MutableLiveData<Integer> step;
     private MutableLiveData<Integer> accx;
     private MutableLiveData<Integer> accy;
@@ -53,7 +47,7 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     private MutableLiveData<Integer> oxi_o2;
     private MutableLiveData<Integer> oxi_air;
 
-    public GlobalMonitoringViewModel(@NonNull Application application, String id) {
+    public GlobalMonitoringViewModel(@NonNull Application application, int id) {
         super(application);
         this.user_id = id;
         //Obtenemos la instancia singleton del globalMonitoringRepository
@@ -74,7 +68,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
 
         //Iniciamos las mutablelivedata para el reloj
         this.hrppg = new MutableLiveData<>();
-        this.hrppgraw = new MutableLiveData<>();
         this.step = new MutableLiveData<>();
         this.accx = new MutableLiveData<>();
         this.accy = new MutableLiveData<>();
@@ -94,17 +87,13 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     }
 
 
-    public String getUserId() {
+    public int getUserId() {
         return user_id;
     }
 
     //GETTERS DEL TICWATCH
     public MutableLiveData<Float> getHrppg() {
         return hrppg;
-    }
-
-    public MutableLiveData<Float> getHrppgraw() {
-        return hrppgraw;
     }
 
     public MutableLiveData<Integer> getStep() {
@@ -205,10 +194,6 @@ public class GlobalMonitoringViewModel extends AndroidViewModel implements ViewM
     //METODOS SETTER DEL TICWATCH
     public void setHrppg(Float hrppg) {
         this.hrppg.postValue(hrppg);
-    }
-
-    public void setHrppgraw(Float hrppgraw) {
-        this.hrppgraw.postValue(hrppgraw);
     }
 
     public void setStep(Integer step){ this.step.postValue(step);}

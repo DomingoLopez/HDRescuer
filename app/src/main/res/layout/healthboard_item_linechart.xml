@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvHealthBoardResults"
+        android:layout_width="330dp"
+        android:layout_height="23dp"
+        android:text="@string/label_results_for_healthboard"
+        android:textColor="@color/blue_secondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView46"
+        app:layout_constraintStart_toEndOf="@+id/imageView46"
+        app:layout_constraintTop_toTopOf="@+id/imageView46" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartHR_HealthBoard"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView21" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartAirFlow_HealthBoard"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chartHR_HealthBoard" />
+
+
+    <ImageView
+        android:id="@+id/imageView46"
+        android:layout_width="69dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:scaleX="1.7"
+        android:scaleY="1.7"
+        android:src="@mipmap/ehealthboard_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView21"
+        android:layout_width="33dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:scaleX="1.3"
+        android:scaleY="1.3"
+        android:src="@mipmap/ehealth_blood_presure"
+        app:layout_constraintStart_toStartOf="@+id/tvHealthBoardResults"
+        app:layout_constraintTop_toBottomOf="@+id/tvHealthBoardResults" />
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MIN:"
+        android:textColor="@color/blue_secondary"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView21"
+        app:layout_constraintStart_toEndOf="@+id/imageView21"
+        app:layout_constraintTop_toTopOf="@+id/imageView21" />
+
+    <TextView
+        android:id="@+id/tvminblood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="- -"
+        android:textColor="@color/blue_secondary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView24"
+        app:layout_constraintStart_toEndOf="@+id/textView24"
+        app:layout_constraintTop_toTopOf="@+id/textView24" />
+
+    <TextView
+        android:id="@+id/textView38"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="MAX:"
+        android:textColor="@color/blue_secondary"
+        app:layout_constraintBottom_toBottomOf="@+id/tvminblood"
+        app:layout_constraintStart_toEndOf="@+id/tvminblood"
+        app:layout_constraintTop_toTopOf="@+id/tvminblood" />
+
+    <TextView
+        android:id="@+id/tvmaxblood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="- -"
+        android:textColor="@color/blue_secondary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView38"
+        app:layout_constraintStart_toEndOf="@+id/textView38"
+        app:layout_constraintTop_toTopOf="@+id/textView38" />
+
+    <TextView
+        android:id="@+id/textView41"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="AV:"
+        android:textColor="@color/blue_secondary"
+        app:layout_constraintBottom_toBottomOf="@+id/tvmaxblood"
+        app:layout_constraintStart_toEndOf="@+id/tvmaxblood"
+        app:layout_constraintTop_toTopOf="@+id/tvmaxblood" />
+
+    <TextView
+        android:id="@+id/tvaverageblood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="- -"
+        android:textColor="@color/blue_secondary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView41"
+        app:layout_constraintStart_toEndOf="@+id/textView41"
+        app:layout_constraintTop_toTopOf="@+id/textView41" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

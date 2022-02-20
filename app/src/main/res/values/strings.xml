@@ -2,7 +2,7 @@
     <string name="app_name">HDRescuer</string>
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
-    <string name="btn_login">Acceder</string>
+    <string name="btn_login">Acceder STANDARD MODE</string>
     <string name="txt_info_login">Accede a la app con el email y contraseña que obtuviste del equipo de desarrollo</string>
     <string name="app_name_login">HDRESCUER</string>
     <string name="title_activity_home">HomeActivity</string>
@@ -16,7 +16,8 @@
     <string name="menu_users">Usuarios</string>
     <string name="menu_support">Información</string>
     <string name="menu_config">Configuración</string>
-    <string name="label_last_monitoring">Última sesión </string>
+    <string name="menu_sessions">Sesiones FastMode</string>
+    <string name="label_last_monitoring">Última Sesión Sincr.</string>
     <string name="label_edad">Edad:</string>
     <string name="label_altura">Altura:</string>
     <string name="label_peso">Peso:</string>
@@ -68,7 +69,7 @@
     <string name="label_ehealthboard">Placa eHealth2.0</string>
     <string name="label_last_monitoring_users">Última sesión:</string>
     <string name="session_time_label_users">Duración:</string>
-    <string name="label_no_sessions_for_user">No hay sesiones registradas para este usuario</string>
+    <string name="label_no_sessions_for_user">No hay sesiones sincronizadas para este usuario</string>
     <string name="label_info_credits">Información sobre la aplicación</string>
     <string name="label_info_developedby">Developed by:</string>
     <string name="label_app_name">HDRescuer</string>
@@ -81,6 +82,18 @@
     <string name="label_icons_obtain">obtenidos desde</string>
     <string name="label_icon_freepik">Freepik</string>
     <string name="label_icon_Flaticon">Flaticon</string>
+    <string name="label_result_session">Resultados de la sesión</string>
+    <string name="label_results_for_ticwatch">Resultados para TicWatch</string>
+    <string name="label_results_for_empatica">Resultados para Empatica Band</string>
+    <string name="label_results_for_healthboard">Resultados para Health Board</string>
+    <string name="label_sessions_not_synchronized">Aquí aparecen las sesiones guardadas en el modo \'Fast Mode\'. Es recomendable sincronizarlas con el servidor.</string>
+    <string name="btn_synchronize_session">Sincronizar sesión</string>
+    <string name="tv_description_app_login">Recopilación de datos fisiológicos de pacientes</string>
+    <string name="btn_login_no_conection">Acceder FAST MODE</string>
 
+    <string name="dialog_confirm">Confirmar</string>
+    <string name="dialog_dismiss">Cancelar</string>
+
+    <string name="icon_connection_ok">Conexión</string>
 
 </resources>

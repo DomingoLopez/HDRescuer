@@ -34,9 +34,7 @@ public class TabWatchMonitoring extends Fragment {
     TextView tvgiry;
     TextView tvgirz;
     TextView tvhrppg;
-    TextView tvhrppgraw;
     TextView tvsteps;
-    TextView tvhb;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,7 +76,6 @@ public class TabWatchMonitoring extends Fragment {
         this.tvgirz = view.findViewById(R.id.tvGirzWatch);
 
         this.tvhrppg = view.findViewById(R.id.tvhrppg);
-        this.tvhrppgraw = view.findViewById(R.id.tvhrppgraw);
         this.tvsteps = view.findViewById(R.id.tvsteps);
     }
 
@@ -152,14 +149,6 @@ public class TabWatchMonitoring extends Fragment {
             @Override
             public void onChanged(Float aFloat) {
                 tvhrppg.setText(String.valueOf(Math.round(aFloat)));
-            }
-        });
-
-        //Observers de hrppgraw
-        this.globalMonitoringViewModel.getHrppgraw().observe(requireActivity(), new Observer<Float>() {
-            @Override
-            public void onChanged(Float aFloat) {
-                tvhrppgraw.setText(String.valueOf(Math.round(aFloat)));
             }
         });
 

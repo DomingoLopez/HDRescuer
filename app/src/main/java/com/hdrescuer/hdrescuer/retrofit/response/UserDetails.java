@@ -1,8 +1,11 @@
 
 package com.hdrescuer.hdrescuer.retrofit.response;
 
+import androidx.room.Ignore;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,12 +16,12 @@ import java.util.Date;
  */
 public class UserDetails implements Serializable
 {
-    @SerializedName("id")
+    @SerializedName("user_id")
     @Expose
-    private String id;
+    private int user_id;
     @SerializedName("createdAt")
     @Expose
-    private Date createdAt;
+    private String createdAt;
     @SerializedName("username")
     @Expose
     private String username;
@@ -28,9 +31,6 @@ public class UserDetails implements Serializable
     @SerializedName("email")
     @Expose
     private String email;
-    @SerializedName("password")
-    @Expose
-    private String password;
     @SerializedName("gender")
     @Expose
     private String gender;
@@ -45,10 +45,10 @@ public class UserDetails implements Serializable
     private Integer weight;
     @SerializedName("phone")
     @Expose
-    private Integer phone;
+    private String phone;
     @SerializedName("phone2")
     @Expose
-    private Integer phone2;
+    private String phone2;
     @SerializedName("city")
     @Expose
     private String city;
@@ -57,21 +57,21 @@ public class UserDetails implements Serializable
     private String address;
     @SerializedName("cp")
     @Expose
-    private Integer cp;
+    private String cp;
 
     //Atributos de la última sesión
     @SerializedName("session_id")
     @Expose
-    private String session_id;
+    private int session_id;
     @SerializedName("timestamp_ini")
     @Expose
-    private Date timestamp_ini;
+    private String timestamp_ini;
     @SerializedName("timestamp_fin")
     @Expose
-    private Date timestamp_fin;
+    private String timestamp_fin;
     @SerializedName("total_time")
     @Expose
-    private Integer total_time;
+    private long total_time;
     @SerializedName("e4band")
     @Expose
     private boolean e4band;
@@ -81,6 +81,9 @@ public class UserDetails implements Serializable
     @SerializedName("ehealthboard")
     @Expose
     private boolean ehealthboard;
+    @SerializedName("description")
+    @Expose
+    private String description;
 
 
     private final static long serialVersionUID = 9212788480303221900L;
@@ -90,17 +93,17 @@ public class UserDetails implements Serializable
      * @author Domingo Lopez
      *
      */
+    @Ignore
     public UserDetails() {
     }
 
     /**
      * Cosntructor con parámetros
      * @author Domingo Lopez
-     * @param id
+     * @param user_id
      * @param username
      * @param lastname
      * @param email
-     * @param password
      * @param gender
      * @param age
      * @param height
@@ -111,44 +114,15 @@ public class UserDetails implements Serializable
      * @param address
      * @param cp
      */
-    public UserDetails(String id, String username, String lastname, String email, String password, String gender, Integer age, String height, Integer weight, Integer phone, Integer phone2, String city, String address, Integer cp) {
+
+    public UserDetails(int user_id, String username, String lastname, String email, String gender, Integer age, String height, Integer weight, String phone, String phone2, String city, String address, String cp, String createdAt,
+                       int session_id, String timestamp_ini, String timestamp_fin, long total_time, boolean e4band, boolean ticwatch, boolean ehealthboard, String description ) {
         super();
-        this.id = id;
-        this.createdAt = null;
-        this.username = username;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.gender = gender;
-        this.age = age;
-        this.height = height;
-        this.weight = weight;
-        this.phone = phone;
-        this.phone2 = phone2;
-        this.city = city;
-        this.address = address;
-        this.cp = cp;
-
-        //Atributos de la última sesión
-        this.session_id = null;
-        this.timestamp_ini = null;
-        this.timestamp_fin = null;
-        this.total_time = null;
-        this.e4band = false;
-        this.ticwatch = false;
-        this.ehealthboard = false;
-    }
-
-
-    public UserDetails(String id, String username, String lastname, String email, String password, String gender, Integer age, String height, Integer weight, Integer phone, Integer phone2, String city, String address, Integer cp, Date createdAt,
-                       String session_id, Date timestamp_ini, Date timestamp_fin, Integer total_time, boolean e4band, boolean ticwatch, boolean ehealthboard ) {
-        super();
-        this.id = id;
+        this.user_id = user_id;
         this.createdAt = createdAt;
         this.username = username;
         this.lastname = lastname;
         this.email = email;
-        this.password = password;
         this.gender = gender;
         this.age = age;
         this.height = height;
@@ -167,15 +141,9 @@ public class UserDetails implements Serializable
         this.e4band = e4band;
         this.ticwatch = ticwatch;
         this.ehealthboard = ehealthboard;
+        this.description = description;
     }
 
-    public String getId(){
-        return id;
-    }
-
-    public void setId(String id){
-        this.id = id;
-    }
     public String getUsername() {
         return username;
     }
@@ -200,13 +168,7 @@ public class UserDetails implements Serializable
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getGender() {
         return gender;
@@ -240,19 +202,19 @@ public class UserDetails implements Serializable
         this.weight = weight;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public Integer getPhone2() {
+    public String getPhone2() {
         return phone2;
     }
 
-    public void setPhone2(Integer phone2) {
+    public void setPhone2(String phone2) {
         this.phone2 = phone2;
     }
 
@@ -272,47 +234,47 @@ public class UserDetails implements Serializable
         this.address = address;
     }
 
-    public Integer getCp() {
+    public String getCp() {
         return cp;
     }
 
-    public void setCp(Integer cp) {
+    public void setCp(String cp) {
         this.cp = cp;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getSession_id() {
+    public int getSession_id() {
         return session_id;
     }
 
-    public void setSession_id(String session_id) {
+    public void setSession_id(int session_id) {
         this.session_id = session_id;
     }
 
-    public Date getTimestamp_ini() {
+    public String getTimestamp_ini() {
         return timestamp_ini;
     }
 
-    public void setTimestamp_ini(Date timestamp_ini) {
+    public void setTimestamp_ini(String timestamp_ini) {
         this.timestamp_ini = timestamp_ini;
     }
 
-    public Date getTimestamp_fin() {
+    public String getTimestamp_fin() {
         return timestamp_fin;
     }
 
-    public void setTimestamp_fin(Date timestamp_fin) {
+    public void setTimestamp_fin(String timestamp_fin) {
         this.timestamp_fin = timestamp_fin;
     }
 
-    public Integer getTotal_time() {
+    public long getTotal_time() {
         return total_time;
     }
 
@@ -342,5 +304,28 @@ public class UserDetails implements Serializable
 
     public void setEhealthboard(boolean ehealthboard) {
         this.ehealthboard = ehealthboard;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+
+
+    public UserEntity getUserEntity(){
+        return new UserEntity(this.user_id,this.createdAt,this.username,this.lastname,this.email,this.gender,this.age,this.height,this.weight,this.phone,this.phone2,this.city,this.address,this.cp);
     }
 }

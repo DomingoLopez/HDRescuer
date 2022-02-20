@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".common.NewUserDialogFragment">
+    tools:context=".common.NewPatientDialogFragment">
 
     <EditText
         android:id="@+id/txtName"
@@ -112,7 +112,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rgGender"
-        android:nextFocusDown="@+id/txtPassword"/>
+        android:nextFocusDown="@+id/numPhone"/>
 
     <EditText
         android:id="@+id/txtAddress"
@@ -135,7 +135,7 @@
         android:nextFocusDown="@+id/txtCity"/>
 
     <EditText
-        android:id="@+id/txtPassword"
+        android:id="@+id/numPhone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -143,36 +143,16 @@
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/blue_secondary"
         android:ems="10"
-        android:hint="Password"
-        android:inputType="textEmailAddress"
-        android:textColor="@color/blue_secondary"
-        android:textColorHint="@color/blue_secondary"
-        android:textColorLink="@color/blue_secondary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail"
-        android:nextFocusDown="@+id/numPhone"/>
-
-    <EditText
-        android:id="@+id/numPhone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/blue_secondary"
-        android:ems="10"
         android:hint="Teléfono"
         android:inputType="phone"
+        android:nextFocusDown="@+id/numPhone2"
         android:textColor="@color/blue_secondary"
         android:textColorHint="@color/blue_secondary"
         android:textColorLink="@color/blue_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword"
-        android:nextFocusDown="@+id/numPhone2"/>
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
     <EditText
         android:id="@+id/numPhone2"
