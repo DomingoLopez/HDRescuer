@@ -14,7 +14,7 @@ public class Constants {
 
 
     //API E4BAND
-    public static final String EMPATICA_API_KEY = "b30b5a4f98984d4db37153a97fb21bde";
+    public static final String EMPATICA_API_KEY = "<insert your empatica api key>";
 
     //CAPABILITIES TO DETECT EACH OTHER (PHONE AND WATCH)
     //Si se cambia debe cambiarse también en /res/values/wear.xml
