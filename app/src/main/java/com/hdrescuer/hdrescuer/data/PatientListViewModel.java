@@ -15,18 +15,18 @@ import java.util.List;
  * ViewModel de la lista de usuarios
  * @author Domingo Lopez
  */
-public class UserListViewModel extends AndroidViewModel {
+public class PatientListViewModel extends AndroidViewModel {
 
-    private UserListRepository userListRepository;
+    private PatientListRepository patientListRepository;
 
     /**
      * Constructor
      * @author Domingo Lopez
      * @param application
      */
-    public UserListViewModel(@NonNull Application application) {
+    public PatientListViewModel(@NonNull Application application) {
         super(application);
-        this.userListRepository = new UserListRepository();
+        this.patientListRepository = new PatientListRepository();
     }
 
 
@@ -35,8 +35,8 @@ public class UserListViewModel extends AndroidViewModel {
      * @author Domingo Lopez
      * @return MutableLiveData
      */
-    public MutableLiveData<List<User>> getUsers(){
-        return this.userListRepository.getUsers();
+    public MutableLiveData<List<User>> getPatients(){
+        return this.patientListRepository.getPatients();
     }
 
     /**
@@ -44,16 +44,16 @@ public class UserListViewModel extends AndroidViewModel {
      * @author Domingo Lopez
      * @param userEntity
      */
-    public void setNewUser(UserEntity userEntity){
-        this.userListRepository.setNewUser(userEntity);
+    public void setNewPatient(UserEntity userEntity){
+        this.patientListRepository.setNewPatient(userEntity);
     }
 
     /**
      * Método que refrescha los usuarios
      * @author Domingo Lopez
      */
-    public void refreshUsers(){
-        this.userListRepository.refreshUsers();
+    public void refreshPatients(){
+        this.patientListRepository.refreshPatients();
     }
 
 

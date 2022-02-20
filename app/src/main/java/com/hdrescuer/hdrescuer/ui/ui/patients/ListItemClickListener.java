@@ -1,4 +1,4 @@
-package com.hdrescuer.hdrescuer.ui.ui.users;
+package com.hdrescuer.hdrescuer.ui.ui.patients;
 
 /**
  * Interfaz para gestionar el click en la lista de usuarios y saber qué item se ha pulsado

@@ -32,7 +32,7 @@
 
         <activity android:name=".ui.ui.devicesconnection.DevicesConnectionActivity" />
         <activity android:name=".ui.ui.charts.SessionResultActivity" />
-        <activity android:name=".ui.ui.userdetails.UserDetailsActivity" />
+        <activity android:name=".ui.ui.patientdetails.PatientDetailsActivity" />
         <activity
             android:name=".ui.HomeActivity"
             android:label="@string/title_activity_home"

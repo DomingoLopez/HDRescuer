@@ -16,8 +16,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.hdrescuer.hdrescuer.R;
-import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
-import com.hdrescuer.hdrescuer.data.UserListViewModel;
+import com.hdrescuer.hdrescuer.data.PatientDetailsViewModel;
+import com.hdrescuer.hdrescuer.data.PatientListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
@@ -28,7 +28,7 @@ import java.time.Clock;
  * Clase dentro del paquete common, ya que sirve para el alta y modificación de un usuario.
  * @author Domingo Lopez
  */
-public class NewUserDialogFragment extends DialogFragment implements View.OnClickListener {
+public class NewPatientDialogFragment extends DialogFragment implements View.OnClickListener {
 
     EditText edName;
     EditText edLastName;
@@ -61,7 +61,7 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
      * @param type
      * @param userEntity
      */
-    public NewUserDialogFragment(UserActionDialog type, UserEntity userEntity){
+    public NewPatientDialogFragment(UserActionDialog type, UserEntity userEntity){
         this.type = type;
         this.userEntity = userEntity;
         this.authConectionClient = AuthConectionClient.getInstance();
@@ -237,16 +237,16 @@ public class NewUserDialogFragment extends DialogFragment implements View.OnClic
                    if(this.type == UserActionDialog.NEW_USER){
                        String instant = Clock.systemUTC().instant().toString();
                        UserEntity user = new UserEntity(0,instant, name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
-                       UserListViewModel userListViewModel = new ViewModelProvider(this.getActivity()).get(UserListViewModel.class);
-                       userListViewModel.setNewUser(user);
+                       PatientListViewModel patientListViewModel = new ViewModelProvider(this.getActivity()).get(PatientListViewModel.class);
+                       patientListViewModel.setNewPatient(user);
                        getDialog().dismiss();
 
                    }else if(this.type == UserActionDialog.MODIFY_USER){
 
                        UserEntity user = new UserEntity(this.userEntity.getUser_id(),this.userEntity.createdAt, name, lastname,email,gender, age, height, weight,phone, phone2, city,direccion,cp);
-                       UserDetailsViewModel userDetailsViewModel = new ViewModelProvider(this.getActivity()).get(UserDetailsViewModel.class);
-                       userDetailsViewModel.updateUserDetails(user);
-                       userDetailsViewModel.refreshUserDetails();
+                       PatientDetailsViewModel patientDetailsViewModel = new ViewModelProvider(this.getActivity()).get(PatientDetailsViewModel.class);
+                       patientDetailsViewModel.getPatientDetails(user);
+                       patientDetailsViewModel.refreshPatientDetails();
                        getDialog().dismiss();
                    }
 

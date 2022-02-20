@@ -1,4 +1,4 @@
-package com.hdrescuer.hdrescuer.ui.ui.users;
+package com.hdrescuer.hdrescuer.ui.ui.patients;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,11 +20,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
-import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
+import com.hdrescuer.hdrescuer.common.NewPatientDialogFragment;
 import com.hdrescuer.hdrescuer.common.UserActionDialog;
-import com.hdrescuer.hdrescuer.data.UserListViewModel;
+import com.hdrescuer.hdrescuer.data.PatientListViewModel;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.ui.ui.userdetails.UserDetailsActivity;
+import com.hdrescuer.hdrescuer.ui.ui.patientdetails.PatientDetailsActivity;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ import java.util.List;
  * Fragmento que contiene la lista de usuarios cargados desde el servidor. Hereda de Fragment e implementa ListItemClickListener, una interfaz para detectar clicks en los items del RecyclerView
  *  @author Domingo Lopez
  */
-public class UserListFragment extends Fragment implements ListItemClickListener, View.OnClickListener {
+public class PatientListFragment extends Fragment implements ListItemClickListener, View.OnClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -41,9 +41,9 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     private int mColumnCount = 1;
 
     RecyclerView recyclerView;
-    MyUserRecyclerViewAdapter adapter;
+    MyPatientRecyclerViewAdapter adapter;
     List<User> userList;
-    UserListViewModel userListViewModel;
+    PatientListViewModel patientListViewModel;
     FloatingActionButton btn;
 
     boolean alreadyCreated = false;
@@ -52,13 +52,13 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
      * Constructor Vacío del fragmento
      * @author Domingo Lopez
      */
-    public UserListFragment() {
+    public PatientListFragment() {
     }
 
 
     @SuppressWarnings("unused")
-    public static UserListFragment newInstance(int columnCount) {
-        UserListFragment fragment = new UserListFragment();
+    public static PatientListFragment newInstance(int columnCount) {
+        PatientListFragment fragment = new PatientListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -79,7 +79,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         }
 
 
-        this.userListViewModel = new ViewModelProvider(getActivity()).get(UserListViewModel.class);
+        this.patientListViewModel = new ViewModelProvider(getActivity()).get(PatientListViewModel.class);
         alreadyCreated = true;
 
     }
@@ -102,7 +102,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
         this.recyclerView = view.findViewById(R.id.list);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        this.adapter = new MyUserRecyclerViewAdapter(
+        this.adapter = new MyPatientRecyclerViewAdapter(
                 getActivity(),
                 this.userList,
                 this
@@ -123,10 +123,11 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     @Override
     public void onResume() {
         super.onResume();
-        if(!alreadyCreated){
+        /*if(!alreadyCreated){
             refreshUserDetails();
         }
-        alreadyCreated = false;
+        alreadyCreated = false;*/
+        refreshUserDetails();
     }
 
     /**
@@ -134,7 +135,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
      * @author Domingo Lopez
      */
     private void refreshUserDetails() {
-        this.userListViewModel.refreshUsers();
+        this.patientListViewModel.refreshPatients();
     }
 
 
@@ -155,7 +156,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
      */
     private void loadUserData() {
 
-        this.userListViewModel.getUsers().observe(requireActivity(), new Observer<List<User>>() {
+        this.patientListViewModel.getPatients().observe(requireActivity(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
                 Log.i("USERS", users.toString());
@@ -175,7 +176,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     public void onListItemClick(int position) {
 
         int id = this.userList.get(position).getUser_id();
-        Intent i = new Intent(MyApp.getContext(), UserDetailsActivity.class);
+        Intent i = new Intent(MyApp.getContext(), PatientDetailsActivity.class);
         i.putExtra("user_id", id);
         startActivity(i);
     }
@@ -193,7 +194,7 @@ public class UserListFragment extends Fragment implements ListItemClickListener,
     @Override
     public void onClick(View view) {
         if(Constants.CONNECTION_UP.equals("SI")){
-            NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.NEW_USER,null);
+            NewPatientDialogFragment dialog = new NewPatientDialogFragment(UserActionDialog.NEW_USER,null);
             dialog.show(this.getActivity().getSupportFragmentManager(), "NewUserFragment");
         }else{
             Toast.makeText(requireActivity(), "Conexión no disponible, vuelva a iniciar sesión", Toast.LENGTH_SHORT).show();

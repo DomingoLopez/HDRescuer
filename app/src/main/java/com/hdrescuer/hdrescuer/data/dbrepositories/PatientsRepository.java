@@ -11,12 +11,12 @@ import com.hdrescuer.hdrescuer.retrofit.response.User;
 
 import java.util.List;
 
-public class UsersRepository {
+public class PatientsRepository {
 
     private UserDao userDao;
 
 
-    public UsersRepository(Application application){
+    public PatientsRepository(Application application){
         DataRecoveryDataBase db = DataRecoveryDataBase.getDataBase(application);
         userDao = db.getUserDao();
 
@@ -26,7 +26,7 @@ public class UsersRepository {
 
     public List<UserEntity> getAllUser(){ return userDao.getAllUsers();}
 
-    public int getMaxUser(){return userDao.getMaxUser();}
+        public int getMaxUser(){return userDao.getMaxUser();}
 
     public void deleteAllUser(){
         userDao.deleteAll();}

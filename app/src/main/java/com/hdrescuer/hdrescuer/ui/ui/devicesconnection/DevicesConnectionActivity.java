@@ -100,25 +100,22 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
     EHealthBoardRepository eHealthBoardRepository;
     SessionsRepository sessionsRepository;
 
-
-
     //ViewModel
     GlobalMonitoringViewModel globalMonitoringViewModel;
+
 
     TextView tvUsernameMonitoring;
     TextView tvDateMonitoring;
     ImageView btn_back;
-
     //Botones de conexión
     Button btnE4BandConnect;
     Button btnWatchConnect;
     Button btnEHealthBoardConnect;
-
     ImageView btn_connection_up;
-
     //Botón de start monitoring
     Button btnStartMonitoring;
 
+    //Datos del paciente actual
     int user_id;
     String user_name;
     Date currentDate;
@@ -218,14 +215,10 @@ public class DevicesConnectionActivity extends AppCompatActivity implements
         this.currentDate = Calendar.getInstance().getTime();
 
 
-
         initViewModels();
-
         findViews();
         events();
         loadUserData();
-
-
         initEmpaticaDeviceManager();
 
     }

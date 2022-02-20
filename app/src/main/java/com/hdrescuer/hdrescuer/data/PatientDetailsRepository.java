@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
-import com.hdrescuer.hdrescuer.data.dbrepositories.UsersRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.PatientsRepository;
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
@@ -21,13 +21,13 @@ import retrofit2.Response;
  * Repositorio de datos de los detalles del usuario
  * @author Domingo Lopez
  */
-public class UserDetailsRepository {
+public class PatientDetailsRepository {
 
     AuthApiService authApiService;
     AuthConectionClient authConectionClient;
     MutableLiveData<UserDetails> userDetails;
 
-    UsersRepository usersRepository;
+    PatientsRepository patientsRepository;
 
 
     /**
@@ -35,11 +35,11 @@ public class UserDetailsRepository {
      * @author Domingo Lopez
      * @param id
      */
-    UserDetailsRepository(int id){
+    PatientDetailsRepository(int id){
         this.authConectionClient = AuthConectionClient.getInstance();
         this.authApiService = this.authConectionClient.getAuthApiService();
-        this.usersRepository = new UsersRepository(MyApp.getInstance());
-        this.userDetails = this.getUser(id);
+        this.patientsRepository = new PatientsRepository(MyApp.getInstance());
+        this.userDetails = this.getPatient(id);
     }
 
     /**
@@ -48,7 +48,7 @@ public class UserDetailsRepository {
      * @param id
      * @return MutableLiveData
      */
-    public MutableLiveData<UserDetails> getUser(int id){
+    public MutableLiveData<UserDetails> getPatient(int id){
 
         if(userDetails == null)
             userDetails = new MutableLiveData<>();
@@ -65,7 +65,7 @@ public class UserDetailsRepository {
 
                     } else {
 
-                        userDetails.setValue(usersRepository.getUsersLarge(id));
+                        userDetails.setValue(patientsRepository.getUsersLarge(id));
 
                     }
                 }
@@ -73,7 +73,7 @@ public class UserDetailsRepository {
 
                 @Override
                 public void onFailure(Call<UserDetails> call, Throwable t) {
-                    userDetails.setValue(usersRepository.getUsersLarge(id));
+                    userDetails.setValue(patientsRepository.getUsersLarge(id));
 
                 }
 
@@ -82,7 +82,7 @@ public class UserDetailsRepository {
 
         }else{
             //Si no tenemos conexión, mostramos el usuario de la base de datos
-            userDetails.setValue(usersRepository.getUsersLarge(id));
+            userDetails.setValue(patientsRepository.getUsersLarge(id));
         }
 
 
@@ -91,7 +91,7 @@ public class UserDetailsRepository {
     }
 
 
-    public MutableLiveData<UserDetails> getUserDetails(){
+    public MutableLiveData<UserDetails> getPatientDetails(){
         return this.userDetails;
     }
 
@@ -101,7 +101,7 @@ public class UserDetailsRepository {
      * @author Domingo Lopez
      * @param user_devuelto
      */
-    public void updateUser(UserEntity user_devuelto){
+    public void updatePatient(UserEntity user_devuelto){
         Call<String> call = authApiService.updateUser(user_devuelto);
         call.enqueue(new Callback<String>() {
             @Override
@@ -109,7 +109,7 @@ public class UserDetailsRepository {
                 if(response.isSuccessful()){
 
                     //Hacemos update en nuestra base de datos
-                    usersRepository.updateUser(user_devuelto);
+                    patientsRepository.updateUser(user_devuelto);
 
                     Toast.makeText(MyApp.getContext(), "Usuario modificado de forma satisfactoria", Toast.LENGTH_SHORT).show();
 
@@ -126,8 +126,8 @@ public class UserDetailsRepository {
         });
     }
 
-    public void refreshUserDetails(int id){
-        this.userDetails = this.getUser(id);
+    public void refreshPatientDetails(int id){
+        this.userDetails = this.getPatient(id);
     }
 
 

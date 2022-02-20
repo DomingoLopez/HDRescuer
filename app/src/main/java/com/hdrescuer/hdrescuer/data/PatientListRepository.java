@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
-import com.hdrescuer.hdrescuer.data.dbrepositories.UsersRepository;
+import com.hdrescuer.hdrescuer.data.dbrepositories.PatientsRepository;
 import com.hdrescuer.hdrescuer.db.entity.UserEntity;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
@@ -23,23 +23,23 @@ import retrofit2.Response;
  * Repositorio de datos de la lista de usuarios
  * @author Domingo Lopez
  */
-public class UserListRepository {
+public class PatientListRepository {
 
     AuthApiService authApiService;
     AuthConectionClient authConectionClient;
-    MutableLiveData<List<User>> users;
+    MutableLiveData<List<User>> patients;
     //Dao para la base de datos
-    UsersRepository usersRepository;
+    PatientsRepository patientsRepository;
 
     /**
      * Constructor vacío
      * @author Domingo Lopez
      */
-    UserListRepository(){
+    PatientListRepository(){
         this.authConectionClient = AuthConectionClient.getInstance();
         this.authApiService = this.authConectionClient.getAuthApiService();
-        usersRepository = new UsersRepository(MyApp.getInstance());
-        users = getAllUsers();
+        patientsRepository = new PatientsRepository(MyApp.getInstance());
+        patients = getAllPatients();
     }
 
     /**
@@ -47,9 +47,9 @@ public class UserListRepository {
      * @author Domingo Lopez
      * @return MutableLiveData
      */
-    public MutableLiveData<List<User>> getAllUsers(){
-        if(users == null)
-            users = new MutableLiveData<>();
+    public MutableLiveData<List<User>> getAllPatients(){
+        if(patients == null)
+            patients = new MutableLiveData<>();
         //Si disponemos de conexión, obtenemos la lista corta de usuarios
         //del servidor
         if(Constants.CONNECTION_UP.equals("SI")) {
@@ -58,22 +58,22 @@ public class UserListRepository {
                 @Override
                 public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                     if (response.isSuccessful()) {
-                        users.setValue(response.body());
+                        patients.setValue(response.body());
                     } else {
-                        users.setValue(usersRepository.getUsersShort());
+                        patients.setValue(patientsRepository.getUsersShort());
                     }
                 }
                 @Override
                 public void onFailure(Call<List<User>> call, Throwable t) {
-                    users.setValue(usersRepository.getUsersShort());
+                    patients.setValue(patientsRepository.getUsersShort());
                 }
             });
         //Si no disponemos de conexión, obtenemos
         //los usuarios de la base de datos local
         }else{
-            users.setValue(usersRepository.getUsersShort());
+            patients.setValue(patientsRepository.getUsersShort());
         }
-        return users;
+        return patients;
     }
 
     /**
@@ -81,8 +81,8 @@ public class UserListRepository {
      * @author Domingo Lopez
      * @return MutableLiveData
      */
-    public MutableLiveData<List<User>> getUsers(){
-        return this.users;
+    public MutableLiveData<List<User>> getPatients(){
+        return this.patients;
     }
 
     /**
@@ -90,10 +90,10 @@ public class UserListRepository {
      * @author Domingo Lopez
      * @param user
      */
-    public void setNewUser(UserEntity user){
+    public void setNewPatient(UserEntity user){
 
         //Obtenemos siguiente id de usuario
-        int max_id = usersRepository.getMaxUser();
+        int max_id = patientsRepository.getMaxUser();
         int id_final = 0;
         //Log.i("MAXIMA SESION",""+max_id);
         if(max_id >= 1){
@@ -112,15 +112,15 @@ public class UserListRepository {
                     if (response.isSuccessful()) {
                         List<User> listaClonada = new ArrayList<>();
                         listaClonada.add(response.body());
-                        if (users.getValue() != null) {
-                            for (int i = 0; i < users.getValue().size(); i++) {
-                                listaClonada.add(new User(users.getValue().get(i)));
+                        if (patients.getValue() != null) {
+                            for (int i = 0; i < patients.getValue().size(); i++) {
+                                listaClonada.add(new User(patients.getValue().get(i)));
                             }
                         }
-                        users.setValue(listaClonada);
+                        patients.setValue(listaClonada);
 
                         //Introducimos el usuario en la Base de datos
-                        usersRepository.insertUser(user);
+                        patientsRepository.insertUser(user);
 
                         Toast.makeText(MyApp.getContext(), "Usuario creado de forma satisfactoria", Toast.LENGTH_SHORT).show();
                     } else {
@@ -145,8 +145,8 @@ public class UserListRepository {
      * Método que refresca los usuarios se ha habido nuevas creaciones de usuario
      * @author Domingo Lopez
      */
-    public void refreshUsers(){
-        this.users = getAllUsers();
+    public void refreshPatients(){
+        this.patients = getAllPatients();
     }
 
 

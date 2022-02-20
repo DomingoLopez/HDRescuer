@@ -95,7 +95,6 @@ public class E4BandRepository implements EmpaDataDelegate {
 
 
             // Escribir el HR obtenido del IBI cada segundo
-            // todo: should be calculated from BVP
             scheduler = Executors.newSingleThreadScheduledExecutor();
             scheduler.scheduleAtFixedRate
                     (new Runnable() {

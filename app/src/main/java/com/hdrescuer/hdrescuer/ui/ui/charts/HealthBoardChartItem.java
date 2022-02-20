@@ -76,8 +76,8 @@ public class HealthBoardChartItem extends ChartItem {
         YAxis leftAxis = holder.chartHr.getAxisLeft();
 
         leftAxis.setLabelCount(5, false);
-        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-        leftAxis.setAxisMaximum(250f);
+        leftAxis.setAxisMinimum(0); // this replaces setStartAtZero(true)
+        leftAxis.setAxisMaximum(250);
 
         YAxis rightAxis = holder.chartHr.getAxisRight();
         rightAxis.setDrawLabels(false);
@@ -105,8 +105,8 @@ public class HealthBoardChartItem extends ChartItem {
         YAxis leftAxisAF = holder.chartAirFlow.getAxisLeft();
 
         leftAxisAF.setLabelCount(5, false);
-        leftAxisAF.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-        leftAxisAF.setAxisMaximum(1000f);
+        leftAxisAF.setAxisMinimum(0); // this replaces setStartAtZero(true)
+        leftAxisAF.setAxisMaximum(400);
 
         YAxis rightAxisAF = holder.chartAirFlow.getAxisRight();
         rightAxisAF.setDrawLabels(false);

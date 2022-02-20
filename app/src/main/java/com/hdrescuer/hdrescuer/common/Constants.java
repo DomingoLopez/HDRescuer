@@ -9,19 +9,8 @@ import java.time.Instant;
  */
 public class Constants {
 
-    public static final String API_BASE_URL = "http://10.0.2.2:8080/";
+
     public static final String DATA_RESCUER_API_GATEWAY= "http://192.168.1.135:8080/";
-
-
-    /*API FINAL
-    public static final String API_BASE_URL = "http://localhost:8080/api/";
-    */
-
-    //PREFERENCES
-    public static final String PREF_TOKEN = "PREF_TOKEN";
-    public static final String PREF_USERNAME = "PREF_CREATED";
-    public static final String PREF_EMAIL = "PREF_EMAIL";
-    public static final String PREF_CREATED = "PREF_CREATED";
 
 
     //API E4BAND

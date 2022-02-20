@@ -1,7 +1,6 @@
 package com.hdrescuer.hdrescuer.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,12 +11,9 @@ import android.widget.ImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
-import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
-import com.hdrescuer.hdrescuer.data.UserListViewModel;
-import com.hdrescuer.hdrescuer.data.dbrepositories.UsersRepository;
+import com.hdrescuer.hdrescuer.data.PatientListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
-import com.hdrescuer.hdrescuer.retrofit.response.User;
 
 import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.Observer;
@@ -38,18 +34,15 @@ import java.util.List;
  */
 public class HomeActivity extends AppCompatActivity {
 
-    UserListViewModel userListViewModel;
+    PatientListViewModel patientListViewModel;
     SessionsListViewModel sessionsListViewModel;
-
     private AppBarConfiguration mAppBarConfiguration;
-
     private ImageView sessions_not_registered;
-
     //flag para no cargar las sesiones dos veces
     public boolean alreadyChecked = false;
 
     /**
-     * Inicia la actividad HomeActivity, cargando los fragmentos necesarios al inicio y el userListViewModel
+     * Inicia la actividad HomeActivity, cargando los fragmentos necesarios al inicio y el patientListViewModel
      * @author Domingo Lopez
      * @param savedInstanceState
      */
@@ -77,19 +70,14 @@ public class HomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-
-
-
         //INICIAMOS VIEWMODELS QUE USARÁN LOS DISTINTOS FRAGMENTS DEL MENÚ PRINCIPAL
 
         //ViewModel para el fragmento de los usuarios
-        this.userListViewModel = new UserListViewModel(getApplication());
+        this.patientListViewModel = new PatientListViewModel(getApplication());
         //Viewmodel para el fragmento de las sesiones sin registrar
         this.sessionsListViewModel = new ViewModelProvider(this).get(SessionsListViewModel.class);
 
         initializeCountBadge();
-
 
 
         this.sessionsListViewModel.getSessions().observe(this, new Observer<List<SessionEntity>>() {

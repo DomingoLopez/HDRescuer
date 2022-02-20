@@ -93,8 +93,8 @@ public class EmpaticaChartItem extends ChartItem {
         YAxis leftAxisAccl = holder.chartBvp.getAxisLeft();
 
         leftAxisAccl.setLabelCount(5, false);
-        leftAxisAccl.setAxisMinimum(-50f); // this replaces setStartAtZero(true)
-        leftAxisAccl.setAxisMaximum(50f);
+        leftAxisAccl.setAxisMinimum(-100f); // this replaces setStartAtZero(true)
+        leftAxisAccl.setAxisMaximum(100f);
 
         YAxis rightAxisAccl = holder.chartBvp.getAxisRight();
         rightAxisAccl.setDrawLabels(false);

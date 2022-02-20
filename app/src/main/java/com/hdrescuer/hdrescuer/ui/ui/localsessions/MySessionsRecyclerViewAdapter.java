@@ -1,7 +1,6 @@
 package com.hdrescuer.hdrescuer.ui.ui.localsessions;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
-import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
+import com.hdrescuer.hdrescuer.ui.ui.patients.ListItemClickListener;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;

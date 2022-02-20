@@ -15,10 +15,10 @@ import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
  * ViewModel para los detalles del usuario
  * @author Domingo Lopez
  */
-public class UserDetailsViewModel extends AndroidViewModel implements ViewModelProvider.Factory {
+public class PatientDetailsViewModel extends AndroidViewModel implements ViewModelProvider.Factory {
 
 
-    public UserDetailsRepository userDetailsRepository;
+    public PatientDetailsRepository patientDetailsRepository;
     int user_id;
 
     /**
@@ -27,10 +27,10 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
      * @param application
      * @param id
      */
-    public UserDetailsViewModel(@NonNull Application application, int id) {
+    public PatientDetailsViewModel(@NonNull Application application, int id) {
         super(application);
         this.user_id = id;
-        this.userDetailsRepository = new UserDetailsRepository(id);
+        this.patientDetailsRepository = new PatientDetailsRepository(id);
 
     }
 
@@ -39,9 +39,9 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
      * @author Domingo Lopez
      * @return MutableLiveData
      */
-    public MutableLiveData<UserDetails> getUser() {
+    public MutableLiveData<UserDetails> getPatient() {
 
-        return this.userDetailsRepository.getUserDetails();
+        return this.patientDetailsRepository.getPatientDetails();
     }
 
     /**
@@ -49,16 +49,16 @@ public class UserDetailsViewModel extends AndroidViewModel implements ViewModelP
      * @author Domingo Lopez
      * @param userEntity
      */
-    public void updateUserDetails(UserEntity userEntity){
-        this.userDetailsRepository.updateUser(userEntity);
+    public void getPatientDetails(UserEntity userEntity){
+        this.patientDetailsRepository.updatePatient(userEntity);
     }
 
     /**
      * Método que refresca los datos del usuario en caso de que haya actualizaciones en los detalles
      * @author Domingo Lopez
      */
-    public void refreshUserDetails(){
-        this.userDetailsRepository.refreshUserDetails(this.user_id);
+    public void refreshPatientDetails(){
+        this.patientDetailsRepository.refreshPatientDetails(this.user_id);
     }
 
 

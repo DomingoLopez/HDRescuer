@@ -42,12 +42,6 @@ public class SessionsRepository {
 
 
 
-
-
-
-
-
-
     public void insertSession(SessionEntity session){
         new insertSessionAsyncTask(sessionDao).execute(session);
     }

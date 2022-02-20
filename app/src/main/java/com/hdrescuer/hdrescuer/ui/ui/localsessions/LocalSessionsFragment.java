@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +21,13 @@ import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
 import com.hdrescuer.hdrescuer.common.OnSimpleDialogClick;
 import com.hdrescuer.hdrescuer.common.SimpleDialogFragment;
+import com.hdrescuer.hdrescuer.data.PatientListViewModel;
 import com.hdrescuer.hdrescuer.data.SessionsListViewModel;
-import com.hdrescuer.hdrescuer.data.UserListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.retrofit.response.User;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
 import com.hdrescuer.hdrescuer.ui.ui.localsessions.services.UploadSessionService;
-import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
+import com.hdrescuer.hdrescuer.ui.ui.patients.ListItemClickListener;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +46,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
     List<SessionEntity> sessionList;
     List<User> users;
     SessionsListViewModel sessionsListViewModel;
-    UserListViewModel userListViewModel;
+    PatientListViewModel patientListViewModel;
 
     public Map<String, Integer> usuarios_predictivo = new HashMap<String,Integer>();
 
@@ -85,7 +84,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
         this.sessionsListViewModel = new ViewModelProvider(requireActivity()).get(SessionsListViewModel.class);
 
         //Obtenemos viewmodel de los usuarios descargados
-        this.userListViewModel = new ViewModelProvider(requireActivity()).get(UserListViewModel.class);
+        this.patientListViewModel = new ViewModelProvider(requireActivity()).get(PatientListViewModel.class);
 
         alreadyCreated = true;
 
@@ -102,7 +101,7 @@ public class LocalSessionsFragment extends Fragment implements ListItemClickList
         this.recyclerView = view.findViewById(R.id.list_sessions);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        this.users = this.userListViewModel.getUsers().getValue();
+        this.users = this.patientListViewModel.getPatients().getValue();
         setUsersAElegir();
 
         this.adapter = new MySessionsRecyclerViewAdapter(

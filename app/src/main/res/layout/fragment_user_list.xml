@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ui.users.UserListFragment">
+    tools:context=".ui.ui.patients.PatientListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.291"
-        tools:context=".ui.ui.users.UserListFragment"
+        tools:context=".ui.ui.patients.PatientListFragment"
         tools:listitem="@layout/fragment_user" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

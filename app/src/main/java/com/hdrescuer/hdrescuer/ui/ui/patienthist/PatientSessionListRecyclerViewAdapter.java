@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
-import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
+import com.hdrescuer.hdrescuer.ui.ui.patients.ListItemClickListener;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
@@ -44,8 +44,6 @@ public class PatientSessionListRecyclerViewAdapter extends RecyclerView.Adapter<
 
 
     }
-
-
 
 
     @Override

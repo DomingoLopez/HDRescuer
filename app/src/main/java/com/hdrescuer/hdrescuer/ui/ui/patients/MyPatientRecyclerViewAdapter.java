@@ -1,4 +1,4 @@
-package com.hdrescuer.hdrescuer.ui.ui.users;
+package com.hdrescuer.hdrescuer.ui.ui.patients;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +14,6 @@ import com.hdrescuer.hdrescuer.retrofit.response.User;
 
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
@@ -24,14 +23,14 @@ import java.util.List;
  * Clase RecyclerView para la lista de usuarios
  * @author Domingo Lopez
  */
-public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecyclerViewAdapter.ViewHolder> {
+public class MyPatientRecyclerViewAdapter extends RecyclerView.Adapter<MyPatientRecyclerViewAdapter.ViewHolder> {
 
     private List<User> mValues;
     private Context ctx;
     final private ListItemClickListener mOnClickListener;
     final private DateFormat dateFormat;
 
-    public MyUserRecyclerViewAdapter(Context contexto, List<User> items, ListItemClickListener onClickListener) {
+    public MyPatientRecyclerViewAdapter(Context contexto, List<User> items, ListItemClickListener onClickListener) {
         this.ctx = contexto;
         this.mValues = items;
         this.mOnClickListener = onClickListener;

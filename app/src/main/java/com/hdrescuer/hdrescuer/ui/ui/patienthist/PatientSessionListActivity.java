@@ -26,7 +26,7 @@ import com.hdrescuer.hdrescuer.data.SessionsHistListViewModel;
 import com.hdrescuer.hdrescuer.db.entity.SessionEntity;
 import com.hdrescuer.hdrescuer.ui.ui.charts.SessionResultActivity;
 import com.hdrescuer.hdrescuer.ui.ui.localsessions.services.UploadSessionService;
-import com.hdrescuer.hdrescuer.ui.ui.users.ListItemClickListener;
+import com.hdrescuer.hdrescuer.ui.ui.patients.ListItemClickListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

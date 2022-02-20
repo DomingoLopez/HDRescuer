@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.gson.JsonObject;
 import com.hdrescuer.hdrescuer.R;
@@ -43,7 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class SessionResultActivity extends AppCompatActivity implements View.OnClickListener{
+public class SessionResultActivity extends AppCompatActivity implements View.OnClickListener {
 
 
 
@@ -286,9 +287,15 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
 
         ArrayList<Entry> datasetHR= new ArrayList<>();
         for(int i = 0; i< empaticaEntities.size(); i++){
-            datasetHR.add(new Entry(i, empaticaEntities.get(i).e4_hr));
+            datasetHR.add(new Entry(i, (float) empaticaEntities.get(i).e4_hr));
         }
         LineDataSet set1 = new LineDataSet(datasetHR, "Heart Rate Empatica E4Band");
+        set1.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return ""+((int)value);
+            }
+        });
         set1.setLineWidth(1f);
         set1.setCircleRadius(1f);
         set1.setColor(Color.rgb(255, 0, 0));
@@ -525,6 +532,12 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
             datasetHr.add(new Entry(i,  Math.round(ticWatchEntities.get(i).tic_hrppg)));
         }
         LineDataSet set1 = new LineDataSet(datasetHr, "Heart Rate Tic Watch");
+        set1.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return ""+((int)value);
+            }
+        });
         set1.setLineWidth(1f);
         set1.setCircleRadius(1f);
         set1.setColor(Color.rgb(255, 0, 0));
@@ -576,9 +589,16 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
 
         ArrayList<Entry> datasetHr= new ArrayList<>();
         for(int i = 0; i< healthBoardEntities.size(); i++){
-            datasetHr.add(new Entry(i,  Math.round(healthBoardEntities.get(i).ehb_bpm)));
+            datasetHr.add(new Entry(i, healthBoardEntities.get(i).ehb_bpm));
         }
+
         LineDataSet set1 = new LineDataSet(datasetHr, "Heart Rate Health Board");
+        set1.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return ""+((int)value);
+            }
+        });
         set1.setLineWidth(1f);
         set1.setCircleRadius(1f);
         set1.setColor(Color.rgb(255, 0, 0));
@@ -601,9 +621,15 @@ public class SessionResultActivity extends AppCompatActivity implements View.OnC
 
         ArrayList<Entry> datasetHr= new ArrayList<>();
         for(int i = 0; i< healthBoardEntities.size(); i++){
-            datasetHr.add(new Entry(i,  Math.round(healthBoardEntities.get(i).ehb_air_flow)));
+            datasetHr.add(new Entry(i, (float) healthBoardEntities.get(i).ehb_air_flow));
         }
         LineDataSet set1 = new LineDataSet(datasetHr, "Air Flow Health Board");
+        set1.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return ""+((int)value);
+            }
+        });
         set1.setLineWidth(1f);
         set1.setCircleRadius(1f);
         set1.setColor(Color.rgb(0, 0, 255));

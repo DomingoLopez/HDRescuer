@@ -178,7 +178,7 @@ public class UploadSessionService extends IntentService {
 
             for(int i = 0; i< empaticaEntities.size(); i++){
                 fos.write((this.session_id+",").getBytes());
-                fos.write(Date.from(Instant.parse(empaticaEntities.get(i).timestamp)).toString().getBytes());
+                fos.write((Date.from(Instant.parse(empaticaEntities.get(i).timestamp)).toString() +",").getBytes());
                 fos.write((Integer.toString(empaticaEntities.get(i).e4_accx)+",").getBytes());
                 fos.write((Integer.toString(empaticaEntities.get(i).e4_accy)+",").getBytes());
                 fos.write((Integer.toString(empaticaEntities.get(i).e4_accz)+",").getBytes());
@@ -221,7 +221,7 @@ public class UploadSessionService extends IntentService {
             for(int i = 0; i< ticWatchEntities.size(); i++){
 
                 fos.write((this.session_id+",").getBytes());
-                fos.write(Date.from(Instant.parse(ticWatchEntities.get(i).timestamp)).toString().getBytes());
+                fos.write((Date.from(Instant.parse(ticWatchEntities.get(i).timestamp)).toString() +",").getBytes());
                 fos.write((Integer.toString(ticWatchEntities.get(i).tic_accx)+",").getBytes());
                 fos.write((Integer.toString(ticWatchEntities.get(i).tic_accy)+",").getBytes());
                 fos.write((Integer.toString(ticWatchEntities.get(i).tic_accz)+",").getBytes());
@@ -264,7 +264,7 @@ public class UploadSessionService extends IntentService {
 
             for(int i = 0; i< healthBoardEntities.size(); i++){
                 fos.write((this.session_id+",").getBytes());
-                fos.write(Date.from(Instant.parse(healthBoardEntities.get(i).timestamp)).toString().getBytes());
+                fos.write((Date.from(Instant.parse(healthBoardEntities.get(i).timestamp)).toString() +",").getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_bpm)+",").getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_ox_blood)+",").getBytes());
                 fos.write((Integer.toString(healthBoardEntities.get(i).ehb_air_flow)).getBytes());

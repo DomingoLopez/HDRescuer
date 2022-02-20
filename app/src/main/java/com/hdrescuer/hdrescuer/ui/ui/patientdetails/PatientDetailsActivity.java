@@ -1,4 +1,4 @@
-package com.hdrescuer.hdrescuer.ui.ui.userdetails;
+package com.hdrescuer.hdrescuer.ui.ui.patientdetails;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,32 +18,31 @@ import android.widget.Toast;
 import com.hdrescuer.hdrescuer.R;
 import com.hdrescuer.hdrescuer.common.Constants;
 import com.hdrescuer.hdrescuer.common.MyApp;
-import com.hdrescuer.hdrescuer.data.UserDetailsViewModel;
+import com.hdrescuer.hdrescuer.data.PatientDetailsViewModel;
 import com.hdrescuer.hdrescuer.retrofit.AuthApiService;
 import com.hdrescuer.hdrescuer.retrofit.AuthConectionClient;
 import com.hdrescuer.hdrescuer.retrofit.response.UserDetails;
 import com.hdrescuer.hdrescuer.ui.ui.devicesconnection.DevicesConnectionActivity;
-import com.hdrescuer.hdrescuer.common.NewUserDialogFragment;
+import com.hdrescuer.hdrescuer.common.NewPatientDialogFragment;
 import com.hdrescuer.hdrescuer.common.UserActionDialog;
 import com.hdrescuer.hdrescuer.ui.ui.patienthist.PatientSessionListActivity;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 
 /**
- * Clase UserDetailsActivity, que contiene la lógica para mostrar los detalles del usuario
+ * Clase PatientDetailsActivity, que contiene la lógica para mostrar los detalles del usuario
  *  @author Domingo Lopez
  */
-public class UserDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+public class PatientDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Servicio de Login y ConectionClient
     AuthConectionClient authConectionClient;
     AuthApiService authApiService;
     //ViewModel
-    UserDetailsViewModel userDetailsViewModel;
+    PatientDetailsViewModel patientDetailsViewModel;
     //Parámetros de la ficha del usuario
     int user_id;
     TextView username;
@@ -82,7 +81,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     UserDetails user;
 
     private DateFormat dateFormat;
-
     boolean alreadyCreated = false;
 
     /**
@@ -110,11 +108,11 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new UserDetailsViewModel(getApplication(),id);
+                return (T) new PatientDetailsViewModel(getApplication(),id);
             }
         };
 
-        this.userDetailsViewModel = new ViewModelProvider(this,factory).get(UserDetailsViewModel.class);
+        this.patientDetailsViewModel = new ViewModelProvider(this,factory).get(PatientDetailsViewModel.class);
 
         findViews();
         events();
@@ -130,8 +128,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         super.onResume();
 
             refreshUserDetails();
-
-
 
     }
 
@@ -202,7 +198,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
      */
     private void loadUserData() {
 
-        this.userDetailsViewModel.getUser().observe(this, new Observer<UserDetails>() {
+        this.patientDetailsViewModel.getPatient().observe(this, new Observer<UserDetails>() {
             @Override
             public void onChanged(UserDetails userDetails) {
                 user_id = userDetails.getUser_id();
@@ -312,7 +308,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
      * @author Domingo Lopez
      */
     void refreshUserDetails(){
-        this.userDetailsViewModel.refreshUserDetails();
+        this.patientDetailsViewModel.refreshPatientDetails();
     }
 
 
@@ -339,7 +335,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.btn_edit_data:
                 if(Constants.CONNECTION_UP.equals("SI")) {
-                    NewUserDialogFragment dialog = new NewUserDialogFragment(UserActionDialog.MODIFY_USER, this.user.getUserEntity());
+                    NewPatientDialogFragment dialog = new NewPatientDialogFragment(UserActionDialog.MODIFY_USER, this.user.getUserEntity());
                     dialog.show(this.getSupportFragmentManager(), "NewUserFragment");
                 }else{
                     Toast.makeText(this, "Conexión no disponible, vuelva a iniciar sesión", Toast.LENGTH_SHORT).show();
