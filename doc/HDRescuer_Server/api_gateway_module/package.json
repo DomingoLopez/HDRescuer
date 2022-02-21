@@ -1,0 +1,19 @@
+{
+  "name": "api_gateway_module",
+  "description": "Express Gateway Instance Bootstraped from Command Line",
+  "repository": {},
+  "license": "UNLICENSED",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "express-gateway": "^1.16.10"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "devstart": "nodemon server.js",
+    "serverstart": "DEBUG=api-gateway-module:* npm run devstart"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

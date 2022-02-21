@@ -1,0 +1,78 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  host: localhost
+apiEndpoints:
+  users:
+    host: '192.168.1.135'
+    paths: 
+      - '/api/auth/*'
+      - '/api/users/*'
+  datarecovery:
+    host: '192.168.1.135'
+    paths: '/api/datarecovery/*'    
+  sessions:
+    host: '192.168.1.135'
+    paths: '/api/sessions/*'
+  apicomposer:
+    host: '192.168.1.135'
+    paths: '/api/apicomposer/*'
+serviceEndpoints:
+  userssrv:
+    url: 'http://192.168.1.135:8081'
+  datarecoverysrv:
+    url: 'http://192.168.1.135:8082'
+  sessionssrv:
+    url: 'http://192.168.1.135:8083'
+  apicomposersrv:
+    url: 'http://192.168.1.135:8084'
+policies:
+  - basic-auth
+  - cors
+  - expression
+  - key-auth
+  - log
+  - oauth2
+  - proxy
+  - rate-limit
+pipelines:
+  default:
+    apiEndpoints:
+      - users
+    policies:
+    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+    # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: userssrv 
+              changeOrigin: true
+  userspln:
+    apiEndpoints:
+      - users
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: userssrv
+  datarecoverypln:
+    apiEndpoints:
+      - datarecovery
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: datarecoverysrv  
+  sessionspln:
+    apiEndpoints:
+      - sessions
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: sessionssrv    
+  apicomposerpln:
+    apiEndpoints:
+      - apicomposer
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: apicomposersrv                     
+            

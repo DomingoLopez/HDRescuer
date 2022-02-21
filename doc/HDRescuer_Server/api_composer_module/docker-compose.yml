@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  apicomposermodule:
+    image: apicomposermodule
+    container_name: api_composer
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8084:8084
+    volumes:
+      - .:/usr/src/app

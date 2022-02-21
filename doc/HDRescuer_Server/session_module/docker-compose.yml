@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  sessionmodule:
+    image: sessionmodule
+    container_name: sessions
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8083:8083
+    volumes: 
+      - .:/usr/src/app
+    links: 
+      - mongodb
+  
+  mongodb:
+    image: mongo:latest
+    container_name: sessions_db
+    ports: 
+      - 27013:27017
+    volumes:
+      - data:/data/db
+  
+        
+volumes:
+  data:
