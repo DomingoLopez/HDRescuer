@@ -4,7 +4,7 @@ Aplicación móvil para Android con la que recopilar datos fisiológicos de paci
 
 Los distintos dispositivos wearables se comunican con la aplicación via Bluetooth, y esta es capaz tanto de almacenar sesiones como de enviar los datos en tiempo real hacia un servidor basado en una arquitectura orientada a microservicios.
 
-Los datos fisiológicos de pacientes pueden ser utilizados para entrenar modelos de aprendizaje automático capaces de predecir por ejemplo si un paciente está infectado por algún virus o detectar problemas cardíacos, etc. 
+Los datos fisiológicos de pacientes pueden ser utilizados para entrenar modelos de aprendizaje automático capaces de predecir por ejemplo si un paciente está infectado por algún virus o detectar problemas cardíacos, etc. </br></br>
 
 ## Contexto e instalación
 
@@ -22,7 +22,7 @@ Los dispositivos utilizados para recopilar datos fisiológicos de pacientes son:
 
 - **SmartWatch TicWatch Pro** (Con una aplicación que también he desarrollado en WearOs para este dispositivo, cuyo proyecto está en la carpeta **hdrescuerwatch**)
 - **Pulsera de salud Empatica E4** (Cuya integración está en la propia aplicación para Smartphone)
-- **Placa de Salud HealthBoard + Arduino** (Pulsioxímetro e Intensidad respiración. Cuyo sketch arduino se encuentra en la carpeta **doc/Programa Arduino eHealthBoard**) 
+- **Placa de Salud HealthBoard + Arduino** (Pulsioxímetro e Intensidad respiración. Cuyo sketch arduino se encuentra en la carpeta **doc/Programa Arduino eHealthBoard**) </br></br>
 
 
 ## Funcionalidades
@@ -44,19 +44,21 @@ Entre las funcionalidades principales destacan:
 
 - **Configuración de la tasa de muestreo** de recopilación de datos: Pudiendo tomar medidas cada X ms que indiquemos.
 
-- **Gestión de pacientes**: La aplicación permite crear y editar pacientes, pudiendo comenzar nuevas sesiones de recopilación sobre ellos, así como visualizar el histórico de sesiones de cada paciente. 
+- **Gestión de pacientes y sesiones**: La aplicación permite crear y editar pacientes, pudiendo comenzar nuevas sesiones de recopilación sobre ellos, así como visualizar el histórico de sesiones de cada paciente. Adicionalmente se incorporan indicadores de la calidad de la sesión, pudiendo indicar si la sesión se ha sincronizado correctamente con el servidor, o si en cambio se han perdido datos en la transmisión o se ha recopilado de forma Offline, pudiendo sincronizar la sesión con el servidor posteriormente.
 
 - **Vinculación con dispositivos personalizada**: La aplicación permite vincular los dispositivos que se deseen de entre los 3 para los que se ha diseñado. Durante la recopilación se podrán ver los valores de los sensores de estos dispositivos en tiempo real. 
 
-- **Gráficas de resultados**: La aplicación permite la visualización de todos los datos recopilados al finalizar la sesión o en el histórico del paciente en forma de gráficas muy manipulables y visuales. Se hace uso de la librería [MPAndroid Chart](https://github.com/PhilJay/MPAndroidChart).
+- **Gráficas de resultados**: La aplicación permite la visualización de todos los datos recopilados al finalizar la sesión o en el histórico del paciente en forma de gráficas muy manipulables y visuales. Se hace uso de la librería [MPAndroid Chart](https://github.com/PhilJay/MPAndroidChart).  </br></br>
 
-## Capturas de pantalla
-
-
+## Capturas de pantalla  </br></br>
 
 
+<img src="doc/img/1_MainActivity.jpg" width="230" />&nbsp; &nbsp;<img src="doc/img/2_users.jpg" width="230" />&nbsp; &nbsp;<img src="doc/img/4_Details.jpg" width="230" />
+
+<img src="doc/img/5_dialog-mod.jpg" width="230" />&nbsp; &nbsp;<img src="doc/img/3_menu.jpg" width="230" />&nbsp; &nbsp;<img src="doc/img/fastmode.jpg" width="230" />
+
+<img src="doc/img/6_historico.jpg" width="230" />&nbsp; &nbsp;<img src="doc/img/7_devices.jpg" width="230" />&nbsp; &nbsp;<img src="doc/img/8_tabemp.jpg" width="230" />
 
 
-
-
+<img src="doc/img/9_results1.jpg" width="230" />&nbsp; &nbsp;<img src="doc/img/10_results2.jpg" width="230" />&nbsp; &nbsp;<img src="doc/img/11_results3.jpg" width="230" />
 
